@@ -1,5 +1,23 @@
 <img src="brand/lockup.svg" alt="falsify" width="320">
 
+**ML evaluation claims should be locked before the experiment runs, not reported after.**
+
+`falsify` commits a claim — metric, threshold, dataset hash, seed — as a SHA-256 manifest. Run the eval. The hash either matches or it doesn't.
+
+```bash
+$ falsify lock claim.yaml
+locked: sha256:a3f9...c821
+
+$ falsify verdict claim.yaml
+PASS  accuracy 0.934 >= 0.90  (hash verified)
+
+# tampered:
+$ falsify verdict claim.yaml
+TAMPERED  sha256 mismatch — spec modified after locking  (exit 3)
+```
+
+4 reference implementations — Python, JavaScript, Go, Rust — byte-equivalent on 12 conformance vectors. Designed for ML eval rigor. Maps to EU AI Act Article 12 evidence as a side effect.
+
 > **Pre-registration + CI for AI-agent claims.** Lock the claim and threshold with SHA-256 *before* running the experiment — or the result doesn't count.
 
 ![CI](https://github.com/studio-11-co/falsify/actions/workflows/falsify.yml/badge.svg)
