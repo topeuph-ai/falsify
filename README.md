@@ -33,7 +33,15 @@ TAMPERED  sha256 mismatch — spec modified after locking  (exit 3)
 
 ---
 
-> **Latest — 2026-05-02** · v0.1.3 released ([release notes](https://github.com/studio-11-co/falsify/releases/tag/v0.1.3) · `pip install falsify==0.1.3`). PRML v0.1 specification published with **four reference implementations** (Python · [JavaScript](impl/js/) · [Go](impl/go/) · [Rust](impl/rust/)) all reproducing the [12 v0.1 vectors](spec/test-vectors/v0.1/) and [6 v0.2 candidate vectors](spec/v0.2/test-vectors-candidates.json) byte-for-byte. [14-page arXiv preprint](spec/paper/) and [v0.2 RFC roadmap](spec/v0.2/ROADMAP.md) (freeze 2026-05-22) open for public review.
+**Try it without installing:** [`registry.falsify.dev`](https://registry.falsify.dev) — paste a PRML manifest, get a SHA-256 permalink and a README badge. No account, no server-side state beyond the hash.
+
+**Need it locked for one of your published claims?** [`falsify.dev/sprint`](https://falsify.dev/sprint) — €9,000 / 14-day Diagnostic Sprint: PRML manifest authored, verifier deployed, audit report shipped.
+
+**What is PRML?** [`falsify.dev/what-is-prml`](https://falsify.dev/what-is-prml) — plain-English answer page.
+
+---
+
+> **Latest — 2026-05-07** · `registry.falsify.dev` live. README badges available at `registry.falsify.dev/badge/<hash>.svg`. v0.1.3 released earlier this month ([release notes](https://github.com/studio-11-co/falsify/releases/tag/v0.1.3) · `pip install falsify==0.1.3`). PRML v0.1 specification published with **four reference implementations** (Python · [JavaScript](impl/js/) · [Go](impl/go/) · [Rust](impl/rust/)) all reproducing the [12 v0.1 vectors](spec/test-vectors/v0.1/) and [6 v0.2 candidate vectors](spec/v0.2/test-vectors-candidates.json) byte-for-byte. [14-page arXiv preprint](spec/paper/) and [v0.2 RFC roadmap](spec/v0.2/ROADMAP.md) (freeze 2026-05-22) open for public review.
 
 ---
 
