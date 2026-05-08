@@ -1,29 +1,61 @@
 cff-version: 1.2.0
-message: "If you use falsify in academic work, please cite it as below."
-title: "falsify: pre-registration + CI for AI/ML accuracy claims"
-abstract: >
-  A single-file Python CLI that pre-registers AI/ML accuracy claims with
-  SHA-256 over canonical YAML. The metric, threshold, dataset hash, and
-  seed are committed to a hashed manifest before the experiment runs;
-  any silent edit afterwards causes the next run to exit 3 and refuse
-  to produce a verdict. The honest amendment path is `lock --force`,
-  which writes a new audit entry while preserving the previous hash.
+message: "If you cite the PRML specification or the falsify reference implementation in academic or technical work, please use the form below."
+title: "falsify — Reference implementation of the PRML (Pre-Registered ML Manifest) specification"
+abstract: >-
+  PRML is an open CC BY 4.0 specification for committing machine-learning
+  evaluation claims to a SHA-256 hash before the experiment runs. falsify
+  is the Python reference implementation that produces canonical bytes
+  per the spec's §4 rules and validates against 12 v0.1 conformance
+  vectors plus 8 v0.2 vectors. The repository contains the specification
+  text, four reference implementations (Python, JS, Go, Rust) producing
+  byte-equivalent output, the conformance vector set, formal JSON
+  Schemas, and a LaTeX preprint.
 authors:
-  - name: "Studio 11"
-    website: "https://studio-11.co"
+  - family-names: "Öztürk"
+    given-names: "Cüneyt"
+    affiliation: "Studio 11 Turkey Ltd. Şti."
+    email: "hello@studio-11.co"
 type: software
 license: MIT
 repository-code: "https://github.com/studio-11-co/falsify"
 url: "https://falsify.dev"
-version: 0.1.1
-date-released: 2026-04-28
+version: "0.1.4"
+date-released: 2026-05-08
 keywords:
-  - pre-registration
-  - reproducibility
-  - machine-learning
-  - audit-trail
-  - sha256
-  - mlops
-  - ai-safety
-  - ai-act
-  - claude-code
+  - "PRML"
+  - "pre-registration"
+  - "ML evaluation"
+  - "AI safety"
+  - "reproducibility"
+  - "content addressing"
+  - "EU AI Act"
+  - "NIST AI RMF"
+  - "ISO/IEC 42001"
+identifiers:
+  - type: url
+    value: "https://spec.falsify.dev/v0.1"
+    description: "PRML v0.1 specification"
+  - type: url
+    value: "https://spec.falsify.dev/v0.2-rfc"
+    description: "PRML v0.2 RFC (open through 2026-05-22)"
+  - type: url
+    value: "https://spec.falsify.dev/schema/"
+    description: "PRML JSON Schemas (v0.1 + v0.2)"
+preferred-citation:
+  type: software
+  title: "PRML — Pre-Registered ML Manifest specification, v0.1"
+  authors:
+    - family-names: "Öztürk"
+      given-names: "Cüneyt"
+  year: 2026
+  url: "https://spec.falsify.dev/v0.1"
+  version: "0.1"
+references:
+  - type: article
+    title: "Pre-Registered ML Manifests: A Cryptographic Primitive for Verifiable Evaluation Claims"
+    authors:
+      - family-names: "Öztürk"
+        given-names: "Cüneyt"
+    year: 2026
+    url: "https://spec.falsify.dev/v0.1"
+    notes: "Working draft preprint, CC BY 4.0. arXiv submission in flight."
