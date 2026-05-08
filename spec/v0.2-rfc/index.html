@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PRML v0.1 — Pre-Registered ML Manifest Specification</title>
-<meta name="description" content="PRML defines a content-addressed serialization format for pre-registered machine learning evaluation claims. Working draft, public review.">
+<title>PRML v0.2 RFC — open for comment until 2026-05-22</title>
+<meta name="description" content="PRML v0.2 — five proposals (streaming variant, runner attestation, revocation, conformance vectors, patent grant placement). Open for community comment through 2026-05-22.">
 <meta name="author" content="Studio 11">
-<link rel="canonical" href="https://spec.falsify.dev/v0.1">
-<meta property="og:title" content="PRML v0.1 — Pre-Registered ML Manifest Specification">
-<meta property="og:description" content="A cryptographic primitive for verifiable ML evaluation claims. Working draft.">
-<meta property="og:url" content="https://spec.falsify.dev/v0.1">
+<link rel="canonical" href="https://spec.falsify.dev/v0.2-rfc">
+<meta property="og:title" content="PRML v0.2 RFC — open for comment until 2026-05-22">
+<meta property="og:description" content="Five proposals, 14-day comment window, full v0.1 backwards compatibility. CC BY 4.0.">
+<meta property="og:url" content="https://spec.falsify.dev/v0.2-rfc">
 <meta property="og:type" content="article">
 <meta name="twitter:card" content="summary">
 
@@ -21,16 +21,16 @@
 {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "PRML — Pre-Registered ML Manifest Specification, Version 0.1",
-  "description": "Open specification for committing machine learning evaluation claims to a SHA-256 hash before the run. CC BY 4.0 working draft.",
+  "headline": "PRML v0.2 — Request for Comment",
+  "description": "Open RFC for v0.2 of the Pre-Registered ML Manifest specification. Five proposals; comment window 2026-05-08 to 2026-05-22; freeze 2026-05-22 23:59 UTC.",
   "author": {"@type":"Person","name":"Cüneyt Öztürk","url":"https://www.linkedin.com/in/cuneyt-ozturk-39812963/"},
   "publisher": {"@type":"Organization","name":"Studio 11","url":"https://studio-11.co"},
-  "datePublished": "2026-05-01",
-  "dateModified": "2026-05-07",
-  "url": "https://spec.falsify.dev/v0.1",
+  "datePublished": "2026-05-08",
+  "dateModified": "2026-05-08",
+  "url": "https://spec.falsify.dev/v0.2-rfc",
   "license": "https://creativecommons.org/licenses/by/4.0/",
   "inLanguage": "en",
-  "keywords": "PRML, pre-registered ML manifest, SHA-256, evaluation, AI eval, machine learning, reproducibility, audit trail"
+  "keywords": "PRML, RFC, v0.2, pre-registered ML manifest, ML evaluation, streaming, runner attestation, revocation"
 }
 </script>
 
@@ -215,17 +215,14 @@ footer.colophon a:hover { color: var(--ink); }
     <a href="https://falsify.dev">falsify.dev</a> ·
     <a href="https://registry.falsify.dev">registry</a> ·
     <a href="https://falsify.dev/sprint">sprint</a> ·
-    <a href="https://github.com/studio-11-co/falsify/blob/main/spec/PRML-v0.1.md">github</a> ·
+    <a href="https://spec.falsify.dev/v0.1">v0.1</a> ·
+    <a href="https://github.com/studio-11-co/falsify/blob/main/spec/PRML-v0.2-RFC.md">github</a> ·
     <a href="https://github.com/studio-11-co/falsify/discussions">discuss</a>
   </span>
 </header>
 
-<aside class="livenote" style="margin: 0 0 14px; padding: 14px 18px; border-left: 3px solid var(--accent); background: #ecf9f1; font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 14px; color: var(--ink); line-height: 1.55;">
-  <strong style="font-weight: 600;">v0.2 RFC open for comment.</strong> Five proposals (streaming variant, runner attestation, revocation, conformance vectors, patent grant placement). Comment window closes <strong>2026-05-22 23:59 UTC</strong>. Read the draft at <a href="https://spec.falsify.dev/v0.2-rfc" style="color: var(--ink); text-decoration: underline; text-underline-offset: 3px;">spec.falsify.dev/v0.2-rfc</a>. v0.1 (this page) remains the stable release; v0.2 will be fully backwards-compatible.
-</aside>
-
 <aside class="livenote" style="margin: 0 0 36px; padding: 14px 18px; border-left: 3px solid var(--accent); background: #f4f4f0; font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 14px; color: var(--ink-2); line-height: 1.55;">
-  <strong style="color: var(--ink); font-weight: 600;">Live registry:</strong> paste a manifest at <a href="https://registry.falsify.dev" style="color: var(--ink); text-decoration: underline; text-underline-offset: 3px;">registry.falsify.dev</a>, get a SHA-256 permalink and a README badge — no account, no server-side state beyond the hash. Reference implementations (Python, JS, Go, Rust) produce byte-equivalent output across <a href="https://github.com/studio-11-co/falsify/tree/main/spec/test-vectors/v0.1" style="color: var(--ink-2);">12 conformance vectors</a>.
+  <strong style="color: var(--ink); font-weight: 600;">RFC — comment window open.</strong> v0.2 is a draft. Comments accepted through <strong>2026-05-22 23:59 UTC</strong> via <a href="https://github.com/studio-11-co/falsify/issues" style="color: var(--ink); text-decoration: underline; text-underline-offset: 3px;">GitHub issues with label <code>rfc-v0.2</code></a> or email <a href="mailto:cuneyt@studio-11.co?subject=%5Bv0.2%20RFC%5D" style="color: var(--ink);">cuneyt@studio-11.co</a> with subject prefix <code>[v0.2 RFC]</code>. v0.1 remains the current stable spec at <a href="https://spec.falsify.dev/v0.1" style="color: var(--ink-2);">spec.falsify.dev/v0.1</a>; v0.2 is fully backwards-compatible with v0.1 hashes.
 </aside>
 
 <article id="content">
@@ -258,8 +255,8 @@ footer.colophon a:hover { color: var(--ink); }
 (async function () {
   const target = document.getElementById('content');
   const sources = [
-    'PRML-v0.1.md',
-    'https://raw.githubusercontent.com/studio-11-co/falsify/main/spec/PRML-v0.1.md'
+    'PRML-v0.2-RFC.md',
+    'https://raw.githubusercontent.com/studio-11-co/falsify/main/spec/PRML-v0.2-RFC.md'
   ];
 
   let md = null;

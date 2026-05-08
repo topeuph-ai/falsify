@@ -73,7 +73,7 @@ A Content-Addressed Format for Verifiable Evaluation Claims}
 Spec: \href{https://spec.falsify.dev/v0.1}{spec.falsify.dev/v0.1} \quad
 Code: \href{https://github.com/studio-11-co/falsify}{github.com/studio-11-co/falsify}}
 
-\date{Working draft v0.1 --- \today}
+\date{Working draft v0.1 --- \today\\ {\small (v0.2 RFC open for comment through 2026-05-22; \href{https://spec.falsify.dev/v0.2-rfc}{spec.falsify.dev/v0.2-rfc})}}
 
 \begin{document}
 \maketitle
@@ -247,7 +247,7 @@ The following fields MAY appear in a manifest. Their presence does not affect re
   \item \texttt{model.id}, \texttt{model.hash}, \texttt{model.uri} --- bind the manifest to a specific model artifact.
   \item \texttt{dataset.uri} --- canonical URL for the dataset bytes.
   \item \texttt{compute\_envelope} --- structured description of compute conditions (precision, hardware class, software stack hash). Out of scope for verdict computation in v0.1.
-  \item \texttt{producer.signature} --- detached signature over the canonical bytes by \texttt{producer.id}'s key. Optional in v0.1; mandatory for high-stakes claims in v0.2.
+  \item \texttt{producer.signature} --- detached signature over the canonical bytes by \texttt{producer.id}'s key. Optional in v0.1; the v0.2 RFC examines mandatory signing for high-stakes claims as one open question, with no commitment in the current draft.
   \item \texttt{prior\_hash} --- the hash of the manifest this one amends. Forms the audit chain.
   \item \texttt{notes} --- free-text rationale for the claim or amendment. Counts toward the canonical bytes; tampering with notes invalidates the hash.
 \end{itemize}
@@ -520,19 +520,23 @@ We anticipate adoption in three phases:
   \item No formal canonicalization grammar in BNF: the grammar is specified prosaically and validated by test vectors.
 \end{itemize}
 
-\subsection{v0.2 roadmap (target 2026 Q4)}
+\subsection{v0.2 RFC (open for comment through 2026-05-22)}
+
+The v0.2 RFC is a public draft\footnote{\url{https://spec.falsify.dev/v0.2-rfc}} with five proposals open for community comment. The freeze date is 2026-05-22 23:59 UTC. v0.2 is fully backwards-compatible: every v0.1 manifest is a valid v0.2 manifest, and the canonicalisation rules preserve hash-equivalence for v0.1-shaped inputs.
 
 \begin{itemize}[leftmargin=2em, itemsep=0.2em]
-  \item Algorithm agility: a \texttt{hash\_alg} field permitting \texttt{sha256}, \texttt{sha3-256}, or post-quantum candidates.
-  \item Tolerance: a \texttt{tolerance} field for floating-point comparison.
-  \item Multi-claim manifests: a \texttt{claims:} sequence with shared dataset and seed.
-  \item Mandatory signature for high-risk Annex III systems.
-  \item Formal canonicalization BNF.
+  \item \textbf{P-01 Streaming variant.} An optional \texttt{prml\_mode: streaming} field for live evaluations (Elo leaderboards, A/B-tested production systems, drift monitors), where the threshold commits a windowed aggregation rule rather than a single batch result.
+  \item \textbf{P-02 Runner attestation.} An optional \texttt{runner\_attestation} field carrying an opaque URI to an out-of-band execution attestation (Sigstore, in-toto, TEE). PRML records that an attestation was emitted; it does not interpret it. This addresses the gap between \emph{what was claimed} and \emph{what was run} that v0.1 deliberately leaves unresolved.
+  \item \textbf{P-03 Revocation primitive.} Optional \texttt{revoked\_at} and \texttt{revocation\_reason} fields with controlled vocabulary (\texttt{dataset\_compromised}, \texttt{model\_recalled}, \texttt{author\_request}, \texttt{other}). A revoked manifest's hash continues to verify; verifiers MUST surface revocation status separately from hash status.
+  \item \textbf{P-04 Conformance vector format.} Standardises the conformance vector directory layout and adds a \texttt{falsify conform <impl>} runner that mechanically tests any implementation binary against the locked v0.1 vectors. Informative (non-normative).
+  \item \textbf{P-05 Patent grant placement.} Moves the existing patent non-assertion grant from Appendix C into a new §1.5 (preamble), to satisfy CEN-CENELEC and other standards-body conventions. No textual change to the grant.
 \end{itemize}
+
+The roadmap deliberately excludes algorithm agility, multi-claim manifests, and on-chain anchoring; these were considered for v0.2 and deferred to v0.3 or later as their threat models warrant separate treatment.
 
 \subsection{Open questions}
 
-Post-quantum hash migration. Interoperability with Weights \& Biases, MLflow, and other experiment trackers. On-chain anchoring of chain hashes (deliberately deferred --- the chain hash is sufficient for the vast majority of audit use without introducing a blockchain dependency). Integration with model registries (Hugging Face, ONNX Model Zoo).
+Post-quantum hash migration (deferred to v0.3 with explicit migration semantics). Interoperability with experiment trackers (Weights \& Biases, MLflow, Inspect AI eval logs --- the latter via an upstream RFC currently in flight\footnote{\url{https://github.com/UKGovernmentBEIS/inspect_ai}}). Native registration into the EU AI Act Article 12 logging requirement via a JTC 21 input draft\footnote{\url{https://github.com/studio-11-co/falsify/blob/main/spec/compliance/AI-Act-mapping-v0.1.md}}. Integration with model registries (Hugging Face, ONNX Model Zoo).
 
 \section{Conclusion}
 \label{sec:conclusion}
