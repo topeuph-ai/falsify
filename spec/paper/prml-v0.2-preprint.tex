@@ -1,0 +1,402 @@
+% PRML v0.2 preprint — DRAFT (started 2026-05-09, frozen on 2026-05-22)
+% Builds on prml-v0.1-preprint.tex; preserves §1.5 patent grant placement
+% from v0.1 final draft.
+%
+% Compile: pdflatex prml-v0.2-preprint.tex && bibtex prml-v0.2-preprint && pdflatex prml-v0.2-preprint.tex && pdflatex prml-v0.2-preprint.tex
+%
+% License: CC BY 4.0 (text); MIT (code samples)
+
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{microtype}
+\usepackage{lmodern}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{authblk}
+\usepackage{abstract}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=teal,
+  pdfauthor={Cüneyt Öztürk},
+  pdftitle={PRML v0.2: Streaming, Revocation, and the Boundaries of a Pre-Registration Primitive for Machine Learning Evaluation},
+  pdfsubject={Pre-Registered ML Manifest specification},
+  pdfkeywords={pre-registration, ML evaluation, AI safety, content addressing, EU AI Act, NIST AI RMF, ISO/IEC 42001}
+}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{verbatim}
+\usepackage{titlesec}
+
+\titleformat{\section}{\Large\bfseries}{\thesection.}{0.6em}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{0.6em}{}
+
+\definecolor{codebg}{HTML}{F4F4F0}
+\definecolor{codeink}{HTML}{1A1F29}
+\lstset{
+  basicstyle=\ttfamily\small\color{codeink},
+  backgroundcolor=\color{codebg},
+  frame=leftline,
+  rulecolor=\color{teal},
+  framesep=8pt,
+  xleftmargin=12pt,
+  breaklines=true,
+  showstringspaces=false,
+  numberstyle=\tiny\color{gray}
+}
+
+\title{\bfseries PRML v0.2:\\[2pt]
+{\large Streaming, Revocation, and the Boundaries of a Pre-Registration Primitive for Machine Learning Evaluation}}
+
+\author[1]{Cüneyt Öztürk\thanks{Corresponding author. Editor of the PRML specification. \href{mailto:hello@studio-11.co}{hello@studio-11.co}}}
+\affil[1]{Studio 11 Turkey Ltd. Şti.}
+
+\date{Working draft v0.2 — \today\\
+{\small (RFC freeze 2026-05-22 23:59 UTC; final draft expected 2026-05-29)}}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+PRML v0.1~\cite{prml-v01-2026} introduced a content-addressed YAML serialisation that binds a pre-registered ML evaluation claim to a SHA-256 hash. The format covered the canonical case --- a single batch evaluation against a fixed threshold --- and deliberately deferred three classes of claim: live streaming evaluations, post-publication retractions, and runtime execution attestation. v0.2, frozen on 2026-05-22 after a 14-day public comment window, addresses these gaps additively. We introduce four optional fields (\texttt{prml\_mode}, \texttt{value\_method}, \texttt{runner\_attestation}, \texttt{revoked\_at}~/~\texttt{revocation\_reason}) and one structural change (the patent non-assertion grant moves from the appendix into the preamble). Every v0.1 manifest remains a valid v0.2 manifest, and the canonicalisation rules preserve hash-equivalence for v0.1-shaped inputs across the four reference implementations. We report the substantive comments received during the RFC window, the changes incorporated and deferred, and a calibration study against the 12 v0.1 conformance vectors plus 8 new v0.2 vectors. The spec is licensed CC BY 4.0; reference implementations are MIT; the patent non-assertion grant is reproduced verbatim in §1.5.
+\end{abstract}
+
+\noindent\textbf{Keywords:} pre-registration · ML evaluation · AI safety · content addressing · EU AI Act · NIST AI RMF · ISO/IEC 42001 · streaming evaluation · revocation
+
+\vspace{1em}
+
+\section{Introduction}
+\label{sec:intro}
+
+\subsection{What v0.1 closed and what it left open}
+
+PRML v0.1~\cite{prml-v01-2026} addressed one well-defined gap in published ML evaluation claims: the absence of a cryptographic record of what was committed \emph{before} the experiment ran. Eight YAML fields hashed with SHA-256 over canonical bytes provided a content-addressed receipt that any independent verifier could re-derive. The threat model was narrow: post-hoc threshold tuning. The format was narrow: a single (metric, comparator, threshold) tuple per manifest. Both were deliberate design choices, not oversights.
+
+Three classes of evaluation claim sit outside the v0.1 envelope:
+
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{Live evaluations} where the threshold commits to an aggregation rule applied to a stream rather than a fixed run --- e.g.\ Chatbot Arena Elo~\cite{chatbot-arena-2024}, A/B-tested production systems, drift monitors.
+  \item \textbf{Post-publication retraction.} A manifest's hash continues to verify even after the publisher has reasons to disavow the claim (dataset contamination discovered, model recalled). v0.1 has no in-spec mechanism for the publisher to signal "this commitment stands cryptographically but I no longer endorse it."
+  \item \textbf{Runtime execution attestation.} A determined publisher can hash a clean evaluation set, run on a contaminated one, and report the hash of the clean set. v0.1 commits to \emph{what was claimed}, not proof of \emph{what was run}. Closing this gap requires execution-side attestation (TEE-backed runners, signed evaluator binaries, in-toto provenance), which v0.1 deliberately leaves out of scope.
+\end{enumerate}
+
+This paper documents the v0.2 additions that address each, the rationale for additivity (no breaking changes), and the open RFC process by which they were validated.
+
+\subsection{Three motivating cases}
+
+The three v0.2 features each emerged from a concrete v0.1 launch event. We describe them briefly here as context for the design choices in §\ref{sec:additions}.
+
+\textbf{Streaming.} Within two weeks of the v0.1 launch, an evaluator running a live A/B test on a production refusal-rate guard asked: \textit{how do I pre-register a window-aggregated statistic when there is no batch start?} v0.1 admitted no clean answer. Wrapping the live system in fake batches preserved the format but fabricated the semantics. P-01 introduces \texttt{prml\_mode: streaming} as the honest answer.
+
+\textbf{Revocation.} A model card published in early 2026 used a benchmark that was subsequently shown to leak through the model's pretraining corpus. The model's claimed accuracy on that benchmark was, per the v0.1 commitment, cryptographically verifiable. It was also, per the contamination finding, no longer something the publisher should claim. There was no spec-level mechanism to communicate this distinction. P-03 introduces \texttt{revoked\_at} and \texttt{revocation\_reason}.
+
+\textbf{Attestation.} A federally-funded audit programme reviewing v0.1 manifests asked: \textit{what was actually run?} The v0.1 hash answered \textit{what was committed.} The audit programme correctly observed that committed and run can diverge; PRML must allow execution-side attestations to be recorded without becoming opinionated about which ones are valid. P-02 introduces \texttt{runner\_attestation} as an opaque URI to an out-of-band attestation (Sigstore, in-toto, AWS Nitro, etc.).
+
+\subsection{Contributions}
+
+\begin{itemize}[leftmargin=2em, itemsep=0.2em]
+  \item Four optional fields adding streaming, attestation, and revocation semantics without breaking v0.1 hash-equivalence (§\ref{sec:additions}).
+  \item A formal JSON Schema (2020-12) for both v0.1 and v0.2 with mechanically-verified backwards compatibility (§\ref{sec:schemas}).
+  \item Eight new v0.2 conformance vectors (TV-013--TV-020) including one that exercises v0.1 backwards compatibility under v0.2 canonicalisation rules (§\ref{sec:vectors}).
+  \item A standardised conformance vector format (P-04) and a stdin/stdout runner protocol enabling any implementation to test mechanically against the locked vectors.
+  \item A 14-day public RFC process with disposition records for every substantive comment (§\ref{sec:rfc}).
+  \item An updated EU AI Act / NIST AI RMF / ISO 42001 compliance mapping reflecting v0.2 capabilities (§\ref{sec:compliance}).
+\end{itemize}
+
+\subsection{Non-goals — preserved from v0.1}
+
+\begin{itemize}[leftmargin=2em, itemsep=0.1em]
+  \item v0.2 does not solve selective publication; §8.1 of v0.1 remains in force as §9.1 here.
+  \item v0.2 does not address data governance, human oversight, or risk-management process design; these are organisational obligations that a serialisation primitive cannot supply.
+  \item v0.2 does not specify which execution attestations are valid; \texttt{runner\_attestation} is opaque, supporting any present or future format.
+  \item v0.2 does not replace v0.1; existing tooling that targets v0.1 continues to work.
+\end{itemize}
+
+\subsection{Patent non-assertion grant (preamble placement, P-05)}
+\label{sec:patent-grant}
+
+\begin{quote}
+\itshape
+Studio 11 Turkey Ltd. Şti.\ ("Studio 11") and its co-founders, in their capacities as authors of the PRML specification, hereby grant a worldwide, royalty-free, irrevocable, non-sublicensable, non-exclusive license to all implementers and users of the PRML specification under any patent rights --- present or future --- that Studio 11 or its co-founders hold or come to hold over: (a) the manifest schema, (b) the canonical byte serialisation algorithm, (c) the registry anchor protocol, or (d) any combination thereof, solely to the extent required to implement, distribute, or use any version of the PRML specification published under CC BY 4.0. This grant is irrevocable provided that the grantee does not assert patent claims against any PRML implementation. Studio 11 reserves no patent rights against any conforming implementation of PRML.
+\end{quote}
+
+The grant is reproduced verbatim from the v0.1 final draft. The placement change (from Appendix C to §1.5) is procedural: CEN-CENELEC and other standards bodies expressed a preference for grants to appear early in the document for inclusion in Annex Z reference checks. No textual change was made.
+
+\section{Background and related work}
+\label{sec:background}
+
+% TODO: §2.1 update Pre-registration in adjacent fields with JTC 21 / EU AI Act references that landed during v0.1 cycle
+% TODO: §2.2 NEW Streaming evaluation primitives (Chatbot Arena, AlpacaEval live, production A/B)
+% TODO: §2.3 NEW Retraction in cryptographic commitment systems (Sigstore/Rekor, CT, in-toto)
+% TODO: §2.4 cross-reference unchanged background
+
+\subsection{Pre-registration in adjacent empirical fields}
+
+[Updated from v0.1 §2.1. Add: JTC 21 input draft, EU AI Act Article 12 mapping work landed during v0.1 cycle, NIST AISIC engagement.]
+
+\subsection{Streaming evaluation primitives}
+
+The closest existing primitive for live evaluation commitments is the time-stamped public log used by Chatbot Arena~\cite{chatbot-arena-2024}, which publishes both individual votes and the aggregated Elo score. The publication is itself the commitment; there is no separate pre-registration of the aggregation rule. AlpacaEval Live~\cite{alpaca-eval-2024} similarly publishes results without committing the win-rate computation rule in advance of any specific window.
+
+What these systems lack is the v0.1 property: a re-derivable hash of the commitment, separate from the data, that any third party can verify. PRML v0.2 streaming mode supplies that property by hashing the rule rather than the result.
+
+\subsection{Retraction in cryptographic commitment systems}
+
+Certificate Transparency~\cite{ct-2013} and Sigstore Rekor~\cite{rekor-2021} both use append-only logs to maintain integrity claims; revocation is communicated out-of-band (CRLs, OCSP, transparency comments). PRML v0.2 follows this pattern: the manifest's hash continues to verify after revocation; the revocation status is communicated through additional fields and registry-side metadata. We deliberately did not adopt a separate revocation log; the additional fields are simpler and avoid coupling PRML to a specific log infrastructure.
+
+\section{The four v0.2 additions}
+\label{sec:additions}
+
+% TODO: Each subsection: motivation paragraph → schema diff → byte-level canonicalisation rule → worked example → known limit
+
+\subsection{P-01: Streaming variant}
+\label{sec:p01}
+
+\textbf{Motivation.} v0.1 assumes a batch evaluation. Live systems --- Chatbot Arena, production A/B tests, drift monitors --- have no clean batch boundary. A pre-registration of "Elo $\geq$ 1300 over the next 30 days" cannot be expressed in v0.1 without fabricating a batch. P-01 introduces \texttt{prml\_mode: streaming} as the honest representation.
+
+\textbf{Schema diff.}
+
+\begin{lstlisting}[language=]
+prml_mode: "streaming"          # v0.2 addition
+metric: "elo_rating"
+value_method: "lmsys_anonymous_chat_arena_v1"   # v0.2 addition
+comparator: ">="
+threshold: 1300
+sample_size: 1000               # MINIMUM — claim undefined below
+seed: null                      # n/a for streams
+pre_registered_from: "..."      # v0.2 addition
+pre_registered_to: "..."        # v0.2 addition
+\end{lstlisting}
+
+\textbf{Canonicalisation rule.} Same as v0.1 (§4 of v0.1 spec): keys sorted, default-flow off, LF endings, single trailing newline, UTF-8. The new fields canonicalise lexicographically; \texttt{prml\_mode} appears before \texttt{producer}.
+
+\textbf{Worked example.} A 30-day Chatbot Arena window committing to Elo $\geq$ 1300:
+
+% TODO: full example
+
+\textbf{Known limit.} The streaming hash commits the \emph{protocol}, not the answer. Verification at end-of-window requires re-deriving the score from the public arena log. If the log is gated, the claim is internally meaningful but externally unverifiable.
+
+\subsection{P-02: Runner attestation}
+\label{sec:p02}
+
+\textbf{Motivation.} v0.1 commits to \emph{what was claimed}, not proof of \emph{what was run}. P-02 closes part of this gap by recording an out-of-band execution attestation without becoming opinionated about which attestations are valid.
+
+\textbf{Schema diff.}
+
+\begin{lstlisting}[language=]
+runner_attestation: "sigstore://rekor.sigstore.dev/api/v1/log/entries/24296fb24b8ad77a"
+\end{lstlisting}
+
+\textbf{Worked example.} A Sigstore-attested runner emitting a Rekor entry for the eval execution.
+
+% TODO: full example with rekor query and verification
+
+\textbf{Known limit.} PRML records that an attestation was emitted; it does not interpret the attestation. The attestation's validity is the responsibility of the attestation framework (Sigstore, in-toto, TEE provider).
+
+\subsection{P-03: Revocation primitive}
+\label{sec:p03}
+
+\textbf{Motivation.} A manifest's hash continues to verify after the publisher has reasons to disavow the claim. P-03 provides the publisher with a spec-level signal.
+
+\textbf{Schema diff.}
+
+\begin{lstlisting}[language=]
+revoked_at: "2026-05-15T10:00:00Z"
+revocation_reason: "dataset_compromised"  # | model_recalled | author_request | other
+\end{lstlisting}
+
+\textbf{Controlled vocabulary.} \texttt{dataset\_compromised}, \texttt{model\_recalled}, \texttt{author\_request}, \texttt{other}. The vocabulary is intentionally small and prescriptive; "other" forces the publisher to publish a free-form note out-of-band.
+
+\textbf{Registry semantics.} A registry MAY mark manifests revoked. A revoked manifest's permalink remains; the badge endpoint emits \texttt{revoked} status alongside \texttt{valid}.
+
+\textbf{Known limit.} Revocation is signal, not authority. The original hash continues to verify. A consumer of the manifest must check revocation status separately. v0.2 verifiers MUST surface revocation status separately from hash status; this is normative.
+
+\subsection{P-04: Conformance vector format}
+\label{sec:p04}
+
+\textbf{Motivation.} v0.1's "12 conformance vectors" are documented in prose. Future implementations cannot mechanically run them against an arbitrary impl binary. P-04 standardises the format and adds a runner protocol.
+
+\textbf{Format.} A directory \texttt{spec/test-vectors/v0.X/} contains:
+
+\begin{itemize}[leftmargin=2em, itemsep=0.1em]
+  \item \texttt{test-vectors.json} — a JSON array of \texttt{\{id, title, description, input, canonical, hash\}} objects
+  \item \texttt{conform.py} — a runner that invokes a target binary and compares its stdin/stdout output
+  \item \texttt{reference-target.py} — a sanity-checking reference implementation in Python
+  \item \texttt{CONFORMANCE.md} — protocol documentation
+\end{itemize}
+
+\textbf{Runner protocol.} The target binary reads a JSON manifest on stdin, writes a JSON object \texttt{\{canonical, hash\}} on stdout, and exits with code 0 on success. The runner compares both fields against the locked vector and reports per-vector pass/fail.
+
+\section{JSON Schema (formal)}
+\label{sec:schemas}
+
+% TODO: Both v0.1 and v0.2 are JSON Schema 2020-12 conformant. Discuss conditional rules (streaming requires window fields, revoked_at requires revocation_reason).
+% TODO: Mechanical validation: 32/32 vectors validate against their respective schemas, 12 v0.1 vectors validate against v0.2 schema (backwards compat).
+
+\section{Backwards compatibility}
+\label{sec:backcompat}
+
+% TODO: §4.1 The non-negotiable property
+% TODO: §4.2 Empirical check (12 v0.1 vectors hash identically under v0.1 and v0.2 rules)
+% TODO: §4.3 What this rules out
+
+\section{The RFC process}
+\label{sec:rfc}
+
+% TODO: §5.1 Process: 14-day window, GitHub issues + email
+% TODO: §5.2 Comment volume + disposition (placeholder until 2026-05-22)
+% TODO: §5.3 Adopted / modified / deferred / rejected
+% TODO: §5.4 Was 14 days enough?
+
+\section{Conformance vectors (v0.2)}
+\label{sec:vectors}
+
+% TODO: TV-013 — TV-020 listing with hashes
+% TODO: TV-013 hash matches TV-001 exactly (backwards compat smoke test)
+
+\section{Implementation report}
+\label{sec:impl}
+
+% TODO: §6.1 patches to falsify (Python), prml-js (Node), prml-go, prml-rust
+% TODO: §6.2 LOC of diff per impl (placeholder until impls are patched)
+% TODO: §6.3 Conformance test results: 12 v0.1 + 8 v0.2 against each impl
+% TODO: §6.4 Inspect AI upstream RFC status
+% TODO: §6.5 falsify-inspect adapter, PyPI 0.1.0
+
+\section{Threat model — updates}
+\label{sec:threat}
+
+% TODO: §7.1 New attack surfaces in streaming mode (window-rolling, eval timing manipulation)
+% TODO: §7.2 New attack surfaces in revocation (selective revocation as quiet retraction)
+% TODO: §7.3 Selective publication still stands (§9.1 below)
+
+\section{Compliance mapping (updates)}
+\label{sec:compliance}
+
+% TODO: §8.1 EU AI Act Article 12 — runner_attestation interaction with 12(2)(b) traceability
+% TODO: §8.2 ISO/IEC 42001:2023 — updated clauses
+% TODO: §8.3 NIST AI RMF — Govern.5.2 with v0.2 revocation
+% TODO: §8.4 JTC 21 input — status as of paper submission
+
+A live, citable version of the article-by-article mapping is at \url{https://falsify.dev/compliance}.
+
+\section{Limitations}
+\label{sec:limits}
+
+\subsection{Selective publication (preserved from v0.1 §8.1, expanded)}
+
+PRML records the existence of a commitment. It cannot compel the publisher to release the result of the commitment. A publisher who runs ten variants and publishes only one is operating below the line of public accountability; PRML does not change that.
+
+\subsection{Bit-level float determinism}
+
+[Preserved from v0.1.]
+
+\subsection{Multi-claim manifests}
+
+[Preserved from v0.1. v0.3 candidate.]
+
+\subsection{Algorithm agility}
+
+[Preserved from v0.1. v0.3 candidate with explicit migration semantics.]
+
+\subsection{Runner attestation does not specify validity}
+
+P-02 records that an attestation was emitted; the attestation framework is responsible for what makes the attestation valid. A PRML verifier cannot, from the manifest alone, determine whether a Sigstore signature is current or whether a TEE quote is fresh.
+
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{What we learned from the v0.1 launch}
+
+% TODO: distribution playbook results, integrity index reception, JTC 21 engagement
+
+\subsection{Why "additive only" mattered}
+
+% TODO: rationale; rejected ideas summary
+
+\subsection{The integrity index pattern}
+
+% TODO: surfacing format-hygiene scores publicly; shifted format conversation from morality to mechanics
+
+\subsection{RFC-process implications for ML standards}
+
+% TODO: 14 days vs 60 days; small spec vs ISO; what other communities can learn
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+PRML v0.2 closes three named gaps in v0.1 (streaming, revocation, attestation) and one procedural gap (patent grant placement) without breaking the central property: every v0.1 manifest's hash is preserved under v0.2 canonicalisation rules. The cost of adoption remains one hash function call. The cost of non-adoption --- measured in regulatory exposure under EU AI Act Article 12, in reproducibility failures, in accumulated reviewer skepticism --- continues to rise. We invite the community to adopt the format in publication and audit pipelines. v0.3 freeze is targeted for early 2027.
+
+\section*{Acknowledgements}
+
+% TODO: RFC commenters (after 2026-05-22)
+
+\section*{Reproducibility statement}
+
+The specification, four reference implementations, conformance vectors, formal JSON Schema, and patent non-assertion grant are at \url{https://github.com/studio-11-co/falsify} under permissive licenses. The compliance mapping at \url{https://falsify.dev/compliance} is CC BY 4.0. This paper is reproducible from the LaTeX source committed alongside the specification.
+
+\section*{Conflict of interest statement}
+
+The author is the editor of the PRML specification and a co-founder of Studio 11, the entity that maintains the reference implementations. The specification and all implementations are released under permissive licenses (CC BY 4.0 / MIT) with an irrevocable patent non-assertion grant. There is no commercial product upstream of the specification.
+
+\appendix
+
+\section{Updated canonical-bytes ABNF grammar}
+\label{app:abnf}
+
+% TODO: full ABNF for v0.2 fields
+
+\section{Updated ISO/IEC 42001:2023 clause-by-clause mapping}
+\label{app:iso}
+
+% TODO: see falsify.dev/compliance for live version
+
+\section{Eight new v0.2 conformance vectors}
+\label{app:vectors}
+
+% TODO: verbatim TV-013–TV-020 with hashes
+
+\section{Full RFC comment archive}
+\label{app:rfc-archive}
+
+The complete archive of comments received during the 2026-05-08 to 2026-05-22 window, with editorial disposition for each, is at \url{https://spec.falsify.dev/v0.2-comments}. This appendix lists comment authors with consent to be named.
+
+% TODO: list
+
+\begin{thebibliography}{99}
+
+\bibitem{prml-v01-2026}
+C.~Öztürk. Pre-Registered ML Manifests: A Cryptographic Primitive for Verifiable Evaluation Claims. Working draft v0.1, Studio 11, May 2026. \url{https://spec.falsify.dev/v0.1}.
+
+\bibitem{chatbot-arena-2024}
+W.-L.~Chiang et al. Chatbot Arena: An Open Platform for Evaluating LLMs by Human Preference. ICML 2024.
+
+\bibitem{alpaca-eval-2024}
+X.~Li et al. AlpacaEval: An Automatic Evaluator of Instruction-Following Models. 2024. \url{https://github.com/tatsu-lab/alpaca_eval}.
+
+\bibitem{ct-2013}
+B.~Laurie, A.~Langley, E.~Kasper. Certificate Transparency. RFC 6962, June 2013.
+
+\bibitem{rekor-2021}
+Sigstore. Rekor: software supply chain transparency log. 2021. \url{https://github.com/sigstore/rekor}.
+
+\bibitem{eu-ai-act-2024}
+Regulation (EU) 2024/1689 of the European Parliament and of the Council of 13 June 2024 laying down harmonised rules on artificial intelligence (Artificial Intelligence Act). Official Journal of the European Union, 12 July 2024.
+
+\bibitem{nist-rmf-2023}
+National Institute of Standards and Technology. AI Risk Management Framework (AI RMF 1.0). NIST AI 100-1, January 2023.
+
+\bibitem{iso-42001-2023}
+ISO/IEC 42001:2023 — Information technology — Artificial intelligence — Management system. International Organization for Standardization, 2023.
+
+\end{thebibliography}
+
+\end{document}

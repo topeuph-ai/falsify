@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spec.falsify.dev/schema/prml-v0.1.schema.json",
+  "title": "PRML v0.1 — Pre-Registered ML Manifest",
+  "description": "Formal JSON Schema for the PRML v0.1 specification (https://spec.falsify.dev/v0.1). A manifest binds a pre-registered evaluation claim to a SHA-256 hash over canonicalised bytes. CC BY 4.0.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "claim_id",
+    "created_at",
+    "metric",
+    "comparator",
+    "threshold",
+    "dataset",
+    "seed",
+    "producer"
+  ],
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "prml/0.1",
+      "description": "Specification version. v0.1 manifests use the literal string 'prml/0.1'."
+    },
+    "claim_id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-7[0-9a-fA-F]{3}-[89ab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "description": "UUIDv7 identifier for the claim. Recommended: generate fresh per claim. Pattern allows the v7 form."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC 3339 timestamp marking when the manifest was authored. Used as the canonical pre-registration timestamp."
+    },
+    "metric": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "description": "Name of the metric being evaluated. Free-form string but should follow community conventions (e.g. 'accuracy', 'pass_at_1', 'refusal_rate', 'mean_episode_reward')."
+    },
+    "comparator": {
+      "type": "string",
+      "enum": [">=", "<=", ">", "<", "=="],
+      "description": "Direction of the threshold comparison. Required to make the claim falsifiable."
+    },
+    "threshold": {
+      "type": "number",
+      "description": "Numeric threshold against which the observed metric value is compared via 'comparator'."
+    },
+    "dataset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "hash"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Human-readable identifier for the dataset (e.g. 'imagenet-val-2012', 'humaneval', 'lunar-lander-v2')."
+        },
+        "hash": {
+          "type": "string",
+          "description": "Content-addressable hash of the dataset. SHA-256 hex form for static datasets; opaque identifier (e.g. 'huggingface:revision-d8f3') for platform-anchored datasets; 'n/a-streaming' or 'n/a-deterministic-env' for cases where content hash is undefined."
+        },
+        "uri": {
+          "type": "string",
+          "format": "uri",
+          "description": "Optional canonical URL for the dataset. Informative; not part of the hash commitment."
+        }
+      },
+      "description": "Dataset reference. The 'id' is human-readable; the 'hash' is the content commitment."
+    },
+    "seed": {
+      "oneOf": [
+        {"type": "integer", "minimum": 0, "maximum": 18446744073709551615},
+        {"type": "integer", "minimum": -9223372036854775808, "maximum": -1},
+        {"type": "null"}
+      ],
+      "description": "RNG seed used in the evaluation. Accepts uint64 (most common, e.g. NumPy/PyTorch) or int64 (negative seeds in some C/Go runtimes). May be null for non-deterministic systems (live streams, online RLHF)."
+    },
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Identifier of the producing entity. Domain (e.g. 'studio-11.co'), GitHub handle, ORCID, or any stable identifier."
+        },
+        "signature": {
+          "type": "string",
+          "description": "Optional detached signature over the canonical bytes by 'id''s key. Out of scope for v0.1 verifier behaviour; reserved for downstream systems."
+        }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable identifier for the model under evaluation (e.g. 'claude-3.5-sonnet@2025-10-01', 'resnet50-fp16')."
+        },
+        "hash": {
+          "type": "string",
+          "description": "Optional content hash of the model artefact. SHA-256 hex form when present."
+        },
+        "uri": {
+          "type": "string",
+          "format": "uri",
+          "description": "Optional canonical URL for the model artefact."
+        }
+      },
+      "description": "Optional model reference. Bind the manifest to a specific build."
+    },
+    "compute_envelope": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Optional structured description of compute conditions (precision, hardware class, software stack hash). Out of scope for verdict computation in v0.1."
+    },
+    "prior_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{64}$",
+      "description": "Optional SHA-256 hex of the manifest this one amends. Forms the audit chain. v0.1 specifies a forward-only chain."
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 4096,
+      "description": "Optional free-text rationale. Counts toward the canonical bytes; tampering with notes invalidates the hash."
+    }
+  },
+
+  "examples": [
+    {
+      "version": "prml/0.1",
+      "claim_id": "01900000-0000-7000-8000-000000000000",
+      "created_at": "2026-05-01T12:00:00Z",
+      "metric": "accuracy",
+      "comparator": ">=",
+      "threshold": 0.85,
+      "dataset": {
+        "id": "imagenet-val-2012",
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "seed": 42,
+      "producer": {
+        "id": "studio-11.co"
+      }
+    },
+    {
+      "version": "prml/0.1",
+      "claim_id": "01900000-0000-7000-8000-000000000010",
+      "created_at": "2026-05-08T20:00:00Z",
+      "metric": "pass_at_1",
+      "comparator": ">=",
+      "threshold": 0.40,
+      "dataset": {
+        "id": "openai/openai_humaneval",
+        "hash": "huggingface:revision-d8f3e1a2",
+        "uri": "https://huggingface.co/datasets/openai/openai_humaneval"
+      },
+      "seed": 42,
+      "producer": {"id": "studio-11.co"},
+      "model": {"id": "meta-llama/Llama-3.1-8B-Instruct"},
+      "notes": "HumanEval pass@1, n=164 problems, temperature 0.0, single completion per problem."
+    }
+  ],
+
+  "$defs": {
+    "comparator": {
+      "type": "string",
+      "enum": [">=", "<=", ">", "<", "=="]
+    }
+  }
+}

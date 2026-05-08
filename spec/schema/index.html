@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PRML JSON Schemas — spec.falsify.dev</title>
+<meta name="description" content="Formal JSON Schemas for PRML v0.1 (stable) and v0.2 (RFC). Drop-in IDE autocomplete; CI validation; no install required.">
+<link rel="canonical" href="https://spec.falsify.dev/schema/">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Source+Serif+4:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #fdfdfb; --ink: #0b0f14; --ink-2: #2b3340; --ink-3: #5a6677;
+          --rule: #d6d9de; --accent: #39d98a; --code-bg: #f4f4f0; }
+  * { box-sizing: border-box; }
+  body { background: var(--bg); color: var(--ink); margin: 0;
+         font-family: 'Source Serif 4', Georgia, serif; font-size: 17px; line-height: 1.65; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 60px 24px 100px; }
+  header.masthead { font-family: 'Space Grotesk', sans-serif; font-size: 12px;
+                    letter-spacing: 0.04em; color: var(--ink-3); margin-bottom: 36px;
+                    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  header.masthead a { color: var(--ink-3); text-decoration: none; border-bottom: 1px dotted var(--ink-3); }
+  header.masthead .brand { color: var(--ink); font-weight: 700; }
+  h1 { font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 500;
+       margin: 0 0 8px; letter-spacing: -0.012em; }
+  .sub { color: var(--ink-3); margin-bottom: 32px; font-style: italic; }
+  h2 { font-family: 'Space Grotesk', sans-serif; font-size: 18px; margin: 36px 0 12px;
+       font-weight: 500; }
+  pre { background: var(--code-bg); padding: 14px 18px; font-family: 'JetBrains Mono', monospace;
+        font-size: 13.5px; line-height: 1.55; border-left: 2px solid var(--accent);
+        overflow-x: auto; margin: 12px 0 18px; }
+  code { font-family: 'JetBrains Mono', monospace; font-size: 0.9em;
+         background: var(--code-bg); padding: 1px 5px; }
+  table { width: 100%; border-collapse: collapse; font-family: 'Space Grotesk', sans-serif;
+          font-size: 14.5px; margin: 14px 0 22px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--rule); }
+  th { background: var(--code-bg); font-weight: 600; }
+  td a { color: var(--ink); }
+  p { margin: 0 0 14px; }
+  ul { margin: 6px 0 18px 22px; padding: 0; }
+  li { margin-bottom: 5px; }
+  footer { margin-top: 80px; padding-top: 18px; border-top: 1px solid var(--rule);
+           font-family: 'Space Grotesk', sans-serif; font-size: 11px; color: var(--ink-3);
+           letter-spacing: 0.04em; text-transform: uppercase; }
+  footer a { color: var(--ink-3); text-decoration: none; border-bottom: 1px dotted var(--ink-3); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <span><span class="brand">› falsify · spec</span></span>
+  <span>
+    <a href="https://falsify.dev">falsify.dev</a> ·
+    <a href="https://spec.falsify.dev/v0.1">v0.1</a> ·
+    <a href="https://spec.falsify.dev/v0.2-rfc">v0.2 RFC</a> ·
+    <a href="https://github.com/studio-11-co/falsify/discussions">discuss</a>
+  </span>
+</header>
+
+<h1>PRML JSON Schemas</h1>
+<p class="sub">Drop-in IDE autocomplete, CI validation, and standards-body verification — no installation.</p>
+
+<p>The schemas are <a href="https://json-schema.org/draft/2020-12/schema">JSON Schema 2020-12</a> conformant. They validate the eight required PRML v0.1 fields plus the optional v0.2 additions (streaming variant, runner attestation, revocation). Every v0.1 manifest validates against both schemas — backwards compatibility is mechanically verified across the locked test vectors (12 v0.1 + 8 v0.2).</p>
+
+<h2>URLs</h2>
+<table>
+  <thead><tr><th>Schema</th><th>URL</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>v0.1 (stable)</strong></td>
+      <td><a href="https://spec.falsify.dev/schema/prml-v0.1.schema.json">prml-v0.1.schema.json</a></td>
+      <td>Working draft, public review</td>
+    </tr>
+    <tr>
+      <td><strong>v0.2 (RFC)</strong></td>
+      <td><a href="https://spec.falsify.dev/schema/prml-v0.2.schema.json">prml-v0.2.schema.json</a></td>
+      <td>Comment window through 2026-05-22 23:59 UTC</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>VS Code / IDE autocomplete</h2>
+<p>Add to your project's <code>.vscode/settings.json</code>:</p>
+<pre>{
+  "yaml.schemas": {
+    "https://spec.falsify.dev/schema/prml-v0.1.schema.json":
+      ["**/*.prml.yaml", "**/manifest.yaml", "**/prml-manifest.yaml"]
+  }
+}</pre>
+
+<p>Requires the <a href="https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml">YAML extension by Red Hat</a>. JetBrains IDEs and Neovim with <code>schemastore</code> integration also pick this up.</p>
+
+<h2>JSON Schema Store registration</h2>
+<p>The schemas can be added to <a href="https://www.schemastore.org/">SchemaStore.org</a> for global IDE auto-detection. PR pending — once accepted, any file matching the patterns above gets autocomplete without per-project config.</p>
+
+<h2>CI validation (Python)</h2>
+<pre>pip install jsonschema pyyaml
+
+python3 -c "
+import json, yaml, jsonschema, urllib.request
+schema = json.loads(urllib.request.urlopen(
+    'https://spec.falsify.dev/schema/prml-v0.1.schema.json').read())
+manifest = yaml.safe_load(open('manifest.yaml'))
+jsonschema.validate(manifest, schema)
+print('OK — manifest.yaml conforms to PRML v0.1')
+"</pre>
+
+<h2>CI validation (Node)</h2>
+<pre>npm install ajv ajv-formats yaml node-fetch
+
+node -e "
+import('node-fetch').then(async ({default: fetch}) => {
+  const Ajv = (await import('ajv')).default;
+  const addFormats = (await import('ajv-formats')).default;
+  const yaml = await import('yaml');
+  const fs = await import('fs');
+  const schema = await (await fetch(
+    'https://spec.falsify.dev/schema/prml-v0.1.schema.json')).json();
+  const ajv = new Ajv({strict: false});
+  addFormats(ajv);
+  const validate = ajv.compile(schema);
+  const ok = validate(yaml.parse(fs.readFileSync('manifest.yaml', 'utf8')));
+  console.log(ok ? 'OK' : validate.errors);
+});
+"</pre>
+
+<h2>What the schemas do not catch</h2>
+<ul>
+  <li><strong>Hash equivalence.</strong> JSON Schema validates structure; it does not verify the SHA-256 anchor. Use <code>falsify verify</code> or any reference impl for that.</li>
+  <li><strong>Canonicalisation drift.</strong> A YAML file that validates against the schema but emits different canonical bytes across implementations is a bug elsewhere — see <a href="https://github.com/studio-11-co/falsify/tree/main/spec/test-vectors">conformance vectors</a>.</li>
+  <li><strong>Conduct.</strong> The schema does not (and cannot) prevent selective publication. PRML §8.1 names this limit explicitly.</li>
+</ul>
+
+<h2>Stability & versioning</h2>
+<p>The v0.1 schema is locked: any change requires a v0.2+ bump. The v0.2 schema is in RFC and may change before <strong>2026-05-22</strong>. Production CI should pin to v0.1 until v0.2 freezes.</p>
+
+<footer>
+  <p>PRML v0.1 working draft · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · Editor: Studio 11 · <a href="mailto:hello@studio-11.co">hello@studio-11.co</a></p>
+</footer>
+
+</div>
+</body>
+</html>
