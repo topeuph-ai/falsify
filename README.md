@@ -35,6 +35,8 @@ TAMPERED  sha256 mismatch — spec modified after locking  (exit 3)
 
 **Try it without installing:** [`registry.falsify.dev`](https://registry.falsify.dev) — paste a PRML manifest, get a SHA-256 permalink and a README badge. No account, no server-side state beyond the hash.
 
+**Add it to your CI in five lines:** [`studio-11-co/prml-verify-action@v1`](https://github.com/studio-11-co/prml-verify-action) — composite GitHub Action wrapping the falsify CLI. Block merges on tampered or regressed eval claims. Optional public registry anchor.
+
 **Need it locked for one of your published claims?** [`falsify.dev/sprint`](https://falsify.dev/sprint) — €9,000 / 14-day Diagnostic Sprint: PRML manifest authored, verifier deployed, audit report shipped.
 
 **What is PRML?** [`falsify.dev/what-is-prml`](https://falsify.dev/what-is-prml) — plain-English answer page.
