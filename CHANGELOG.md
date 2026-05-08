@@ -6,6 +6,19 @@ numbers follow [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.1.4] — 2026-05-08
+
+### Fixed
+
+- **Wheel packaging gap.** v0.1.3 PyPI wheel was unusable on a clean install: `falsify lock` failed with `FileNotFoundError: hypothesis.schema.yaml` and `falsify init` failed with `template not found`, because the schema and template files lived at the repo root (outside the `py-modules = ["falsify"]` namespace) and were therefore not shipped in the wheel. v0.1.4 inlines both files as `_BUNDLED_SCHEMA_YAML` and `_BUNDLED_TEMPLATE_YAML` constants in `falsify.py` and uses them as fallbacks when the external files are missing. Dev mode (where the files exist alongside the script) still prefers the on-disk files; installed mode now works end-to-end without any external fetch.
+- `falsify lock` now succeeds against a clean `pip install falsify==0.1.4` with no companion files.
+- `falsify init <claim>` now writes a usable spec.yaml on a clean install.
+
+### Notes
+
+- Schema and template content unchanged — only delivery mechanism fixed.
+- Downstream consumers (e.g. `studio-11-co/prml-verify-action`) can drop the curl-based data-file workaround once 0.1.4 is on PyPI.
+
 ## [0.1.3] — 2026-05-02
 
 Documentation, brand, and metadata refresh. No functional code changes.

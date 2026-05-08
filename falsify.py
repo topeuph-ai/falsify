@@ -25,7 +25,7 @@ from typing import Any, Callable
 
 import yaml
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 EXIT_PASS = 0
 EXIT_FAIL = 10
@@ -36,6 +36,170 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 TEMPLATE_PATH = SCRIPT_DIR / "examples" / "template.yaml"
 SCHEMA_PATH = SCRIPT_DIR / "hypothesis.schema.yaml"
 FALSIFY_DIR = Path(".falsify")
+
+# Inlined data files (v0.1.4): pyproject.toml's py-modules layout cannot ship
+# data files in the wheel under setuptools, so the file paths above only resolve
+# in dev mode. The constants below are the source of truth bundled inside the
+# Python module itself, ensuring `falsify init` and `falsify lock` work on a
+# clean `pip install falsify` without any external file fetch.
+_BUNDLED_SCHEMA_YAML = """\
+schema_version: 1
+
+type: object
+required:
+  - claim
+  - falsification
+  - experiment
+
+properties:
+
+  claim:
+    type: string
+    required: true
+    description: >
+      One-sentence hypothesis that can, in principle, be proven wrong.
+      Must be a concrete, falsifiable statement — not a vibe.
+
+  falsification:
+    type: object
+    required: true
+    description: >
+      The conditions under which the claim is considered falsified.
+    properties:
+      failure_criteria:
+        type: array
+        required: true
+        min_items: 1
+        description: >
+          One or more conditions. If ANY criterion triggers on a run,
+          the claim is FAIL.
+        items:
+          type: object
+          required: [metric, direction, threshold]
+          properties:
+            metric:
+              type: string
+              description: >
+                Name of the metric. Must be a key returned by the
+                experiment's metric_fn.
+            direction:
+              type: string
+              enum: [above, below, equals]
+              description: >
+                Direction that must hold for the claim to PASS.
+                Comparisons are STRICT — boundary equality FAILS.
+                  above:  observed >  threshold  (strictly greater, NOT >=)
+                  below:  observed <  threshold  (strictly less,    NOT <=)
+                  equals: |observed - threshold| < 1e-9
+                A claim like "at least N" with integer values must set
+                threshold to N-1 and direction to above (so observed=N
+                PASSes as N > N-1). Setting threshold=N with direction
+                above would FAIL at the exact boundary.
+            threshold:
+              type: number
+              description: Numeric threshold the metric is compared to.
+      minimum_sample_size:
+        type: integer
+        required: true
+        minimum: 1
+        description: >
+          Minimum n before a verdict is considered valid. Runs with
+          fewer samples return an indeterminate verdict, not PASS.
+      stopping_rule:
+        type: string
+        required: true
+        description: >
+          When to stop collecting evidence — e.g. "after 1000 samples"
+          or "after 1 epoch over the eval set". Locked at pre-registration
+          time to prevent optional stopping.
+
+  experiment:
+    type: object
+    required: true
+    description: The reproducible procedure that generates evidence.
+    properties:
+      command:
+        type: string
+        required: true
+        description: Shell command that runs the experiment.
+      dataset:
+        type: string
+        required: false
+        description: Path or identifier of the dataset under test.
+      metric_fn:
+        type: string
+        required: true
+        pattern: "^[A-Za-z_][\\\\w.]*:[A-Za-z_]\\\\w*$"
+        description: >
+          Dotted import path and function, separated by a colon.
+          Example: "my_pkg.metrics:accuracy". The function must return
+          a dict keyed by metric name.
+
+  environment:
+    type: object
+    required: false
+    description: Environment pins used to reproduce the run.
+    properties:
+      python:
+        type: string
+        description: Python version spec, e.g. "3.11" or ">=3.11,<3.13".
+      packages:
+        type: array
+        items:
+          type: string
+          description: PEP-508 requirement string, e.g. "numpy==2.0.0".
+
+  artifacts:
+    type: object
+    required: false
+    description: Files the experiment is expected to produce.
+    properties:
+      outputs:
+        type: array
+        items:
+          type: string
+          description: Path (glob allowed) of an expected output artifact.
+
+placeholder_markers:
+  - "<"
+  - "TODO"
+  - "FIXME"
+  - "REPLACE_ME"
+  - "XXX"
+"""
+
+_BUNDLED_TEMPLATE_YAML = """\
+# Falsification Engine — claim spec
+#
+# Fill in every placeholder before running `falsify lock`.
+# Placeholders: "<...>", TODO, FIXME, REPLACE_ME, XXX.
+# A spec with any placeholder left in a string field cannot be locked
+# (the CLI will exit 2: bad spec).
+
+claim: "<one-sentence hypothesis that can, in principle, be proven wrong>"
+
+falsification:
+  failure_criteria:
+    - metric: "<metric name, must match a key returned by metric_fn>"
+      direction: "<above|below|equals>"
+      threshold: 0.0  # TODO: real threshold
+  minimum_sample_size: 1  # TODO: real n
+  stopping_rule: "<when to stop — e.g. 'after 1000 samples' or 'after 1 epoch'>"
+
+experiment:
+  command: "<shell command that runs the experiment, e.g. python run.py>"
+  dataset: "<path or identifier of the dataset under test>"
+  metric_fn: "<module:function>"  # e.g. my_pkg.metrics:accuracy
+
+environment:
+  python: "3.11"
+  packages:
+    - "<package==version>"
+
+artifacts:
+  outputs:
+    - "<path/to/expected/output>"
+"""
 
 _FALLBACK_PLACEHOLDER_MARKERS = ("<", "TODO", "FIXME", "REPLACE_ME", "XXX")
 _RUN_TIMEOUT_S = 300
@@ -409,15 +573,12 @@ def cmd_init(args: argparse.Namespace) -> int:
         )
         return 1
 
-    if not TEMPLATE_PATH.exists():
-        print(
-            f"falsify init: template not found at {TEMPLATE_PATH}",
-            file=sys.stderr,
-        )
-        return 1
-
     target_dir.mkdir(parents=True, exist_ok=True)
-    spec_path.write_text(TEMPLATE_PATH.read_text())
+    if TEMPLATE_PATH.exists():
+        spec_path.write_text(TEMPLATE_PATH.read_text())
+    else:
+        # Fallback: bundled template (pip-installed wheel ships data inline).
+        spec_path.write_text(_BUNDLED_TEMPLATE_YAML)
 
     print(f"Created {spec_path}")
     print("Next: edit the spec, replace placeholders, then `falsify lock`.")
@@ -430,8 +591,13 @@ def _stub(name: str) -> int:
 
 
 def _load_schema() -> dict:
-    with SCHEMA_PATH.open() as f:
-        return yaml.safe_load(f)
+    if SCHEMA_PATH.exists():
+        with SCHEMA_PATH.open() as f:
+            return yaml.safe_load(f)
+    # Fallback: bundled schema (used when installed via pip wheel where the
+    # external file isn't shipped). See _BUNDLED_SCHEMA_YAML at the top of
+    # this module.
+    return yaml.safe_load(_BUNDLED_SCHEMA_YAML)
 
 
 def _collect_required_keys(node: dict) -> list[str]:
