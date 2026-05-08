@@ -1,7 +1,7 @@
 # PRML v0.2 — RFC
 
 **Status:** Draft (open for community comment)
-**Editor:** Cüneyt Öztürk · Studio 11 · cuneyt@studio-11.co
+**Editor:** Cüneyt Öztürk · Studio 11 · hello@studio-11.co
 **Comment window:** 2026-05-08 → 2026-05-22 (14 days)
 **Freeze date:** 2026-05-22, 23:59 UTC
 **Final draft expected:** 2026-05-29
@@ -13,7 +13,7 @@
 ## How to comment
 
 1. **GitHub issues** at `github.com/studio-11-co/falsify/issues` with label `rfc-v0.2`. Preferred for normative concerns.
-2. **Email** the editor at `cuneyt@studio-11.co` with subject prefix `[v0.2 RFC]`. Preferred for confidential or institutional comments (JTC 21, AISI, audit firms).
+2. **Email** the editor at `hello@studio-11.co` with subject prefix `[v0.2 RFC]`. Preferred for confidential or institutional comments (JTC 21, AISI, audit firms).
 3. **Pull request** against this document for prose-level edits.
 
 A comment that lands by **2026-05-22 23:59 UTC** can change the freeze. A comment after that date is logged and rolled into v0.3 unless it identifies a security flaw.
