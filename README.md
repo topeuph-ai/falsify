@@ -28,10 +28,13 @@ TAMPERED  sha256 mismatch — spec modified after locking  (exit 3)
 ![honesty](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/studio-11-co/falsify/main/.falsify/badge.json)
 ![python](https://img.shields.io/badge/python-3.11%2B-blue)
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)
+[![SchemaStore](https://img.shields.io/badge/schema-in%20SchemaStore-blue.svg)](https://github.com/SchemaStore/schemastore/pull/5673)
 
 > Code: MIT. "FALSIFY" name and chevron logo: ™ reserved. See [NOTICE](NOTICE) · [docs/COMMERCIAL.md](docs/COMMERCIAL.md).
 
 ---
+
+**Open `*.prml.yaml` in your IDE:** as of May 2026 the PRML JSON Schema is in the [SchemaStore](https://github.com/SchemaStore/schemastore/pull/5673) catalog. VS Code, JetBrains IDEs, Helix, Zed, and anything using `yaml-language-server` autocomplete and validate manifest files out of the box. No config.
 
 **Try it without installing:** [`registry.falsify.dev`](https://registry.falsify.dev) — paste a PRML manifest, get a SHA-256 permalink and a README badge. No account, no server-side state beyond the hash.
 
@@ -43,7 +46,7 @@ TAMPERED  sha256 mismatch — spec modified after locking  (exit 3)
 
 ---
 
-> **Latest — 2026-05-07** · `registry.falsify.dev` live. README badges available at `registry.falsify.dev/badge/<hash>.svg`. v0.1.3 released earlier this month ([release notes](https://github.com/studio-11-co/falsify/releases/tag/v0.1.3) · `pip install falsify==0.1.3`). PRML v0.1 specification published with **four reference implementations** (Python · [JavaScript](impl/js/) · [Go](impl/go/) · [Rust](impl/rust/)) all reproducing the [12 v0.1 vectors](spec/test-vectors/v0.1/) and [6 v0.2 candidate vectors](spec/v0.2/test-vectors-candidates.json) byte-for-byte. [14-page arXiv preprint](spec/paper/) and [v0.2 RFC roadmap](spec/v0.2/ROADMAP.md) (freeze 2026-05-22) open for public review.
+> **Latest — 2026-05-12** · **PRML JSON Schema merged into [SchemaStore](https://github.com/SchemaStore/schemastore/pull/5673)** by Mads Kristensen (Microsoft) — `.prml.yaml` files now get autocomplete + validation in every IDE that reads the SchemaStore catalog (VS Code, JetBrains, Helix, Zed). JTC 21 comment paper submitted via the EU AI Act standards-body channel. `registry.falsify.dev` live with README badges at `registry.falsify.dev/badge/<hash>.svg`. v0.1.3 released ([release notes](https://github.com/studio-11-co/falsify/releases/tag/v0.1.3) · `pip install falsify==0.1.3`). PRML v0.1 specification published with **four reference implementations** (Python · [JavaScript](impl/js/) · [Go](impl/go/) · [Rust](impl/rust/)) all reproducing the [12 v0.1 vectors](spec/test-vectors/v0.1/) and [8 v0.2 candidate vectors](spec/v0.2/test-vectors-candidates.json) byte-for-byte. [14-page arXiv preprint](spec/paper/) and [v0.2 RFC roadmap](spec/v0.2/ROADMAP.md) (freeze 2026-05-22) open for public review.
 
 ---
 
