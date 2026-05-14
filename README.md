@@ -16,7 +16,7 @@ $ falsify verdict claim.yaml
 TAMPERED  sha256 mismatch — spec modified after locking  (exit 3)
 ```
 
-4 reference implementations — Python, JavaScript, Go, Rust — byte-equivalent on 12 conformance vectors. Designed for ML eval rigor. Maps to EU AI Act Article 12 evidence as a side effect.
+4 reference implementations — Python, JavaScript, Go, Rust — byte-equivalent on the 12 v0.1 conformance vectors (8 v0.2 candidates ship alongside, full 20-vector parity targeted for v0.2 freeze 2026-05-22). Designed for ML eval rigor. Maps to EU AI Act Article 12 evidence as a side effect.
 
 > **Pre-registration + CI for AI-agent claims.** Lock the claim and threshold with SHA-256 *before* running the experiment — or the result doesn't count.
 
@@ -47,7 +47,7 @@ TAMPERED  sha256 mismatch — spec modified after locking  (exit 3)
 
 ---
 
-> **Latest — 2026-05-12** · **PRML JSON Schema merged into [SchemaStore](https://github.com/SchemaStore/schemastore/pull/5673)** by Mads Kristensen (Microsoft) — `.prml.yaml` files now get autocomplete + validation in every IDE that reads the SchemaStore catalog (VS Code, JetBrains, Helix, Zed). JTC 21 comment paper submitted via the EU AI Act standards-body channel. `registry.falsify.dev` live with README badges at `registry.falsify.dev/badge/<hash>.svg`. v0.1.3 released ([release notes](https://github.com/studio-11-co/falsify/releases/tag/v0.1.3) · `pip install falsify==0.1.3`). PRML v0.1 specification published with **four reference implementations** (Python · [JavaScript](impl/js/) · [Go](impl/go/) · [Rust](impl/rust/)) all reproducing the [12 v0.1 vectors](spec/test-vectors/v0.1/) and [8 v0.2 candidate vectors](spec/v0.2/test-vectors-candidates.json) byte-for-byte. [14-page arXiv preprint](spec/paper/) and [v0.2 RFC roadmap](spec/v0.2/ROADMAP.md) (freeze 2026-05-22) open for public review.
+> **Latest — 2026-05-14** · v0.1 published on Zenodo: citable DOI [10.5281/zenodo.20177839](https://doi.org/10.5281/zenodo.20177839). PRML JSON Schema [merged into SchemaStore](https://github.com/SchemaStore/schemastore/pull/5673) (2026-05-11) by Mads Kristensen (Microsoft) — `.prml.yaml` files now autocomplete in VS Code, JetBrains, Helix, Zed, and Cursor. [OECD.AI Catalogue submission](https://oecd.ai/en/catalogue/tools) filed, vetting in progress. NIST AI 800-2 late comment archived. JTC 21 routed via Dr. Sebastian Hallensleben. `registry.falsify.dev` live with README badges at `registry.falsify.dev/badge/<hash>.svg`. **v0.1.4 released** ([release notes](https://github.com/studio-11-co/falsify/releases/tag/v0.1.4) · `pip install falsify==0.1.4`). PRML v0.1 specification published with **four reference implementations** (Python · [JavaScript](impl/js/) · [Go](impl/go/) · [Rust](impl/rust/)) all reproducing the [12 v0.1 vectors](spec/test-vectors/v0.1/) and [8 v0.2 candidate vectors](spec/test-vectors/v0.2/) byte-for-byte (20 vectors total). [14-page arXiv preprint](spec/paper/) and [v0.2 RFC](https://spec.falsify.dev/v0.2-rfc) (freeze 2026-05-22) open for public review.
 
 ---
 
@@ -106,7 +106,7 @@ Falsify is the reference implementation of **PRML v0.1** — Pre-Registered ML M
 - **[`spec/paper/`](spec/paper/)** — 14-page arXiv preprint (LaTeX, CC BY 4.0)
 - **[`spec/v0.2/ROADMAP.md`](spec/v0.2/ROADMAP.md)** — v0.2 RFC roadmap (freeze 2026-05-22)
 
-**Reference implementations** (four languages, all 12 v0.1 + 6 v0.2 candidate vectors pass byte-for-byte):
+**Reference implementations** (four languages, 12 v0.1 + 8 v0.2 candidate vectors = 20 total; multi-lang CI currently runs 18, full 20-vector parity scheduled for v0.2 freeze 2026-05-22):
 
 - **Python:** [`falsify.py`](falsify.py) — original reference, uses PyYAML
 - **Node.js:** [`impl/js/`](impl/js/) — second reference, ~400 LOC, hand-rolled, zero deps
