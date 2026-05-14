@@ -29,6 +29,7 @@ TAMPERED  sha256 mismatch — spec modified after locking  (exit 3)
 ![python](https://img.shields.io/badge/python-3.11%2B-blue)
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)
 [![SchemaStore](https://img.shields.io/badge/schema-in%20SchemaStore-blue.svg)](https://github.com/SchemaStore/schemastore/pull/5673)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20177839.svg)](https://doi.org/10.5281/zenodo.20177839)
 
 > Code: MIT. "FALSIFY" name and chevron logo: ™ reserved. See [NOTICE](NOTICE) · [docs/COMMERCIAL.md](docs/COMMERCIAL.md).
 
@@ -494,3 +495,5 @@ adoption scenarios: ML team, DevOps team, research group.
 
 Claude Opus 4.7 (1M context), in three days, for the Anthropic
 Built with Opus 4.7 hackathon.
+
+**Cite the spec:** Öztürk, C. (2026). *PRML v0.1*. Zenodo. [https://doi.org/10.5281/zenodo.20177839](https://doi.org/10.5281/zenodo.20177839)
