@@ -6,6 +6,58 @@ numbers follow [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+Specification-track changes between 0.1.4 and the next CLI release. No
+behaviour changes in the installed `falsify` Python package.
+
+### Added — specification
+
+- **v0.2 RFC** at `spec/v0.2/RFC.md` and live at
+  `spec.falsify.dev/v0.2/rfc` — ten changes, five open questions, freeze
+  targeted 2026-05-22, release 2026-06-15. Companion paper outline at
+  `spec/paper/prml-v0.2-preprint.tex`.
+- **Eight v0.2 candidate vectors** at `spec/test-vectors/v0.2/test-vectors.json`
+  (TV-013 through TV-020). Supersedes the six-vector candidate set at
+  `spec/v0.2/test-vectors-candidates.json` for CI purposes; the latter
+  is retained for historical reference until v0.2 freeze.
+- **JSON Schemas** for v0.1 and v0.2 manifests shipped under `spec/schema/`,
+  linked from the SchemaStore catalog and surfaced in the spec masthead.
+- **Zenodo DOI** [10.5281/zenodo.20177839] for the v0.1 spec. README,
+  CITATION.cff, spec/index.html footer, and the arXiv preprint author
+  block all carry the DOI.
+- **SchemaStore catalog merge** — PRML manifests are now JSON-schema-
+  validated by every editor that uses SchemaStore (VS Code, JetBrains,
+  Neovim, etc.). Routed for ISO/IEC JTC 21 review.
+
+### Changed — conformance CI
+
+- `.github/workflows/multi-lang-conformance.yml` runs all 20 vectors
+  (12 v0.1 normative + 8 v0.2 candidate) across Python, JS, Go, and
+  Rust per push and daily at 04:00 UTC. Total verification surface:
+  4 implementations × 20 vectors = 80 byte-for-byte agreements per run.
+  Replaces the earlier 18-vector configuration. Redundant
+  `.github/workflows/conformance.yml` removed.
+- `impl/{js,go,rust}` canonicalizers are now **version-aware** on
+  `FLOAT_FIELDS`. v0.1 keeps `threshold` as float64 (integer thresholds
+  carry `.0`); v0.2 RFC P-XX relaxes `threshold` to `int|float`, so
+  integer thresholds render as plain integers under v0.2. All four
+  reference implementations now pass 12/12 v0.1 + 8/8 v0.2 byte-for-byte.
+
+### Changed — registry
+
+- `registry.falsify.dev` Worker now parses incoming YAML via `js-yaml`
+  and runs the byte-equivalent canonicalizer (port of
+  `impl/js/falsify.js`, version-aware). Replaces the prior naive
+  text-based canonicalize that diverged from `yaml.safe_dump` for
+  nested manifests. 19/20 conformance vectors agree byte-for-byte
+  with the Python reference; TV-006 (2^64-1 seed) is a JS-Number-
+  precision edge case documented as a known limitation.
+
+### Added — tooling
+
+- `tools/registry_hash.py` — local helper that computes the
+  `registry.falsify.dev`-equivalent SHA-256 without a network round-trip,
+  for offline verification and CI gating.
+
 ## [0.1.4] — 2026-05-08
 
 ### Fixed
@@ -303,7 +355,9 @@ verdict refresh, multi-metric specs.
 - Built with Claude Code + Opus 4.7 (1M context). Every commit
   carries a `Co-Authored-By:` trailer.
 
-[Unreleased]: https://github.com/studio-11-co/falsify/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/studio-11-co/falsify/compare/v0.1.4...HEAD
+[0.1.4]: https://github.com/studio-11-co/falsify/releases/tag/v0.1.4
+[0.1.3]: https://github.com/studio-11-co/falsify/releases/tag/v0.1.3
 [0.1.2]: https://github.com/studio-11-co/falsify/releases/tag/v0.1.2
 [0.1.1]: https://github.com/studio-11-co/falsify/releases/tag/v0.1.1
 [0.1.0]: https://github.com/studio-11-co/falsify/releases/tag/v0.1.0
