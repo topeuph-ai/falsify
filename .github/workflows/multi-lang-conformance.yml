@@ -2,8 +2,8 @@ name: Multi-language conformance
 
 # Asserts that every reference implementation (Python, Node.js, Go, Rust)
 # reproduces the v0.1 normative suite (12 vectors) AND the v0.2 candidate
-# suite (6 vectors) byte-for-byte. Total verification surface per run:
-# 4 implementations × 18 vectors = 72 byte-for-byte agreements.
+# suite (8 vectors) byte-for-byte. Total verification surface per run:
+# 4 implementations × 20 vectors = 80 byte-for-byte agreements.
 #
 # A failure in any language is a portability regression. Treat it as a
 # specification-level event: either the canonicalizer in that language
@@ -17,7 +17,6 @@ on:
       - 'falsify.py'
       - 'impl/**'
       - 'spec/test-vectors/**'
-      - 'spec/v0.2/test-vectors-candidates.json'
       - 'spec/v0.2/generate-candidates.py'
       - '.github/workflows/multi-lang-conformance.yml'
   pull_request:
@@ -25,7 +24,6 @@ on:
       - 'falsify.py'
       - 'impl/**'
       - 'spec/test-vectors/**'
-      - 'spec/v0.2/test-vectors-candidates.json'
       - 'spec/v0.2/generate-candidates.py'
       - '.github/workflows/multi-lang-conformance.yml'
   schedule:
@@ -70,13 +68,13 @@ jobs:
           sys.exit(10 if fails else 0)
           PY
 
-      - name: Conformance — v0.2 candidate suite (6 vectors)
+      - name: Conformance — v0.2 candidate suite (8 vectors)
         run: |
           python3 - <<'PY'
           import json, hashlib, sys
           sys.path.insert(0, '.')
           import falsify
-          vectors = json.load(open('spec/v0.2/test-vectors-candidates.json'))
+          vectors = json.load(open('spec/test-vectors/v0.2/test-vectors.json'))
           fails = 0
           for v in vectors:
               produced = falsify._canonicalize(v['input'])
@@ -103,8 +101,8 @@ jobs:
       - name: Conformance — v0.1 normative suite (12 vectors)
         run: node impl/js/falsify.js test-vectors spec/test-vectors/v0.1/test-vectors.json
 
-      - name: Conformance — v0.2 candidate suite (6 vectors)
-        run: node impl/js/falsify.js test-vectors spec/v0.2/test-vectors-candidates.json
+      - name: Conformance — v0.2 candidate suite (8 vectors)
+        run: node impl/js/falsify.js test-vectors spec/test-vectors/v0.2/test-vectors.json
 
   go-conformance:
     name: Go (impl/go)
@@ -124,8 +122,8 @@ jobs:
       - name: Conformance — v0.1 normative suite (12 vectors)
         run: ./impl/go/falsify-go test-vectors spec/test-vectors/v0.1/test-vectors.json
 
-      - name: Conformance — v0.2 candidate suite (6 vectors)
-        run: ./impl/go/falsify-go test-vectors spec/v0.2/test-vectors-candidates.json
+      - name: Conformance — v0.2 candidate suite (8 vectors)
+        run: ./impl/go/falsify-go test-vectors spec/test-vectors/v0.2/test-vectors.json
 
   rust-conformance:
     name: Rust (impl/rust)
@@ -155,8 +153,8 @@ jobs:
       - name: Conformance — v0.1 normative suite (12 vectors)
         run: ./impl/rust/target/release/falsify-rs test-vectors spec/test-vectors/v0.1/test-vectors.json
 
-      - name: Conformance — v0.2 candidate suite (6 vectors)
-        run: ./impl/rust/target/release/falsify-rs test-vectors spec/v0.2/test-vectors-candidates.json
+      - name: Conformance — v0.2 candidate suite (8 vectors)
+        run: ./impl/rust/target/release/falsify-rs test-vectors spec/test-vectors/v0.2/test-vectors.json
 
   conformance-summary:
     name: All four implementations agree
@@ -182,4 +180,4 @@ jobs:
             echo "    in spec/analysis/canonicalization-portability-v0.1.md."
             exit 1
           fi
-          echo "::notice::All four reference implementations passed all 18 vectors byte-for-byte."
+          echo "::notice::All four reference implementations passed all 20 vectors byte-for-byte."

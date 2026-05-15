@@ -38,8 +38,16 @@ const PLAIN_BOOL_NULL = new Set([
 
 // Fields whose value MUST round-trip as a float even when integer-valued.
 // PyYAML preserves float-ness via its number type; JSON parsers in many
-// languages do not. The spec field type (float64) is the source of truth.
-const FLOAT_FIELDS = new Set(['threshold']);
+// languages do not. The spec field type is the source of truth, and it is
+// version-aware: v0.1 fixed threshold as float64 (integer-valued thresholds
+// render with explicit ".0" suffix), v0.2 RFC P-XX relaxes threshold to
+// int|float (integer-valued thresholds render as plain integers).
+const FLOAT_FIELDS_V01 = new Set(['threshold']);
+const FLOAT_FIELDS_V02 = new Set();
+
+function floatFieldsFor(version) {
+  return version === 'prml/0.1' ? FLOAT_FIELDS_V01 : FLOAT_FIELDS_V02;
+}
 
 function looksLikeNumber(s) {
   if (/^[-+]?(\.[0-9]+|[0-9]+(\.[0-9]*)?)([eE][-+]?[0-9]+)?$/.test(s)) return true;
@@ -130,7 +138,7 @@ function renderScalar(v, hint) {
   throw new Error('renderScalar: unsupported value type ' + typeof v);
 }
 
-function renderMapping(obj, indent) {
+function renderMapping(obj, indent, floatFields) {
   const keys = Object.keys(obj).sort();
   const lines = [];
   const pad = ' '.repeat(indent);
@@ -138,13 +146,13 @@ function renderMapping(obj, indent) {
     const v = obj[k];
     if (v !== null && typeof v === 'object' && !Array.isArray(v) && typeof v !== 'bigint') {
       lines.push(`${pad}${k}:`);
-      lines.push(renderMapping(v, indent + 2));
+      lines.push(renderMapping(v, indent + 2, floatFields));
     } else if (Array.isArray(v)) {
       lines.push(`${pad}${k}:`);
       for (const item of v) {
-        const hint = FLOAT_FIELDS.has(k) ? 'float' : null;
+        const hint = floatFields.has(k) ? 'float' : null;
         if (item !== null && typeof item === 'object' && !Array.isArray(item)) {
-          const sub = renderMapping(item, indent + 2);
+          const sub = renderMapping(item, indent + 2, floatFields);
           // Prefix first nested line with "- " instead of indent
           const padNested = ' '.repeat(indent + 2);
           const subLines = sub.split('\n');
@@ -158,7 +166,7 @@ function renderMapping(obj, indent) {
         }
       }
     } else {
-      const hint = FLOAT_FIELDS.has(k) ? 'float' : null;
+      const hint = floatFields.has(k) ? 'float' : null;
       lines.push(`${pad}${k}: ${renderScalar(v, hint)}`);
     }
   }
@@ -166,7 +174,8 @@ function renderMapping(obj, indent) {
 }
 
 function canonicalize(obj) {
-  return renderMapping(obj, 0) + '\n';
+  const floatFields = floatFieldsFor(obj && obj.version);
+  return renderMapping(obj, 0, floatFields) + '\n';
 }
 
 function manifestHash(obj) {

@@ -131,7 +131,19 @@ func quoteSingle(s string) string {
 // floatFields are PRML manifest fields whose value MUST round-trip as float
 // even when integer-valued. PyYAML preserves float-ness through its native
 // type system; JSON+Go must use the json.Number raw form to preserve "1.0".
-var floatFields = map[string]bool{"threshold": true}
+//
+// Version-aware: v0.1 fixed threshold as float64; v0.2 RFC P-XX relaxes
+// threshold to int|float, so integer-valued thresholds render as plain
+// integers under v0.2.
+var floatFieldsV01 = map[string]bool{"threshold": true}
+var floatFieldsV02 = map[string]bool{}
+
+func floatFieldsFor(version string) map[string]bool {
+	if version == "prml/0.1" {
+		return floatFieldsV01
+	}
+	return floatFieldsV02
+}
 
 // renderNumber takes a json.Number (raw string) and the field name, returning
 // the canonical byte representation. For float-typed fields, the output must
@@ -148,7 +160,7 @@ var floatFields = map[string]bool{"threshold": true}
 // v0.1 conformance vectors. Go's own encoding/json marshal does not pad,
 // however, so any input round-tripped through Go's marshaler would fail; the
 // canonicalizer expects raw json.Number strings preserved by UseNumber.
-func renderNumber(n json.Number, field string) string {
+func renderNumber(n json.Number, field string, floatFields map[string]bool) string {
 	s := string(n)
 	if !floatFields[field] {
 		return s
@@ -172,7 +184,7 @@ func renderNumber(n json.Number, field string) string {
 
 // renderScalar emits the canonical form of a non-collection value.
 // `field` is the parent key name (for hint-driven float rendering).
-func renderScalar(v interface{}, field string) (string, error) {
+func renderScalar(v interface{}, field string, floatFields map[string]bool) (string, error) {
 	switch x := v.(type) {
 	case nil:
 		return "null", nil
@@ -182,7 +194,7 @@ func renderScalar(v interface{}, field string) (string, error) {
 		}
 		return "false", nil
 	case json.Number:
-		return renderNumber(x, field), nil
+		return renderNumber(x, field, floatFields), nil
 	case string:
 		if needsQuoting(x) {
 			return quoteSingle(x), nil
@@ -196,7 +208,7 @@ func renderScalar(v interface{}, field string) (string, error) {
 // renderMapping emits a YAML block-style mapping with keys sorted
 // lexicographically. Indent is the current depth in spaces.
 // Returns the rendered text (without trailing newline at top level).
-func renderMapping(m map[string]interface{}, indent int) (string, error) {
+func renderMapping(m map[string]interface{}, indent int, floatFields map[string]bool) (string, error) {
 	keys := make([]string, 0, len(m))
 	for k := range m {
 		keys = append(keys, k)
@@ -209,7 +221,7 @@ func renderMapping(m map[string]interface{}, indent int) (string, error) {
 		switch sub := v.(type) {
 		case map[string]interface{}:
 			lines = append(lines, fmt.Sprintf("%s%s:", pad, k))
-			nested, err := renderMapping(sub, indent+2)
+			nested, err := renderMapping(sub, indent+2, floatFields)
 			if err != nil {
 				return "", err
 			}
@@ -218,7 +230,7 @@ func renderMapping(m map[string]interface{}, indent int) (string, error) {
 			lines = append(lines, fmt.Sprintf("%s%s:", pad, k))
 			for _, item := range sub {
 				if itemMap, ok := item.(map[string]interface{}); ok {
-					nested, err := renderMapping(itemMap, indent+2)
+					nested, err := renderMapping(itemMap, indent+2, floatFields)
 					if err != nil {
 						return "", err
 					}
@@ -227,7 +239,7 @@ func renderMapping(m map[string]interface{}, indent int) (string, error) {
 					nestedLines[0] = fmt.Sprintf("%s- %s", pad, strings.TrimPrefix(nestedLines[0], padNested))
 					lines = append(lines, strings.Join(nestedLines, "\n"))
 				} else {
-					rendered, err := renderScalar(item, k)
+					rendered, err := renderScalar(item, k, floatFields)
 					if err != nil {
 						return "", err
 					}
@@ -235,7 +247,7 @@ func renderMapping(m map[string]interface{}, indent int) (string, error) {
 				}
 			}
 		default:
-			rendered, err := renderScalar(v, k)
+			rendered, err := renderScalar(v, k, floatFields)
 			if err != nil {
 				return "", err
 			}
@@ -249,7 +261,9 @@ func renderMapping(m map[string]interface{}, indent int) (string, error) {
 // The argument must be a map[string]interface{} as produced by
 // json.Decoder with UseNumber enabled.
 func Canonicalize(m map[string]interface{}) (string, error) {
-	body, err := renderMapping(m, 0)
+	version, _ := m["version"].(string)
+	floatFields := floatFieldsFor(version)
+	body, err := renderMapping(m, 0, floatFields)
 	if err != nil {
 		return "", err
 	}

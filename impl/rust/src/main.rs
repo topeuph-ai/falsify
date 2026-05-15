@@ -271,17 +271,23 @@ fn render_number_for_float_field(raw: &str) -> String {
 }
 
 // Float fields whose canonical form must always carry at least one
-// decimal place even when integer-valued.
-fn is_float_field(field: &str) -> bool {
-    field == "threshold"
+// decimal place even when integer-valued. Version-aware: v0.1 fixed
+// threshold as float64; v0.2 RFC P-XX relaxes threshold to int|float,
+// so integer-valued thresholds render as plain integers under v0.2.
+fn is_float_field(field: &str, version: &str) -> bool {
+    if version == "prml/0.1" {
+        field == "threshold"
+    } else {
+        false
+    }
 }
 
-fn render_scalar(v: &Value, field: &str) -> String {
+fn render_scalar(v: &Value, field: &str, version: &str) -> String {
     match v {
         Value::Null => "null".to_string(),
         Value::Bool(true) => "true".to_string(),
         Value::Bool(false) => "false".to_string(),
-        Value::Number(n) => render_number(n, field),
+        Value::Number(n) => render_number(n, field, version),
         Value::String(s) => {
             if needs_quoting(s) {
                 quote_single(s)
@@ -293,9 +299,9 @@ fn render_scalar(v: &Value, field: &str) -> String {
     }
 }
 
-fn render_number(n: &Number, field: &str) -> String {
+fn render_number(n: &Number, field: &str, version: &str) -> String {
     let raw = n.to_string();
-    if is_float_field(field) {
+    if is_float_field(field, version) {
         return render_number_for_float_field(&raw);
     }
     raw
@@ -309,7 +315,7 @@ fn sorted_keys(map: &serde_json::Map<String, Value>) -> Vec<&String> {
     keys
 }
 
-fn render_mapping(map: &serde_json::Map<String, Value>, indent: usize) -> String {
+fn render_mapping(map: &serde_json::Map<String, Value>, indent: usize, version: &str) -> String {
     let pad: String = " ".repeat(indent);
     let mut lines: Vec<String> = Vec::with_capacity(map.len());
     for k in sorted_keys(map) {
@@ -317,13 +323,13 @@ fn render_mapping(map: &serde_json::Map<String, Value>, indent: usize) -> String
         match v {
             Value::Object(sub) => {
                 lines.push(format!("{}{}:", pad, k));
-                lines.push(render_mapping(sub, indent + 2));
+                lines.push(render_mapping(sub, indent + 2, version));
             }
             Value::Array(items) => {
                 lines.push(format!("{}{}:", pad, k));
                 for item in items {
                     if let Value::Object(sub) = item {
-                        let nested = render_mapping(sub, indent + 2);
+                        let nested = render_mapping(sub, indent + 2, version);
                         let pad_nested = " ".repeat(indent + 2);
                         let mut nested_lines: Vec<String> =
                             nested.lines().map(|s| s.to_string()).collect();
@@ -336,12 +342,12 @@ fn render_mapping(map: &serde_json::Map<String, Value>, indent: usize) -> String
                         }
                         lines.push(nested_lines.join("\n"));
                     } else {
-                        lines.push(format!("{}- {}", pad, render_scalar(item, k)));
+                        lines.push(format!("{}- {}", pad, render_scalar(item, k, version)));
                     }
                 }
             }
             _ => {
-                lines.push(format!("{}{}: {}", pad, k, render_scalar(v, k)));
+                lines.push(format!("{}{}: {}", pad, k, render_scalar(v, k, version)));
             }
         }
     }
@@ -349,7 +355,11 @@ fn render_mapping(map: &serde_json::Map<String, Value>, indent: usize) -> String
 }
 
 fn canonicalize(map: &serde_json::Map<String, Value>) -> String {
-    format!("{}\n", render_mapping(map, 0))
+    let version = map
+        .get("version")
+        .and_then(|v| v.as_str())
+        .unwrap_or("");
+    format!("{}\n", render_mapping(map, 0, version))
 }
 
 fn manifest_hash(map: &serde_json::Map<String, Value>) -> String {
