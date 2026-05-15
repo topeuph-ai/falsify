@@ -212,12 +212,11 @@ footer.colophon a:hover { color: var(--ink); }
 <header class="masthead">
   <span class="brand"><span class="chev">›</span> falsify · spec</span>
   <span>
-    <a href="https://falsify.dev">falsify.dev</a> ·
-    <a href="https://registry.falsify.dev">registry</a> ·
-    <a href="https://falsify.dev/sprint">sprint</a> ·
-    <a href="https://github.com/studio-11-co/falsify/blob/main/spec/PRML-v0.1.md">github</a> ·
-    <a href="/schema/">schema</a> ·
-    <a href="https://github.com/studio-11-co/falsify/discussions">discuss</a>
+    <a href="https://falsify.dev">Home</a> ·
+    <span style="color:var(--ink);border-bottom:1px dotted var(--ink)" aria-current="page">Spec v0.1</span> ·
+    <a href="https://spec.falsify.dev/v0.2-rfc">RFC v0.2 <span style="color:var(--accent);font-size:0.85em">(open)</span></a> ·
+    <a href="https://registry.falsify.dev">Registry</a> ·
+    <a href="https://github.com/studio-11-co/falsify">GitHub</a>
   </span>
 </header>
 
@@ -226,7 +225,7 @@ footer.colophon a:hover { color: var(--ink); }
 </aside>
 
 <aside class="livenote" style="margin: 0 0 36px; padding: 14px 18px; border-left: 3px solid var(--accent); background: #f4f4f0; font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 14px; color: var(--ink-2); line-height: 1.55;">
-  <strong style="color: var(--ink); font-weight: 600;">Live registry:</strong> paste a manifest at <a href="https://registry.falsify.dev" style="color: var(--ink); text-decoration: underline; text-underline-offset: 3px;">registry.falsify.dev</a>, get a SHA-256 permalink and a README badge — no account, no server-side state beyond the hash. Reference implementations (Python, JS, Go, Rust) produce byte-equivalent output across <a href="https://github.com/studio-11-co/falsify/tree/main/spec/test-vectors/v0.1" style="color: var(--ink-2);">12 conformance vectors</a>.
+  <strong style="color: var(--ink); font-weight: 600;">Live registry:</strong> paste a manifest at <a href="https://registry.falsify.dev" style="color: var(--ink); text-decoration: underline; text-underline-offset: 3px;">registry.falsify.dev</a>, get a SHA-256 permalink and a README badge — no account, no server-side state beyond the hash. Reference implementations (Python, JS, Go, Rust) produce byte-equivalent output across <a href="https://github.com/studio-11-co/falsify/tree/main/spec/test-vectors" style="color: var(--ink-2);">20 conformance vectors (12 v0.1 + 8 v0.2)</a>.
 </aside>
 
 <article id="content">
@@ -236,6 +235,14 @@ footer.colophon a:hover { color: var(--ink); }
 <aside class="related" style="margin: 60px 0 24px; padding: 24px 0; border-top: 1px solid #e5e3dc; border-bottom: 1px solid #e5e3dc;">
   <h2 style="font-size: 16px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); margin: 0 0 14px;">Related documents</h2>
   <ul style="list-style: none; padding: 0; margin: 0; display: grid; gap: 10px;">
+    <li><a href="https://spec.falsify.dev/v0.2-rfc"><strong>v0.2 RFC</strong></a> — open for comment until 2026-05-22 23:59 UTC</li>
+    <li><a href="https://spec.falsify.dev/editor"><strong>Editor's contact page</strong></a> — how to reach the editor, latencies, refusals</li>
+    <li><a href="https://falsify.dev/audit-firms/"><strong>For audit practices</strong></a> — how Big 4 audit teams use PRML inside client engagements</li>
+    <li><a href="https://spec.falsify.dev/eu-ai-act/article-12"><strong>EU AI Act Article 12 — working pattern</strong></a> — the logging pattern, with code</li>
+    <li><a href="https://spec.falsify.dev/reproducibility/eval-audit"><strong>ML reproducibility audit method</strong></a> — re-runnable / reproducible / auditable, defined</li>
+    <li><a href="https://spec.falsify.dev/pre-registration"><strong>Pre-registration for ML</strong></a> — the clinical-trials discipline ported to ML</li>
+    <li><a href="https://spec.falsify.dev/article-12-readiness/"><strong>Article 12 readiness self-assessment</strong></a> — 10 questions, browser-only, one-page diagnostic</li>
+    <li><a href="https://registry.falsify.dev/board"><strong>Registry board</strong></a> &middot; <a href="https://registry.falsify.dev/locks">Locks feed</a> &middot; <a href="https://registry.falsify.dev/verify">Verify</a> — public commit log</li>
     <li><a href="https://github.com/studio-11-co/falsify/blob/main/spec/analysis/positioning-v0.1.md"><strong>Positioning matrix</strong></a> — PRML vs in-toto, SLSA, Model Cards, HELM, ClinicalTrials.gov</li>
     <li><a href="https://github.com/studio-11-co/falsify/blob/main/spec/analysis/canonicalization-portability-v0.1.md"><strong>Canonicalization portability findings</strong></a> — three cross-language gotchas from the Node.js second implementation</li>
     <li><a href="https://github.com/studio-11-co/falsify/blob/main/spec/compliance/AI-Act-mapping-v0.1.md"><strong>EU AI Act Article mapping</strong></a> — fields → Articles 12, 17, 18, 50, 72, 73</li>
@@ -246,6 +253,9 @@ footer.colophon a:hover { color: var(--ink); }
     <li><a href="https://github.com/studio-11-co/falsify/tree/main/spec/test-vectors"><strong>Conformance test vectors</strong></a> — 20 vectors total (12 v0.1 normative + 8 v0.2 candidate), all with locked SHA-256 digests.</li>
     <li><a href="https://github.com/marketplace/actions/prml-verify"><strong>GitHub Action: <code>prml-verify</code></strong></a> — composite Action on the GitHub Marketplace; tags <code>continuous-integration</code> + <code>code-quality</code>; wraps the <code>falsify</code> CLI for one-line CI integration.</li>
     <li><a href="https://pypi.org/project/mlflow-falsify/"><strong>MLflow plugin: <code>mlflow-falsify</code></strong></a> — <code>pip install mlflow-falsify</code> auto-tags every MLflow run with the PRML manifest hash + key fields. Zero workflow change. Source: <a href="https://github.com/studio-11-co/mlflow-falsify">studio-11-co/mlflow-falsify</a>.</li>
+    <li><a href="https://github.com/studio-11-co/falsify-cookbook"><strong>Cookbook: <code>falsify-cookbook</code></strong></a> — field manual for the spec. 10 patterns + 4 anti-patterns; each one page with a runnable example. CC0.</li>
+    <li><a href="https://falsify.dev/integrity"><strong>Integrity Index</strong></a> — public scorecard of how 25+ well-known ML eval claims meet the 9 PRML falsifiability criteria. Source: <a href="https://github.com/studio-11-co/falsify-integrity-index">studio-11-co/falsify-integrity-index</a>. CC0 data, MIT tooling.</li>
+    <li><a href="https://github.com/studio-11-co/falsify-inspect"><strong>Inspect AI adapter: <code>falsify-inspect</code></strong></a> — anchor an Inspect AI eval claim's threshold to a SHA-256 hash before the run, verify the post-run log against it. MIT.</li>
   </ul>
 </aside>
 

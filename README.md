@@ -117,6 +117,15 @@ Falsify is the reference implementation of **PRML v0.1** — Pre-Registered ML M
 
 Hosted spec at [spec.falsify.dev/v0.1](https://spec.falsify.dev/v0.1). Public review thread at [GitHub Discussion #6](https://github.com/studio-11-co/falsify/discussions/6). Comments via `hello@studio-11.co`.
 
+**Companion projects** (separate repos under `studio-11-co`, each MIT or CC0 licensed):
+
+- **[`falsify-cookbook`](https://github.com/studio-11-co/falsify-cookbook)** — field manual for the spec: 10 patterns + 4 anti-patterns, every one a single page with a runnable example. CC0.
+- **[`falsify-integrity-index`](https://github.com/studio-11-co/falsify-integrity-index)** — public scorecard of how 25+ well-known ML eval claims meet the 9 PRML falsifiability criteria. Live at [falsify.dev/integrity](https://falsify.dev/integrity). CC0 data, MIT tooling.
+- **[`falsify-inspect`](https://github.com/studio-11-co/falsify-inspect)** — Inspect AI adapter: anchor an Inspect AI eval claim's threshold to a SHA-256 hash before the run, verify the post-run log against it. MIT.
+- **[`prml-verify-action`](https://github.com/studio-11-co/prml-verify-action)** — composite GitHub Action ([listed on Marketplace](https://github.com/marketplace/actions/prml-verify)) for CI integration. MIT.
+- **[`mlflow-falsify`](https://github.com/studio-11-co/mlflow-falsify)** — MLflow plugin (`pip install mlflow-falsify`) auto-tags every run with the PRML manifest hash. MIT.
+- **[`falsify-js`](https://github.com/studio-11-co/falsify-js)** — JS reference implementation, [`npm install falsify-js`](https://www.npmjs.com/package/falsify-js). MIT.
+
 ---
 
 ## Why
