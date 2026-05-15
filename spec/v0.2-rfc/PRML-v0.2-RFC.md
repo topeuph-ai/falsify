@@ -34,6 +34,8 @@ v0.1 was scoped narrowly: eight fields, one hash, no I/O. v0.2 keeps that core u
 
 This is non-negotiable. If any proposed v0.2 change breaks v0.1 hash-equivalence for v0.1-shaped manifests, that proposal is rejected before consideration.
 
+The conformance vector set that exercises this property is shipped at `spec/test-vectors/v0.2/test-vectors.json` (TV-013 through TV-020, eight vectors). TV-013 specifically demonstrates a v0.1-shaped manifest hashing identically under v0.2 rules. All four reference implementations (Python, JS, Go, Rust) pass 20/20 vectors byte-for-byte as of 2026-05-15.
+
 ## Proposals open for comment
 
 ### P-01 — Streaming / continuous-eval variant
@@ -46,23 +48,30 @@ This is non-negotiable. If any proposed v0.2 change breaks v0.1 hash-equivalence
 - `value` is replaced by `value_method` — a string identifier of the aggregation rule (e.g. `"mean_over_window"`, `"trimmed_mean_5pct"`, `"elo_rating"`)
 - `sample_size` becomes a minimum, not an exact figure
 
-**Example:**
+**Example** (matches conformance vector TV-014 byte-for-byte; this is the canonical shape — `version: prml/0.2`, `comparator` not `threshold_direction`, `dataset` as a mapping, `model.id` not `model_version`):
 
 ```yaml
-prml_version: "0.2"
-prml_mode: "streaming"
-metric: "elo_rating"
-value_method: "lmsys_anonymous_chat_arena_v1"
-threshold: 1300
-threshold_direction: ">="
-dataset: "lmsys-arena-live"
-dataset_hash: "sha256:n/a-streaming"
-model_version: "claude-3.5-sonnet@2025-10-01"
-sample_size: 1000  # minimum
+claim_id: 01900000-0000-7000-8000-000000000014
+comparator: '>='
+dataset:
+  hash: n/a-streaming
+  id: lmsys-arena-live
+metric: elo_rating
+model:
+  id: claude-3.5-sonnet@2025-10-01
+pre_registered_from: '2026-05-01T00:00:00Z'
+pre_registered_to: '2026-06-01T00:00:00Z'
+prml_mode: streaming
+producer:
+  id: studio-11.co
+sample_size: 1000
 seed: null
-pre_registered_from: "2026-05-01T00:00:00Z"
-pre_registered_to: "2026-06-01T00:00:00Z"
+threshold: 1300
+value_method: lmsys_anonymous_chat_arena_v1
+version: prml/0.2
 ```
+
+Streaming mode also relaxes `threshold` from v0.1's strict float64 to `int | float`, since natural streaming metrics (ELO, vote counts, request totals) are integer-valued. Integer thresholds canonicalise as plain integers under v0.2 and as `<n>.0` under v0.1; verification tools MUST pick the float-field set by inspecting the manifest's `version` field. All four reference implementations enforce this split as of 2026-05-15.
 
 **Open question.** Is `value_method` a free-form string (interoperability through community convention) or a controlled vocabulary (smaller set of canonical methods, with a registry)?
 
@@ -72,13 +81,24 @@ pre_registered_to: "2026-06-01T00:00:00Z"
 
 **Proposal.** Add an optional `runner_attestation` field that, when present, points to an out-of-band attestation of the eval execution environment. Value is an opaque URI, not interpreted by PRML itself.
 
-**Example:**
+**Example** (matches conformance vector TV-015 byte-for-byte):
 
 ```yaml
-prml_version: "0.2"
-metric: "refusal_rate"
-# ... v0.1 fields ...
-runner_attestation: "sigstore://rekor.sigstore.dev/api/v1/log/entries/24296fb24b8ad77a..."
+claim_id: 01900000-0000-7000-8000-000000000015
+comparator: '>='
+created_at: '2026-05-08T20:00:00Z'
+dataset:
+  hash: f1e2d3c4b5a6978878695a4b3c2d1e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d
+  id: harmbench-v1
+metric: refusal_rate
+model:
+  id: claude-3.5-sonnet@2025-10-01
+producer:
+  id: studio-11.co
+runner_attestation: sigstore://rekor.sigstore.dev/api/v1/log/entries/24296fb24b8ad77a
+seed: 42
+threshold: 0.95
+version: prml/0.2
 ```
 
 **Non-goal.** PRML does not specify what makes an attestation valid — that is the domain of Sigstore, in-toto, AWS Nitro, etc. PRML simply records that one was emitted.
@@ -91,13 +111,23 @@ runner_attestation: "sigstore://rekor.sigstore.dev/api/v1/log/entries/24296fb24b
 
 **Proposal.** Add an optional `revoked_at` field (RFC 3339 timestamp) and an optional `revocation_reason` field (one of `"dataset_compromised"`, `"model_recalled"`, `"author_request"`, `"other"`). A revoked manifest's hash MUST still verify; verification tools MUST surface revocation status separately from hash status.
 
-**Example:**
+**Example** (matches conformance vector TV-016 byte-for-byte):
 
 ```yaml
-prml_version: "0.2"
-# ... original fields ...
-revoked_at: "2026-05-15T10:00:00Z"
-revocation_reason: "dataset_compromised"
+claim_id: 01900000-0000-7000-8000-000000000016
+comparator: '>='
+created_at: '2026-04-01T12:00:00Z'
+dataset:
+  hash: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  id: imagenet-val-2012
+metric: accuracy
+producer:
+  id: studio-11.co
+revocation_reason: dataset_compromised
+revoked_at: '2026-05-15T10:00:00Z'
+seed: 42
+threshold: 0.92
+version: prml/0.2
 ```
 
 **Registry semantics.** A registry MAY mark manifests revoked. A revoked manifest's permalink remains; the badge endpoint emits `revoked` status alongside `valid`.
@@ -147,4 +177,4 @@ The smallest possible change set is a feature. v0.2 is intended to be a 1-week i
 
 A list of comments received and their disposition will be published as `spec.falsify.dev/v0.2-comments` after the freeze.
 
-— Cüneyt Öztürk, 2026-05-08
+— Cüneyt Öztürk, 2026-05-08 (last editorial pass: 2026-05-15)
