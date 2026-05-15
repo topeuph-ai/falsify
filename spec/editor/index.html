@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<!--
+  Slug recommendation: /editor  (over /contact)
+  Reasoning: "/contact" sets a service expectation that this page is designed to refuse.
+  "/editor" frames the page as a person, not a help desk — which is the doctrine.
+  Final fill-ins:
+    - Studio 11 advisory floor: Diagnostic Sprint = 5 days fixed-scope,
+      €22,500, written audit or compliance mapping as the deliverable.
+    - Confirm autumn podcast window before launch (currently set: "Sep-Oct 2026").
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Editor's contact page — spec.falsify.dev</title>
+<meta name="description" content="How to reach the editor of the PRML specification. Latencies, refusals, and the next four weeks.">
+<meta name="author" content="Studio 11">
+<link rel="canonical" href="https://spec.falsify.dev/editor">
+<meta name="robots" content="index,follow">
+<style>
+:root {
+  --bg: #fdfdfb;
+  --ink: #0b0f14;
+  --ink-2: #2b3340;
+  --silver: #5a6677;
+  --rule: #d6d9de;
+  --code-bg: #f4f4f0;
+  --accent: #39d98a;
+  --max: 720px;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Charter", "Iowan Old Style", "Source Serif 4", Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  line-height: 1.65;
+  font-feature-settings: "kern", "liga", "onum";
+}
+.wrap { max-width: var(--max); margin: 0 auto; padding: 72px 28px 120px; }
+header.masthead {
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 18px;
+  margin-bottom: 56px;
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--silver);
+  text-transform: uppercase;
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+}
+header.masthead a { color: var(--silver); text-decoration: none; border-bottom: 1px dotted var(--silver); }
+header.masthead a:hover { color: var(--ink); border-color: var(--ink); }
+header.masthead .brand { font-weight: 700; color: var(--ink); }
+header.masthead .brand .chev { color: var(--accent); }
+
+h1 {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 30px; line-height: 1.2; font-weight: 700;
+  letter-spacing: -0.01em; margin: 0 0 14px;
+}
+.lede { font-size: 18px; color: var(--ink-2); margin: 0 0 8px; }
+h2 {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 14px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--silver);
+  margin: 72px 0 22px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+p { margin: 0 0 18px; }
+.micro {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 12px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--silver);
+}
+
+/* Tier rows */
+.tier {
+  display: grid; grid-template-columns: 220px 1fr;
+  gap: 28px; padding: 22px 0;
+  border-top: 1px solid var(--rule);
+}
+.tier:last-of-type { border-bottom: 1px solid var(--rule); }
+.tier .label {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 17px; font-weight: 600;
+  color: var(--ink); letter-spacing: -0.005em;
+  word-break: break-word;
+}
+.tier .label .accent { color: var(--accent); }
+.tier .body { color: var(--ink-2); }
+.tier .body .lat {
+  display: block; margin-top: 8px;
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 12px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--silver);
+}
+.tier .body .ign {
+  display: block; margin-top: 4px;
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 12px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--silver);
+}
+
+/* Calendar */
+.cal {
+  font-family: "JetBrains Mono", ui-monospace, "SF Mono", Consolas, monospace;
+  font-size: 13.5px; line-height: 1.9;
+  color: var(--ink-2);
+  border: 1px solid var(--rule);
+  padding: 28px 28px;
+  margin: 0 0 12px;
+  background: transparent;
+  white-space: pre;
+  overflow-x: auto;
+}
+.cal .wk { color: var(--silver); }
+.cal .mk { color: var(--accent); }
+.cal .strike { color: var(--silver); text-decoration: line-through; text-decoration-color: var(--rule); }
+
+/* Refusals */
+ul.refuse {
+  list-style: none; padding: 0; margin: 0 0 8px;
+}
+ul.refuse li {
+  padding: 10px 0 10px 22px;
+  border-bottom: 1px solid var(--rule);
+  position: relative;
+  color: var(--ink-2);
+}
+ul.refuse li::before {
+  content: "—"; position: absolute; left: 0; color: var(--accent);
+}
+ul.refuse li:first-child { border-top: 1px solid var(--rule); }
+
+footer.colophon {
+  margin-top: 96px; padding-top: 20px;
+  border-top: 1px solid var(--rule);
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 12px; color: var(--silver);
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+footer.colophon a { color: var(--silver); text-decoration: none; border-bottom: 1px dotted var(--silver); }
+footer.colophon a:hover { color: var(--ink); }
+
+@media (max-width: 600px) {
+  body { font-size: 16px; }
+  .wrap { padding: 40px 18px 80px; }
+  h1 { font-size: 24px; }
+  .tier { grid-template-columns: 1fr; gap: 10px; }
+  .cal { font-size: 12px; padding: 18px 16px; }
+}
+@media print {
+  body { background: white; color: black; font-size: 11pt; line-height: 1.45; }
+  .wrap { max-width: none; padding: 0; }
+  header.masthead, footer.colophon { display: none; }
+  .cal { border-color: #888; color: black; }
+  .tier { border-color: #888; }
+  ul.refuse li { border-color: #888; color: black; }
+  .micro, h2 { color: black; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <span class="brand"><span class="chev">›</span> falsify · editor</span>
+  <span>
+    <a href="https://spec.falsify.dev/v0.1">v0.1</a> ·
+    <a href="https://spec.falsify.dev/v0.2-rfc">v0.2-rfc</a> ·
+    <a href="https://falsify.dev">falsify.dev</a> ·
+    <a href="https://studio-11.co">studio 11</a>
+  </span>
+</header>
+
+<p class="micro">Editor's contact page</p>
+<h1>How to reach the editor.</h1>
+<p class="lede">This page is short on purpose. The editor is hard to reach by design — the spec is the interface; correspondence is a courtesy. If your question is answered in <a href="https://spec.falsify.dev/v0.1" style="color:var(--ink);text-decoration:underline;text-decoration-color:var(--rule);text-underline-offset:3px;">v0.1</a> or the <a href="https://spec.falsify.dev/v0.2-rfc" style="color:var(--ink);text-decoration:underline;text-decoration-color:var(--rule);text-underline-offset:3px;">v0.2 RFC</a>, it is already answered.</p>
+
+<h2>Three ways in</h2>
+
+<div class="tier">
+  <div class="label">GitHub issues <span class="accent">›</span></div>
+  <div class="body">
+    Anyone with a reproducible problem in a reference implementation, a conformance vector that fails, or a concrete spec ambiguity. This is the front door.
+    <span class="lat">Latency · 3–10 days, rolling.</span>
+    <span class="ign">Ignored · feature wishlists, vendor pitches, "have you considered…" without a vector.</span>
+  </div>
+</div>
+
+<div class="tier">
+  <div class="label">Label <code style="font-family:'JetBrains Mono',monospace;background:rgba(57,217,138,0.08);color:var(--accent);padding:1px 5px;border-radius:3px;font-size:0.9em;">rfc-v0.2</code></div>
+  <div class="body">
+    Comments on the open RFC. Use the issue template. One concern per issue. The editor reads every comment on this label during the window.
+    <span class="lat">Latency · under 14 days during the comment window; otherwise rolling.</span>
+    <span class="ign">Ignored · comments filed after 2026-05-22 23:59 UTC. Those wait for v0.3.</span>
+  </div>
+</div>
+
+<div class="tier">
+  <div class="label">hello@studio-11.co</div>
+  <div class="body">
+    For things that genuinely cannot be public: confidential review of a clause before disclosure, institutional procurement, EU AI Act notified-body queries, and paid Studio 11 work.
+    <span class="lat">Latency · 7–21 days. No same-week guarantees.</span>
+    <span class="ign">Ignored · partnership intros, growth pitches, link-trade requests, "quick call?" without a one-paragraph brief.</span>
+  </div>
+</div>
+
+<h2>Editor's calendar — next four weeks</h2>
+<div class="cal" aria-label="Calendar dump for the next four weeks"><span class="wk">Wk 20 · May 18 — May 24</span>   RFC comment window closes Fri <span class="mk">22 May 23:59 UTC</span>.
+                       <span class="mk">freeze week — no calls, no email triage</span>.
+                       Office hours: <span class="strike">0 left</span>.
+
+<span class="wk">Wk 21 · May 25 — May 31</span>   v0.2 disposition writeup. Deep work block.
+                       Office hours: 2 left · Wed + Thu, 30 min each.
+                       No new advisory intake.
+
+<span class="wk">Wk 22 · Jun 01 — Jun 07</span>   arXiv revision + conformance vectors 13–20.
+                       Office hours: 1 left · Thu.
+                       No slots for press or podcasts.
+
+<span class="wk">Wk 23 · Jun 08 — Jun 14</span>   <span class="mk">summer slowdown begins</span>. Email replies batched Fridays.
+                       Office hours: none.
+                       Re-opens late August.</div>
+<p class="micro">Office hours are booked privately by people the editor already corresponds with. There is no booking link.</p>
+
+<h2>What we are not doing this quarter</h2>
+<ul class="refuse">
+  <li>We will not review your hash function.</li>
+  <li>We will not endorse, certify, or "bless" a product, model, or eval harness.</li>
+  <li>The advisory floor is the Diagnostic Sprint: <strong>5 days, €22,500 fixed</strong>, deliverable is a written audit or compliance mapping. Below that we do not take advisory calls.</li>
+  <li>We will not sign NDAs to look at a deck.</li>
+  <li>We will not co-author a blog post, op-ed, or LinkedIn carousel.</li>
+  <li>We will not introduce you to other editors, regulators, or notified bodies.</li>
+  <li>We do not give private previews of v0.3. There is no v0.3 yet.</li>
+  <li>We will not debug your CI. The four reference implementations pass 20/20 vectors; start there.</li>
+  <li>We will not add a field because one vendor needs it. File an RFC with two independent implementers behind it.</li>
+  <li>We will not comment on competitors, alternatives, or who is "ahead."</li>
+  <li>We do not do paid speaking slots at vendor conferences this quarter.</li>
+  <li>We will not respond to recruiter outreach. Studio 11 is not hiring.</li>
+</ul>
+
+<h2>Press, institutional, podcasts</h2>
+<p><strong style="font-weight:600;">Press.</strong> Quotes and background are given to journalists with a published byline at an outlet that runs corrections. Send the angle and the deadline in the first email. If the deadline is shorter than 72 hours, the answer is no.</p>
+<p><strong style="font-weight:600;">Institutional.</strong> Notified bodies, regulators, and procurement teams should write from an institutional address with a docket or reference number. We will reply in writing only. We do not attend exploratory video calls.</p>
+<p><strong style="font-weight:600;">Podcasts.</strong> We do podcasts twice a year and the next slot is autumn. Don't email; we'll announce. Pitches sent before September are deleted unread.</p>
+
+<footer class="colophon">
+  Last revised: 2026-05-15. Charter: <a href="https://spec.falsify.dev/v0.2-rfc">spec.falsify.dev/v0.2-rfc</a>. Editor: Cüneyt Öztürk.
+</footer>
+
+</div>
+</body>
+</html>
