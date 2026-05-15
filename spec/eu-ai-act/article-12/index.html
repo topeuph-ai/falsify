@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EU AI Act Article 12 logging compliance — a working pattern for high-risk providers</title>
+<meta name="description" content="Article 12 of Regulation (EU) 2024/1689 obliges high-risk AI providers to log evaluation events with tamper-evidence. A worked pattern using PRML manifests, with code, before the 2 August 2026 deadline.">
+<meta name="author" content="Cüneyt Öztürk">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://spec.falsify.dev/eu-ai-act/article-12">
+
+<meta property="og:title" content="EU AI Act Article 12 logging compliance — a working pattern">
+<meta property="og:description" content="A concrete, code-level pattern for satisfying Article 12 automated-logging obligations before 2 August 2026, using SHA-256 pre-registered evaluation manifests.">
+<meta property="og:url" content="https://spec.falsify.dev/eu-ai-act/article-12">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://spec.falsify.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "EU AI Act Article 12 logging compliance — a working pattern for high-risk providers",
+  "description": "How PRML pre-registered evaluation manifests mechanically support Article 12 automated-logging obligations under Regulation (EU) 2024/1689.",
+  "author": {"@type":"Person","name":"Cüneyt Öztürk","url":"https://www.linkedin.com/in/cuneyt-ozturk-39812963/"},
+  "publisher": {"@type":"Organization","name":"Studio 11","url":"https://studio-11.co"},
+  "datePublished": "2026-05-15",
+  "dateModified": "2026-05-15",
+  "url": "https://spec.falsify.dev/eu-ai-act/article-12",
+  "inLanguage": "en",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "keywords": "EU AI Act, Article 12, logging compliance, high-risk AI, Regulation 2024/1689, PRML, SHA-256, evaluation record-keeping",
+  "citation": {
+    "@type": "CreativeWork",
+    "name": "PRML v0.1 specification",
+    "identifier": "https://doi.org/10.5281/zenodo.20177839",
+    "url": "https://doi.org/10.5281/zenodo.20177839"
+  }
+}
+</script>
+
+<style>
+:root { --bg:#fdfdfb; --ink:#0b0f14; --ink-2:#2b3340; --ink-3:#5a6677; --rule:#d6d9de; --accent:#39d98a; --code-bg:#f4f4f0; --code-ink:#1a1f29; --max:720px; }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body { margin:0; background:var(--bg); color:var(--ink); font-family:"Source Serif 4",Georgia,"Times New Roman",serif; font-size:17px; line-height:1.65; font-feature-settings:"kern","liga","onum"; }
+.wrap { max-width:var(--max); margin:0 auto; padding:64px 28px 120px; }
+header.masthead { border-bottom:1px solid var(--rule); padding-bottom:18px; margin-bottom:36px; font-family:"Space Grotesk",system-ui,sans-serif; font-size:13px; letter-spacing:0.04em; color:var(--ink-3); text-transform:uppercase; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+header.masthead a { color:var(--ink-3); text-decoration:none; border-bottom:1px dotted var(--ink-3); }
+header.masthead a:hover { color:var(--ink); border-color:var(--ink); }
+header.masthead .brand { font-weight:700; color:var(--ink); }
+header.masthead .brand .chev { color:var(--accent); }
+article h1 { font-family:"Space Grotesk",system-ui,sans-serif; font-size:32px; line-height:1.2; font-weight:700; letter-spacing:-0.01em; margin:0 0 12px; }
+article .lede { color:var(--ink-2); font-size:18px; margin:0 0 28px; }
+article h2 { font-family:"Space Grotesk",system-ui,sans-serif; font-size:22px; font-weight:700; margin:48px 0 14px; letter-spacing:-0.005em; border-bottom:1px solid var(--rule); padding-bottom:6px; }
+article h3 { font-family:"Space Grotesk",system-ui,sans-serif; font-size:17px; font-weight:600; margin:32px 0 10px; color:var(--ink-2); }
+article p { margin:0 0 16px; }
+article ul, article ol { margin:0 0 16px; padding-left:26px; }
+article li { margin-bottom:6px; }
+article a { color:var(--ink); text-decoration:underline; text-decoration-color:var(--rule); text-underline-offset:3px; }
+article a:hover { text-decoration-color:var(--accent); }
+article strong { font-weight:600; }
+article em { font-style:italic; color:var(--ink-2); }
+article hr { border:0; border-top:1px solid var(--rule); margin:40px 0; }
+article code { font-family:"JetBrains Mono",ui-monospace,"SF Mono",Consolas,monospace; font-size:0.9em; background:var(--code-bg); color:var(--code-ink); padding:1px 5px; border-radius:3px; }
+article pre { background:var(--code-bg); color:var(--code-ink); padding:16px 18px; border-radius:4px; overflow-x:auto; font-size:13.5px; line-height:1.55; margin:0 0 20px; border-left:2px solid var(--accent); }
+article pre code { background:none; padding:0; font-size:inherit; }
+article table { width:100%; border-collapse:collapse; margin:0 0 22px; font-size:15px; font-family:"Space Grotesk",system-ui,sans-serif; }
+article th, article td { text-align:left; padding:8px 12px; border-bottom:1px solid var(--rule); vertical-align:top; }
+article th { font-weight:600; background:var(--code-bg); }
+article blockquote { border-left:2px solid var(--accent); margin:0 0 18px; padding:4px 0 4px 16px; color:var(--ink-2); font-style:italic; }
+.cta { margin-top:48px; padding:24px; border:1px solid var(--rule); background:var(--code-bg); border-left:3px solid var(--accent); }
+.cta a { font-family:"Space Grotesk",system-ui,sans-serif; font-weight:600; font-size:15px; }
+footer.colophon { margin-top:96px; padding-top:24px; border-top:1px solid var(--rule); font-family:"Space Grotesk",system-ui,sans-serif; font-size:12px; color:var(--ink-3); letter-spacing:0.02em; text-transform:uppercase; }
+footer.colophon a { color:var(--ink-3); text-decoration:none; border-bottom:1px dotted var(--ink-3); }
+@media (max-width:600px) { body { font-size:16px; } .wrap { padding:40px 18px 80px; } article h1 { font-size:26px; } article h2 { font-size:19px; } }
+@media print { body { background:white; font-size:11pt; line-height:1.45; } .wrap { max-width:none; padding:0; } header.masthead, footer.colophon { display:none; } article h1, article h2, article h3 { page-break-after:avoid; } article pre, article table { page-break-inside:avoid; } article a { color:var(--ink); text-decoration:none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <span class="brand"><span class="chev">›</span> falsify · spec</span>
+  <span>
+    <a href="https://falsify.dev">falsify.dev</a> ·
+    <a href="https://registry.falsify.dev">registry</a> ·
+    <a href="https://spec.falsify.dev/v0.1">v0.1</a> ·
+    <a href="https://spec.falsify.dev/v0.2-rfc">v0.2 RFC</a> ·
+    <a href="https://github.com/studio-11-co/falsify">github</a>
+  </span>
+</header>
+
+<article>
+
+<h1>EU AI Act Article 12 logging compliance: a working pattern for high-risk providers</h1>
+<p class="lede">The high-risk obligations in Regulation (EU) 2024/1689 become applicable on <strong>2 August 2026</strong>. Article 12 is the one that most procurement teams underestimate, because "automated logging" reads like a checkbox and turns out to be a system design decision. This page is the technical pattern we use.</p>
+
+<h2>What Article 12 actually requires</h2>
+<p>Article 12(1) of the AI Act states that high-risk AI systems "shall technically allow for the automatic recording of events (<em>logs</em>) over the lifetime of the system." Article 12(2) qualifies that logging must be appropriate to the intended purpose. Article 12(3) enumerates the events that must be captured for systems referred to in Annex III §1(a) — biometric identification — and Article 12(4)–(5) extends logging to facilitate post-market monitoring under Article 72 and operation monitoring under Article 26(5).</p>
+
+<p>Three properties matter and tend to get missed:</p>
+<ul>
+  <li><strong>Automatic.</strong> Not "we have a process." The system itself must emit the record.</li>
+  <li><strong>Tamper-evident.</strong> Implied by Article 12 read together with Article 18's ten-year retention. A log a provider can quietly edit is not a log.</li>
+  <li><strong>Lifetime.</strong> The system's lifetime, not the deployment's. That likely outlives any specific MLOps stack you are using today.</li>
+</ul>
+
+<p>The standard interpretation, consistent with the consolidated text in OJ L 2024/1689 and the editorial reading in our <a href="https://github.com/studio-11-co/falsify/blob/main/spec/compliance/AI-Act-mapping-v0.1.md">Article 12/17/18/50/72/73 crosswalk</a>, is that the provider is responsible for both the per-request inference logs and the per-release <em>evaluation-claim</em> logs. Most procurement teams have a plan for the first. Almost no one has a clean plan for the second.</p>
+
+<h2>The gap: evaluation-claim logging is the soft target</h2>
+<p>You can buy an inference-logging pipeline. Datadog will sell you one. AWS, GCP, Azure all have offerings. None of them solve the evaluation-claim layer, because that layer is not an event stream — it is a small set of high-stakes commitments. "This model achieves 0.94 accuracy on this validation set with this seed." That sentence is what the auditor cares about, and it is the sentence a provider quietly rewrites under pressure when the number changes.</p>
+
+<p>An Article 12 audit in 2027 will not ask "did you log requests?" It will ask "show me the evaluation claim you committed to before release v2.4, and show me how you know it has not been edited since."</p>
+
+<p>If the answer is a Confluence page, the audit ends there.</p>
+
+<h2>The pattern: a pre-registered manifest, hashed before the run</h2>
+<p><strong>PRML</strong> (Pre-Registered ML Manifest, <a href="https://spec.falsify.dev/v0.1">v0.1 spec</a>, Zenodo DOI <a href="https://doi.org/10.5281/zenodo.20177839">10.5281/zenodo.20177839</a>) is the format we use to make evaluation-claim logging mechanically auditable. The manifest is a small UTF-8 YAML file that binds a SHA-256 hash to: the metric, the comparator, the threshold, the dataset content hash, the seed, the producer identity, and a forward-only <code>prior_hash</code> pointer to the previous claim in the chain.</p>
+
+<p>A minimal Article-12-shaped manifest looks like this:</p>
+
+<pre><code>spec: prml/v0.1
+claim_id: cv-screening-release-2026-q3
+created_at: 2026-05-15T09:14:22Z
+producer:
+  id: company.example
+  role: provider          # AI Act Art. 3(3)
+metric: f1
+comparator: ">="
+threshold: 0.78
+dataset:
+  id: hr-screening-holdout-v3
+  hash: sha256:0c4e...d811
+seed: 42
+prior_hash: null          # first link in the chain
+</code></pre>
+
+<p>Lock it before the eval runs. The CLI emits a sidecar containing the canonical SHA-256. From that moment, any retroactive edit to threshold, dataset hash, or seed will cause <code>falsify verdict</code> to exit with code <code>3</code> (<em>TAMPERED</em>) rather than <code>0</code> (<em>PASS</em>) or <code>10</code> (<em>FAIL</em>). The exit code is the audit signal.</p>
+
+<h3>Mapping the manifest to Article 12 obligations</h3>
+<table>
+  <tr><th>Article 12 obligation</th><th>PRML mechanism</th></tr>
+  <tr><td>Automatic recording of evaluation events</td><td><code>lock</code> emits manifest + sidecar; deterministic exit codes are the event record</td></tr>
+  <tr><td>Identifying risk situations</td><td>FAIL (10) and TAMPERED (3) are deterministic, not interpretive</td></tr>
+  <tr><td>Facilitating post-market monitoring (Art. 72)</td><td><code>prior_hash</code> chain accumulates over the system lifetime</td></tr>
+  <tr><td>Lifetime preservation</td><td>plain UTF-8 YAML + 32-byte hash; readable in 2046 without a vendor runtime</td></tr>
+</table>
+
+<h2>The amendment chain is the audit log</h2>
+<p>When you re-evaluate — quarterly retraining, post-incident retest, a fix landing after a TAMPERED verdict — you do not edit the prior manifest. You write a new one with <code>prior_hash</code> pointing at the previous canonical hash. The chain is forward-only. The chain's terminal hash compresses the entire history into a single 32-byte value that an auditor can verify offline.</p>
+
+<pre><code>spec: prml/v0.1
+claim_id: cv-screening-release-2026-q3-amend-1
+created_at: 2026-08-09T11:02:51Z
+producer: { id: company.example, role: provider }
+metric: f1
+comparator: ">="
+threshold: 0.78
+dataset:
+  id: hr-screening-holdout-v3.1   # bias remediation rerun
+  hash: sha256:9ab7...c124
+seed: 42
+prior_hash: sha256:a3f9...c821    # Q3 release manifest above
+reason: |
+  Re-evaluation triggered by deployer-reported regression
+  on the 30-44 age cohort. Article 72 incident folder #IN-2026-08-007.
+</code></pre>
+
+<p>The auditor in 2031 does not need access to your MLOps stack. They need the YAML, the sidecar, and a copy of <a href="https://github.com/studio-11-co/falsify">falsify</a> — or any of the four reference implementations in Python, JavaScript, Go, or Rust. They recompute the canonical bytes, recompute the chain hash, compare. Integrity verification requires no provider trust.</p>
+
+<h2>What this does not give you</h2>
+<p>PRML covers the <em>evaluation-claim</em> slice of Article 12. It does not log per-request inferences, it does not implement the quality management system required by Article 17, and it does not perform the substantive accuracy assessment required by Article 15. The <a href="https://github.com/studio-11-co/falsify/blob/main/spec/compliance/AI-Act-mapping-v0.1.md">full crosswalk</a> is explicit about what is full coverage (Article 12 evaluation events, Article 18 retention, Article 72 monitoring), partial coverage (Article 17 records, Article 73 incident detection), and out of scope (Articles 9, 10, 14, 15, 27).</p>
+
+<p>Pair PRML with whatever inference-logging stack you already trust. The two layers don't overlap.</p>
+
+<h2>What to do this quarter</h2>
+<p>Twelve weeks remain until the 2 August 2026 applicability date. Concretely:</p>
+<ol>
+  <li>Identify every high-risk system you place on the EU market under Annex III. CV screening, credit scoring, biometric ID, critical infrastructure, education access — the list is enumerated.</li>
+  <li>For each, list the named evaluation claims (accuracy, F1, calibration, latency SLA, fairness metric) that you would defend in writing today.</li>
+  <li>Lock each one as a PRML manifest before the next release. Sign it (<code>producer.signature</code> is optional in v0.1, <a href="https://spec.falsify.dev/v0.2-rfc">mandatory in v0.2</a>).</li>
+  <li>Store the manifest + sidecar in an immutable bucket. Wire <code>falsify verdict</code> into CI so a TAMPERED exit halts the release.</li>
+  <li>Anchor the chain hash somewhere external. <a href="https://registry.falsify.dev">registry.falsify.dev</a> provides a free public anchor.</li>
+</ol>
+
+<div class="cta">
+<p><strong>Lock your first manifest.</strong> Paste a PRML draft into <a href="https://registry.falsify.dev">registry.falsify.dev</a> and get a SHA-256 permalink with a README badge. No account. No server-side state beyond the hash. Or read the <a href="https://spec.falsify.dev/v0.1">v0.1 spec</a> and the <a href="https://github.com/studio-11-co/falsify/blob/main/spec/compliance/AI-Act-mapping-v0.1.md">Article 12/17/18/50/72/73 crosswalk</a> directly.</p>
+</div>
+
+</article>
+
+<footer class="colophon">
+  Studio 11 · spec.falsify.dev · CC BY 4.0 · not legal advice · published 2026-05-15
+</footer>
+
+</div>
+</body>
+</html>

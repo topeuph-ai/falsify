@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pre-registration for machine learning — how the clinical-trials discipline ports to ML</title>
+<meta name="description" content="Pre-registration was invented to stop p-hacking and HARKing in clinical and psychological research. Machine learning needs it more, not less. A working format for ML pre-registration: PRML.">
+<meta name="author" content="Cüneyt Öztürk">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://spec.falsify.dev/pre-registration">
+
+<meta property="og:title" content="Pre-registration for machine learning — how the discipline ports">
+<meta property="og:description" content="ML is the field that most needs pre-registration and least practices it. A SHA-256 manifest format ports the discipline from clinical trials to model evaluation.">
+<meta property="og:url" content="https://spec.falsify.dev/pre-registration">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://spec.falsify.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Pre-registration for machine learning — how the clinical-trials discipline ports to ML",
+  "description": "A practical method and format for pre-registering machine learning evaluation claims, with SHA-256 commitment before the run.",
+  "author": {"@type":"Person","name":"Cüneyt Öztürk","url":"https://www.linkedin.com/in/cuneyt-ozturk-39812963/"},
+  "publisher": {"@type":"Organization","name":"Studio 11","url":"https://studio-11.co"},
+  "datePublished": "2026-05-15",
+  "dateModified": "2026-05-15",
+  "url": "https://spec.falsify.dev/pre-registration",
+  "inLanguage": "en",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "keywords": "pre-registration, machine learning, ML pre-registration, registered reports, p-hacking, HARKing, reproducibility, PRML",
+  "citation": {
+    "@type": "CreativeWork",
+    "name": "PRML v0.1 specification",
+    "identifier": "https://doi.org/10.5281/zenodo.20177839",
+    "url": "https://doi.org/10.5281/zenodo.20177839"
+  }
+}
+</script>
+
+<style>
+:root { --bg:#fdfdfb; --ink:#0b0f14; --ink-2:#2b3340; --ink-3:#5a6677; --rule:#d6d9de; --accent:#39d98a; --code-bg:#f4f4f0; --code-ink:#1a1f29; --max:720px; }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body { margin:0; background:var(--bg); color:var(--ink); font-family:"Source Serif 4",Georgia,"Times New Roman",serif; font-size:17px; line-height:1.65; font-feature-settings:"kern","liga","onum"; }
+.wrap { max-width:var(--max); margin:0 auto; padding:64px 28px 120px; }
+header.masthead { border-bottom:1px solid var(--rule); padding-bottom:18px; margin-bottom:36px; font-family:"Space Grotesk",system-ui,sans-serif; font-size:13px; letter-spacing:0.04em; color:var(--ink-3); text-transform:uppercase; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+header.masthead a { color:var(--ink-3); text-decoration:none; border-bottom:1px dotted var(--ink-3); }
+header.masthead a:hover { color:var(--ink); border-color:var(--ink); }
+header.masthead .brand { font-weight:700; color:var(--ink); }
+header.masthead .brand .chev { color:var(--accent); }
+article h1 { font-family:"Space Grotesk",system-ui,sans-serif; font-size:32px; line-height:1.2; font-weight:700; letter-spacing:-0.01em; margin:0 0 12px; }
+article .lede { color:var(--ink-2); font-size:18px; margin:0 0 28px; }
+article h2 { font-family:"Space Grotesk",system-ui,sans-serif; font-size:22px; font-weight:700; margin:48px 0 14px; letter-spacing:-0.005em; border-bottom:1px solid var(--rule); padding-bottom:6px; }
+article h3 { font-family:"Space Grotesk",system-ui,sans-serif; font-size:17px; font-weight:600; margin:32px 0 10px; color:var(--ink-2); }
+article p { margin:0 0 16px; }
+article ul, article ol { margin:0 0 16px; padding-left:26px; }
+article li { margin-bottom:6px; }
+article a { color:var(--ink); text-decoration:underline; text-decoration-color:var(--rule); text-underline-offset:3px; }
+article a:hover { text-decoration-color:var(--accent); }
+article strong { font-weight:600; }
+article em { font-style:italic; color:var(--ink-2); }
+article hr { border:0; border-top:1px solid var(--rule); margin:40px 0; }
+article code { font-family:"JetBrains Mono",ui-monospace,"SF Mono",Consolas,monospace; font-size:0.9em; background:var(--code-bg); color:var(--code-ink); padding:1px 5px; border-radius:3px; }
+article pre { background:var(--code-bg); color:var(--code-ink); padding:16px 18px; border-radius:4px; overflow-x:auto; font-size:13.5px; line-height:1.55; margin:0 0 20px; border-left:2px solid var(--accent); }
+article pre code { background:none; padding:0; font-size:inherit; }
+article table { width:100%; border-collapse:collapse; margin:0 0 22px; font-size:15px; font-family:"Space Grotesk",system-ui,sans-serif; }
+article th, article td { text-align:left; padding:8px 12px; border-bottom:1px solid var(--rule); vertical-align:top; }
+article th { font-weight:600; background:var(--code-bg); }
+article blockquote { border-left:2px solid var(--accent); margin:0 0 18px; padding:4px 0 4px 16px; color:var(--ink-2); font-style:italic; }
+.cta { margin-top:48px; padding:24px; border:1px solid var(--rule); background:var(--code-bg); border-left:3px solid var(--accent); }
+.cta a { font-family:"Space Grotesk",system-ui,sans-serif; font-weight:600; font-size:15px; }
+footer.colophon { margin-top:96px; padding-top:24px; border-top:1px solid var(--rule); font-family:"Space Grotesk",system-ui,sans-serif; font-size:12px; color:var(--ink-3); letter-spacing:0.02em; text-transform:uppercase; }
+footer.colophon a { color:var(--ink-3); text-decoration:none; border-bottom:1px dotted var(--ink-3); }
+@media (max-width:600px) { body { font-size:16px; } .wrap { padding:40px 18px 80px; } article h1 { font-size:26px; } article h2 { font-size:19px; } }
+@media print { body { background:white; font-size:11pt; line-height:1.45; } .wrap { max-width:none; padding:0; } header.masthead, footer.colophon { display:none; } article h1, article h2, article h3 { page-break-after:avoid; } article pre, article table { page-break-inside:avoid; } article a { color:var(--ink); text-decoration:none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <span class="brand"><span class="chev">›</span> falsify · spec</span>
+  <span>
+    <a href="https://falsify.dev">falsify.dev</a> ·
+    <a href="https://registry.falsify.dev">registry</a> ·
+    <a href="https://spec.falsify.dev/v0.1">v0.1</a> ·
+    <a href="https://spec.falsify.dev/v0.2-rfc">v0.2 RFC</a> ·
+    <a href="https://github.com/studio-11-co/falsify">github</a>
+  </span>
+</header>
+
+<article>
+
+<h1>Pre-registration for machine learning: how the clinical-trials discipline ports to ML</h1>
+<p class="lede">Pre-registration emerged in clinical research because too many positive results disappeared on replication. The same pattern is now routine in ML. Headline accuracy numbers retract. Benchmark leaderboards regress under scrutiny. <em>Nature</em> retracts an AI-for-materials paper; an arXiv preprint claiming a record on MMLU evaporates when an external team re-runs it. The mechanism is the same one Daryl Bem critics named in 2011: claims and analyses arrive in the wrong order.</p>
+
+<h2>What pre-registration originally solved</h2>
+<p>The clinical-trials and psychology literatures converged on pre-registration in the 2010s as the practical answer to two specific failure modes:</p>
+<ul>
+  <li><strong>P-hacking.</strong> Run enough analyses, one will clear <em>p</em> &lt; 0.05 by chance. Report only that one.</li>
+  <li><strong>HARKing</strong> (Hypothesising After the Results are Known). Discover a pattern in the data, then write the introduction as if you predicted it.</li>
+</ul>
+<p>Both look like science from the outside. Both produce literatures that fail to replicate. ClinicalTrials.gov, the AsPredicted registry, the Open Science Framework's pre-registration template, and Registered Reports (peer review of the protocol before data collection) were the institutional responses. They worked. The replication rate in pre-registered psychology studies is materially higher than in unregistered ones; the effect is even stronger in clinical trials.</p>
+
+<p>The format is boring on purpose. You write down, before the data arrives: the hypothesis, the dependent and independent variables, the sample size, the exclusion criteria, the analysis plan, and the rule that distinguishes a positive from a negative result. You commit it. Then you run the study. If you deviate, you say so explicitly.</p>
+
+<h2>ML is the field that most needs pre-registration</h2>
+<p>Machine learning makes empirical claims at industrial scale. Every paper, every model card, every leaderboard entry, every internal release note asserts that some metric clears some threshold on some dataset. The structural pressure to silently relax the threshold, swap the dataset, or pick the seed that worked is at least as strong as in psychology — and the gatekeeping is weaker.</p>
+
+<p>Concrete failure modes in ML that map cleanly onto pre-registration's original targets:</p>
+<ul>
+  <li><strong>Seed laundering.</strong> Run with twelve seeds, publish the median of the best three. The "best three" choice is HARKing.</li>
+  <li><strong>Threshold drift.</strong> The claim said 0.90; the code compared against 0.875. The number is correct; the claim is fabricated.</li>
+  <li><strong>Benchmark substitution.</strong> The eval set changes between the development cycle and the published number, and nobody quite remembers when.</li>
+  <li><strong>Hyperparameter HARKing.</strong> The sweep happens on the test set, then the introduction explains why those hyperparameters were obvious.</li>
+  <li><strong>Metric shopping.</strong> Report accuracy when it flatters, F1 when it doesn't, AUC when neither does.</li>
+</ul>
+
+<p>None of these require malice. They are emergent under publication pressure and the absence of any binding pre-experimental commitment.</p>
+
+<h2>Why a Notion page or a README isn't enough</h2>
+<p>A pre-registration is only useful if it is <em>verifiable</em> — if a third party can confirm that the document you point at is the document you committed to, and that it hasn't been edited since. ClinicalTrials.gov solves this institutionally: the registry timestamps and freezes the protocol. AsPredicted does the same with a fixed PDF.</p>
+
+<p>ML has nothing analogous. A Notion page is editable. A README in <code>main</code> is editable. A pre-print on arXiv is timestamped but the supplementary code is not. The audit-grade question — "what claim did you commit to on the day you ran the experiment" — has no infrastructural answer.</p>
+
+<p>The answer that does work, and that the field has been edging toward, is <em>cryptographic</em>: hash the protocol, publish the hash, run the experiment. Tampering becomes arithmetically detectable.</p>
+
+<h2>PRML: the format</h2>
+<p><strong>PRML</strong> (Pre-Registered ML Manifest, <a href="https://spec.falsify.dev/v0.1">v0.1 spec</a>, Zenodo DOI <a href="https://doi.org/10.5281/zenodo.20177839">10.5281/zenodo.20177839</a>) is what the AsPredicted form would look like if it were machine-readable and content-addressed. A manifest binds: <code>metric</code>, <code>comparator</code>, <code>threshold</code>, <code>dataset.hash</code>, <code>seed</code>, <code>producer.id</code>, and an optional <code>prior_hash</code> chain pointer. The manifest is canonicalised — a small deterministic subset of YAML — and SHA-256 hashed. The hash is the registration.</p>
+
+<p>A registered claim for a new retrieval method might read:</p>
+
+<pre><code>spec: prml/v0.1
+claim_id: dense-retriever-nq-2026-05
+created_at: 2026-05-15T07:30:00Z
+producer:
+  id: lab.example
+  role: research
+metric: ndcg_at_10
+comparator: ">="
+threshold: 0.42
+dataset:
+  id: nq-open-dev-v1
+  hash: sha256:b113...8027
+  rows: 8757
+seed: 13
+prior_hash: null
+notes: |
+  Primary endpoint: nDCG@10 on NQ-open dev set.
+  Secondary endpoints (Recall@20, MRR) reported but not gated.
+  No model selection on the dev set; tuning frozen pre-lock.
+</code></pre>
+
+<p>Lock it before the experiment runs. Publish the hash anywhere — a tweet, an arXiv comment, the project's <a href="https://registry.falsify.dev">registry.falsify.dev</a> page. The hash is short, durable, and verifiable by anyone with the four-language <a href="https://github.com/studio-11-co/falsify">reference implementation</a> or any SHA-256 library.</p>
+
+<h3>Negative results are first-class</h3>
+<p>The standard pre-registration outcome that ML has trouble reporting is "we tried this and it didn't work." PRML makes that outcome a deterministic exit code — <code>10</code> (<em>FAIL</em>) — not a narrative judgement. The chain shows you committed, ran, and got FAIL; the published artifact is the FAIL itself.</p>
+
+<pre><code>spec: prml/v0.1
+claim_id: dense-retriever-nq-2026-05-result
+created_at: 2026-05-15T11:48:02Z
+producer: { id: lab.example }
+metric: ndcg_at_10
+comparator: ">="
+threshold: 0.42
+dataset:
+  id: nq-open-dev-v1
+  hash: sha256:b113...8027
+  rows: 8757
+seed: 13
+observed_value: 0.387
+verdict: FAIL          # exit code 10
+prior_hash: sha256:fe22...09a4    # the pre-registered manifest above
+</code></pre>
+
+<p>This is what an honest negative result looks like in a content-addressed world: the pre-registration and the outcome are linked by hash; the threshold was not relaxed; the seed was not changed; the dataset was not swapped. The result counts as evidence precisely because the claim was committed before the data spoke.</p>
+
+<h2>Deviations: how to be honest about them</h2>
+<p>The single most common objection to pre-registration is operational: "what if we need to deviate?" In clinical trials the answer is a protocol amendment; in PRML it's an amendment manifest with <code>prior_hash</code> pointing at the prior canonical hash and a <code>reason</code> field stating why. The chain preserves both versions. The auditor (or reader, or reviewer) can see exactly what changed and when.</p>
+
+<p>Crucially, deviations don't retroactively edit the original claim. They follow it. The discipline is that you can change your mind — you just can't pretend you didn't.</p>
+
+<h2>What PRML doesn't try to be</h2>
+<p>PRML is not Registered Reports. It does not gate publication. It does not assess whether the claim is interesting or the methodology is sound. It is the smallest possible primitive that makes the pre-experimental commitment <em>verifiable</em> — a building block, not a workflow. Layer Registered Reports, peer review, and external benchmarking on top as you need them. The <a href="https://github.com/studio-11-co/falsify/blob/main/spec/analysis/positioning-v0.1.md">positioning analysis</a> compares PRML against in-toto, SLSA, Model Cards, HELM, and ClinicalTrials.gov; each does a different job.</p>
+
+<p>For regulated ML, the same manifest doubles as evidence for EU AI Act Article 12 logging and Article 72 post-market monitoring — see the <a href="https://spec.falsify.dev/eu-ai-act/article-12">Article 12 page</a> and the <a href="https://github.com/studio-11-co/falsify/blob/main/spec/compliance/AI-Act-mapping-v0.1.md">crosswalk</a> for the article-by-article reading.</p>
+
+<h2>For researchers crossing over from clinical or psychology</h2>
+<p>If you are familiar with the OSF template or AsPredicted, PRML will feel under-specified — that is deliberate. The clinical pre-registration burden is heavy for a reason (human subjects, ethics, IRBs). The ML pre-registration burden has to be light enough that researchers actually do it, or it won't propagate. PRML is the minimum viable commitment: metric, threshold, data hash, seed, signed and dated. Everything else lives in the prose around the manifest, where it can be richer and more discipline-specific.</p>
+
+<p>The hash is the part that has to be machine-checkable. The rest can stay in your usual writing.</p>
+
+<div class="cta">
+<p><strong>Read the v0.2 RFC.</strong> <a href="https://spec.falsify.dev/v0.2-rfc">PRML v0.2 RFC</a> is in public review and freezes 2026-05-22. Comments via <a href="https://github.com/studio-11-co/falsify">GitHub Discussions</a>. To register your first claim in a browser without installing anything, use <a href="https://registry.falsify.dev">registry.falsify.dev</a>.</p>
+</div>
+
+</article>
+
+<footer class="colophon">
+  Studio 11 · spec.falsify.dev · CC BY 4.0 · published 2026-05-15
+</footer>
+
+</div>
+</body>
+</html>

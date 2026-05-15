@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Article 12 Readiness — Self-Assessment</title>
+<meta name="description" content="A 10-question self-assessment for EU AI Act Article 12 (logging), Article 17 (quality management), and Article 18 (documentation retention). Client-side, no data leaves your browser.">
+<meta name="author" content="Studio 11">
+<link rel="canonical" href="https://spec.falsify.dev/article-12-readiness/">
+<meta property="og:title" content="EU AI Act Article 12 Readiness — Self-Assessment">
+<meta property="og:description" content="10 questions. A numerical readiness score. A one-page diagnostic. Runs in your browser; nothing is sent anywhere.">
+<meta property="og:url" content="https://spec.falsify.dev/article-12-readiness/">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #fdfdfb;
+  --ink: #0b0f14;
+  --ink-2: #2b3340;
+  --ink-3: #5a6677;
+  --rule: #d6d9de;
+  --accent: #39d98a;
+  --warn: #d97639;
+  --crit: #c0392b;
+  --code-bg: #f4f4f0;
+  --code-ink: #1a1f29;
+  --max: 720px;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  line-height: 1.65;
+  font-feature-settings: "kern", "liga", "onum";
+}
+.wrap {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 64px 28px 120px;
+}
+header.masthead {
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 18px;
+  margin-bottom: 36px;
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+header.masthead a { color: var(--ink-3); text-decoration: none; border-bottom: 1px dotted var(--ink-3); }
+header.masthead a:hover { color: var(--ink); border-color: var(--ink); }
+header.masthead .brand { font-weight: 700; color: var(--ink); }
+header.masthead .brand .chev { color: var(--accent); }
+
+h1 {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 30px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0 0 10px;
+}
+.kicker {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  margin: 0 0 18px;
+}
+.lede {
+  color: var(--ink-2);
+  margin: 0 0 12px;
+}
+.privacy {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 13px;
+  color: var(--ink-3);
+  background: var(--code-bg);
+  border-left: 2px solid var(--accent);
+  padding: 10px 14px;
+  margin: 18px 0 28px;
+  line-height: 1.55;
+}
+h2 {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 48px 0 14px;
+  letter-spacing: -0.005em;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 6px;
+}
+h3 {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 28px 0 8px;
+  color: var(--ink-2);
+}
+p { margin: 0 0 14px; }
+a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 3px; }
+a:hover { text-decoration-color: var(--accent); }
+
+/* progress */
+.progress-wrap {
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  padding: 12px 0 8px;
+  margin: 0 0 18px;
+  z-index: 5;
+  border-bottom: 1px solid var(--rule);
+}
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+  margin-bottom: 6px;
+}
+.progress-bar {
+  height: 3px;
+  background: var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  width: 0%;
+  transition: width 240ms ease-out;
+}
+
+/* questions */
+.q {
+  border-top: 1px solid var(--rule);
+  padding: 22px 0 6px;
+}
+.q:first-of-type { border-top: none; padding-top: 8px; }
+.q-num {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+}
+.q-text {
+  font-size: 18px;
+  line-height: 1.45;
+  margin: 4px 0 12px;
+  color: var(--ink);
+}
+.q-why {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 13px;
+  color: var(--ink-3);
+  margin: 0 0 14px;
+  line-height: 1.55;
+}
+.q-why summary {
+  cursor: pointer;
+  list-style: none;
+  display: inline-block;
+  border-bottom: 1px dotted var(--ink-3);
+  user-select: none;
+}
+.q-why summary::-webkit-details-marker { display: none; }
+.q-why summary::before { content: "+ "; color: var(--accent); }
+.q-why[open] summary::before { content: "− "; }
+.q-why-body { margin-top: 8px; padding-left: 2px; }
+
+.q-options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.q-options label {
+  flex: 1 1 0;
+  min-width: 90px;
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 14px;
+  padding: 10px 14px;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 120ms ease;
+  background: var(--bg);
+  color: var(--ink-2);
+  user-select: none;
+}
+.q-options label:hover { border-color: var(--ink-3); color: var(--ink); }
+.q-options input { display: none; }
+.q-options input:checked + span {
+  /* visual handled via label state below */
+}
+.q-options label.selected {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+.q-options label.selected.no { background: var(--ink-2); }
+
+.q-tag {
+  margin-top: 12px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+  visibility: hidden;
+}
+.q.answered .q-tag { visibility: visible; }
+.q-tag .pts { color: var(--accent); }
+.q-tag .pts.zero { color: var(--crit); }
+.q-tag .pts.part { color: var(--warn); }
+
+.actions {
+  margin: 36px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.btn {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 11px 22px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--bg);
+  cursor: pointer;
+  border-radius: 3px;
+  letter-spacing: 0.02em;
+}
+.btn:hover { background: var(--ink-2); border-color: var(--ink-2); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn.secondary { background: transparent; color: var(--ink); }
+.btn.secondary:hover { background: var(--code-bg); }
+.btn.accent { background: var(--accent); border-color: var(--accent); color: var(--ink); }
+.btn.accent:hover { background: #2cc578; border-color: #2cc578; }
+
+/* result */
+#result { display: none; }
+.score-card {
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 28px 28px 24px;
+  margin: 28px 0 28px;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
+.score-card .band-tag {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 8px;
+}
+.score-num {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+}
+.score-num .out { color: var(--ink-3); font-weight: 400; font-size: 28px; }
+.score-band {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0 0 14px;
+}
+.score-band.b-crit { color: var(--crit); }
+.score-band.b-mat { color: var(--warn); }
+.score-band.b-ok { color: var(--accent); }
+.score-meter {
+  height: 4px;
+  background: var(--rule);
+  border-radius: 2px;
+  margin: 14px 0 0;
+  overflow: hidden;
+}
+.score-meter > div {
+  height: 100%;
+  background: var(--accent);
+}
+.score-meter > div.crit { background: var(--crit); }
+.score-meter > div.mat  { background: var(--warn); }
+
+.diag h3 { margin-top: 24px; }
+.diag ol { padding-left: 22px; }
+.diag li { margin-bottom: 10px; }
+.diag .rem {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 14px;
+  color: var(--ink-3);
+  display: block;
+  margin-top: 3px;
+  line-height: 1.5;
+}
+.diag .art {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--ink-3);
+  margin-left: 6px;
+}
+
+.prml-box {
+  margin: 24px 0;
+  padding: 16px 18px;
+  border-left: 3px solid var(--accent);
+  background: #ecf9f1;
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+.prml-box strong { color: var(--ink); font-weight: 600; }
+.prml-box code {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.9em;
+  background: rgba(255,255,255,0.6);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.prml-box.honest { background: var(--code-bg); border-left-color: var(--ink-3); }
+
+.cta {
+  margin: 28px 0 0;
+  padding: 22px 22px 20px;
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+}
+.cta h3 {
+  margin: 0 0 8px;
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 16px;
+  color: var(--ink);
+}
+.cta p { font-size: 15px; color: var(--ink-2); margin: 0 0 14px; }
+.cta .row { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.share-row {
+  margin: 18px 0 0;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 13px;
+}
+.share-row .copied {
+  color: var(--accent);
+  opacity: 0;
+  transition: opacity 200ms;
+  align-self: center;
+}
+.share-row .copied.show { opacity: 1; }
+
+.urgency {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 13px;
+  color: var(--ink-3);
+  margin: 14px 0 0;
+  letter-spacing: 0.02em;
+}
+.urgency strong { color: var(--ink); font-weight: 600; }
+
+footer.colophon {
+  margin-top: 80px;
+  padding-top: 22px;
+  border-top: 1px solid var(--rule);
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 12px;
+  color: var(--ink-3);
+  letter-spacing: 0.02em;
+  line-height: 1.65;
+}
+footer.colophon a { color: var(--ink-3); border-bottom: 1px dotted var(--ink-3); text-decoration: none; }
+footer.colophon a:hover { color: var(--ink); }
+
+@media (max-width: 600px) {
+  body { font-size: 16px; }
+  .wrap { padding: 36px 18px 80px; }
+  h1 { font-size: 24px; }
+  .q-text { font-size: 16.5px; }
+  .score-num { font-size: 52px; }
+  .q-options { flex-direction: column; }
+  .q-options label { flex: none; }
+}
+
+@media print {
+  body { background: white; font-size: 11pt; line-height: 1.45; color: #000; }
+  .wrap { max-width: none; padding: 0; }
+  header.masthead, footer.colophon,
+  #questions, .actions, .share-row, .progress-wrap, .privacy { display: none !important; }
+  #result { display: block !important; }
+  h2 { page-break-after: avoid; }
+  .score-card, .cta, .prml-box, .diag li { page-break-inside: avoid; }
+  .cta { border-color: #000; }
+  .score-band.b-crit { color: #000; }
+  .score-band.b-mat { color: #000; }
+  .score-band.b-ok { color: #000; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <span class="brand"><span class="chev">›</span> falsify · spec</span>
+  <span>
+    <a href="https://falsify.dev">falsify.dev</a> ·
+    <a href="https://spec.falsify.dev/v0.1">spec</a> ·
+    <a href="https://registry.falsify.dev">registry</a> ·
+    <a href="https://github.com/studio-11-co/falsify/blob/main/spec/compliance/AI-Act-mapping-v0.1.md">ai-act mapping</a>
+  </span>
+</header>
+
+<p class="kicker">Self-assessment · Reg. (EU) 2024/1689</p>
+<h1>EU AI Act Article 12 Readiness</h1>
+<p class="lede">Ten questions covering logging (Art. 12), quality management (Art. 17), documentation retention (Art. 18), and adjacent obligations under Articles 50, 72, and 73. Designed for compliance leads and ML governance owners at providers of high-risk AI systems under Annex III.</p>
+
+<p class="privacy">Runs entirely in your browser. No answers, scores, or organization details are transmitted, stored, or logged. Closing this tab erases the session. Article tags are revealed only after you answer each question, to keep the diagnostic honest.</p>
+
+<div class="progress-wrap" id="progressWrap" aria-hidden="false">
+  <div class="progress-meta">
+    <span>Progress</span>
+    <span><span id="answered">0</span> / 10 answered</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<section id="questions" aria-label="Assessment questions"></section>
+
+<div class="actions">
+  <button class="btn accent" id="scoreBtn" disabled>Compute readiness score</button>
+  <button class="btn secondary" id="resetBtn" type="button">Reset</button>
+</div>
+
+<section id="result" aria-live="polite">
+  <h2>Diagnostic</h2>
+  <div class="score-card">
+    <p class="band-tag">Readiness score · Art. 12 / 17 / 18 self-assessment</p>
+    <div class="score-num"><span id="scoreVal">0</span><span class="out"> / 100</span></div>
+    <p class="score-band" id="scoreBand"></p>
+    <div class="score-meter"><div id="scoreMeterFill"></div></div>
+    <p class="urgency"><strong>Reference date.</strong> High-risk provisions of Regulation (EU) 2024/1689 apply from <strong>2 August 2026</strong> (Article 113). This assessment is a working aid, not legal advice.</p>
+  </div>
+
+  <div class="diag" id="diagBody"></div>
+
+  <div class="prml-box" id="prmlBox"></div>
+
+  <div class="cta">
+    <h3>Next step — same for everyone</h3>
+    <p>Read the PRML v0.2 RFC and lock a manifest for one evaluation claim at the public registry. No account, no server-side state beyond the SHA-256.</p>
+    <div class="row">
+      <a class="btn accent" href="https://spec.falsify.dev/v0.2-rfc">Read the v0.2 RFC</a>
+      <a class="btn secondary" href="https://registry.falsify.dev">Lock a manifest at registry.falsify.dev</a>
+    </div>
+  </div>
+
+  <div class="share-row">
+    <button class="btn secondary" id="copyBtn" type="button">Copy result link</button>
+    <button class="btn secondary" id="printBtn" type="button">Print one-pager</button>
+    <button class="btn secondary" id="retakeBtn" type="button">Retake</button>
+    <span class="copied" id="copied">Link copied.</span>
+  </div>
+</section>
+
+<footer class="colophon">
+  <p>Self-assessment instrument. Editorial commentary by Studio 11, not legal advice, not reviewed by a notified body, does not bind any regulator. Article references are to the consolidated text of Regulation (EU) 2024/1689 (OJ L 2024/1689, 12 July 2024). For the canonical PRML-to-Article mapping, see the <a href="https://github.com/studio-11-co/falsify/blob/main/spec/compliance/AI-Act-mapping-v0.1.md">AI Act mapping document</a>. Editor: <a href="mailto:hello@studio-11.co">hello@studio-11.co</a>. CC BY 4.0.</p>
+</footer>
+
+</div>
+
+<script>
+"use strict";
+
+// Questions. Plain-English, no Eurocrat phrasing.
+// score weights: Yes=10, Partial=5, No=0.
+const QUESTIONS = [
+  {
+    id: 1,
+    article: "Art. 12",
+    text: "For every high-risk AI system you place on the market, are evaluation events recorded automatically, with the recording happening as part of the system itself rather than as an afterthought a human can skip?",
+    why: "Article 12(1) requires high-risk systems to technically allow automatic event logging over the system's lifetime. Manual or opt-in logging does not satisfy the obligation.",
+    remediation: "Move evaluation logging into the release pipeline. The lock step that produces the manifest should be a CI gate, not a developer habit."
+  },
+  {
+    id: 2,
+    article: "Art. 12",
+    text: "If somebody quietly edited a past evaluation log entry — to soften a failed metric or change a threshold after the fact — would your current setup detect it?",
+    why: "Article 12 logs are evidence in a post-market dispute. If they are not tamper-evident, they will not survive a notified body audit or a regulator's challenge.",
+    remediation: "Bind evaluation records to a cryptographic hash committed before the run (e.g. PRML manifest + sidecar). Append-only storage alone is not sufficient if the producer controls the storage."
+  },
+  {
+    id: 3,
+    article: "Art. 12(2)(b) / Art. 72",
+    text: "Across the lifetime of a deployed system, can you produce a totally-ordered, machine-readable trail of every evaluation run linking each version to its predecessor?",
+    why: "Article 12(2)(b) requires logs that facilitate the post-market monitoring of Article 72. A pile of dated PDFs is not a monitoring chain.",
+    remediation: "Use a forward-only prior-hash chain (or equivalent) so every amendment references the manifest it supersedes. The chain itself is the audit log."
+  },
+  {
+    id: 4,
+    article: "Art. 17(g)",
+    text: "Is the exact dataset used for each evaluation pinned by content — meaning two engineers running the eval six months apart would either get bit-identical inputs or a hard failure — rather than pinned only by a name or a folder path?",
+    why: "Article 17(g) requires documented data management procedures. \"validation_set_final_v3\" is a name, not a content commitment, and silently drifts.",
+    remediation: "Record a content hash (SHA-256 over canonical bytes) for each evaluation dataset and verify it at run time. Names and paths are metadata; hashes are the commitment."
+  },
+  {
+    id: 5,
+    article: "Art. 17(i)",
+    text: "Do you re-run the evaluation harness on a defined cadence after deployment — not only when something visibly breaks — and is that cadence written down?",
+    why: "Article 17(i) ties the quality management system to a post-market monitoring plan under Article 72. Reactive-only re-evaluation is a finding, not a posture.",
+    remediation: "Document a scheduled re-evaluation cadence per system class (e.g. quarterly for Annex III), and treat each re-run as a new manifest with prior_hash set."
+  },
+  {
+    id: 6,
+    article: "Art. 17(j) / Art. 73",
+    text: "If a previously-passing model release later fails the same evaluation, is that regression detected automatically and routed to whoever owns serious-incident reporting — within hours, not the next quarterly review?",
+    why: "Article 73 obliges providers to report serious incidents to market surveillance authorities, and Article 17(j) requires procedures for it. A regression on a published claim is the textbook trigger.",
+    remediation: "Wire the verifier into CI so a FAIL exit code on a manifest that previously passed pages the compliance lead immediately. Quarterly reviews are too slow."
+  },
+  {
+    id: 7,
+    article: "Art. 18",
+    text: "Can your evaluation records be opened, read, and verified in 2036 using only a text editor and a SHA-256 implementation — with no dependency on your current vendor, your current CI, or any proprietary binary format?",
+    why: "Article 18 imposes a 10-year retention obligation. Records locked inside today's SaaS vendor are not records you control for ten years.",
+    remediation: "Store evaluation manifests as plain UTF-8 text (YAML 1.2 subset or equivalent) with an external hash sidecar. Anything that needs a live service to read is a liability."
+  },
+  {
+    id: 8,
+    article: "Art. 18",
+    text: "Is responsibility for the 10-year retention assigned to a named role inside your organization, with a backup, and written down somewhere a regulator could see it on a Monday?",
+    why: "Article 18 retention is a 10-year promise. Without a named owner, it becomes nobody's job between reorgs.",
+    remediation: "Name a primary and a deputy in the QMS document. Bake the retention obligation into the role's onboarding and offboarding checklists."
+  },
+  {
+    id: 9,
+    article: "Art. 50(2)",
+    text: "When a downstream deployer asks how your system was evaluated — metric, threshold, dataset identity, producer identity — can you hand them a single machine-readable artefact, or do you send a slide deck?",
+    why: "Article 50(2) requires that outputs of certain AI systems be marked machine-readably, and the transparency logic extends to deployer-facing disclosure of evaluation methodology.",
+    remediation: "Publish a manifest (or equivalent structured artefact) per release at a stable URL. A deck is not machine-readable; a hashed manifest is."
+  },
+  {
+    id: 10,
+    article: "Art. 72",
+    text: "If a national competent authority sent you a written request today asking for the evaluation history of one of your high-risk systems, could you respond completely within five working days without an emergency cross-team scramble?",
+    why: "Article 72 post-market monitoring obligations are not satisfied by 'we could probably pull that together'. The records have to be at the regulator's disposal under Article 18.",
+    remediation: "Run a tabletop exercise once a year: an internal request, five-day clock, no special preparation. Whatever you can't deliver in time is your real gap."
+  }
+];
+
+const OPTS = [
+  { v: "yes",     label: "Yes",     pts: 10 },
+  { v: "partial", label: "Partial", pts: 5  },
+  { v: "no",      label: "No",      pts: 0  }
+];
+
+const answers = new Array(QUESTIONS.length).fill(null); // values "yes"|"partial"|"no"|null
+
+const qContainer = document.getElementById("questions");
+const progressFill = document.getElementById("progressFill");
+const answeredEl = document.getElementById("answered");
+const scoreBtn = document.getElementById("scoreBtn");
+const resetBtn = document.getElementById("resetBtn");
+const result = document.getElementById("result");
+const scoreVal = document.getElementById("scoreVal");
+const scoreBand = document.getElementById("scoreBand");
+const scoreMeterFill = document.getElementById("scoreMeterFill");
+const diagBody = document.getElementById("diagBody");
+const prmlBox = document.getElementById("prmlBox");
+const copyBtn = document.getElementById("copyBtn");
+const printBtn = document.getElementById("printBtn");
+const retakeBtn = document.getElementById("retakeBtn");
+const copiedEl = document.getElementById("copied");
+
+function renderQuestions() {
+  qContainer.innerHTML = "";
+  QUESTIONS.forEach((q, i) => {
+    const div = document.createElement("div");
+    div.className = "q";
+    div.id = "q-" + q.id;
+    div.innerHTML = `
+      <div class="q-num">Question ${String(i+1).padStart(2,"0")} / 10</div>
+      <div class="q-text">${escapeHtml(q.text)}</div>
+      <details class="q-why">
+        <summary>Why this matters</summary>
+        <div class="q-why-body">${escapeHtml(q.why)}</div>
+      </details>
+      <div class="q-options" role="radiogroup" aria-label="Question ${i+1} answer">
+        ${OPTS.map(o => `
+          <label data-val="${o.v}" tabindex="0" role="radio" aria-checked="false">
+            <input type="radio" name="q${q.id}" value="${o.v}">
+            ${o.label}
+          </label>`).join("")}
+      </div>
+      <div class="q-tag" id="tag-${q.id}"></div>
+    `;
+    qContainer.appendChild(div);
+
+    const labels = div.querySelectorAll(".q-options label");
+    labels.forEach(lab => {
+      lab.addEventListener("click", () => selectAnswer(i, lab.dataset.val));
+      lab.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          selectAnswer(i, lab.dataset.val);
+        }
+      });
+    });
+  });
+}
+
+function selectAnswer(idx, val) {
+  answers[idx] = val;
+  const q = QUESTIONS[idx];
+  const block = document.getElementById("q-" + q.id);
+  block.classList.add("answered");
+  block.querySelectorAll(".q-options label").forEach(lab => {
+    const sel = lab.dataset.val === val;
+    lab.classList.toggle("selected", sel);
+    if (val === "no" && sel) lab.classList.add("no");
+    else lab.classList.remove("no");
+    lab.setAttribute("aria-checked", sel ? "true" : "false");
+  });
+  const pts = OPTS.find(o => o.v === val).pts;
+  const cls = pts === 10 ? "" : pts === 5 ? "part" : "zero";
+  document.getElementById("tag-" + q.id).innerHTML =
+    `<span class="pts ${cls}">+${pts}</span> &nbsp;·&nbsp; maps to ${q.article}`;
+
+  const answered = answers.filter(a => a !== null).length;
+  answeredEl.textContent = answered;
+  progressFill.style.width = (answered * 10) + "%";
+  scoreBtn.disabled = answered < 10;
+  if (answered === 10) {
+    scoreBtn.textContent = "Compute readiness score";
+  }
+}
+
+function computeScore() {
+  let total = 0;
+  answers.forEach(v => {
+    const o = OPTS.find(o => o.v === v);
+    if (o) total += o.pts;
+  });
+  return total;
+}
+
+function band(score) {
+  if (score <= 40) return "crit";
+  if (score <= 75) return "mat";
+  return "ok";
+}
+
+function articlesUnchecked() {
+  // articles tied to questions answered No or Partial (score < 10)
+  const set = new Set();
+  QUESTIONS.forEach((q, i) => {
+    const o = OPTS.find(o => o.v === answers[i]);
+    if (!o || o.pts < 10) {
+      // strip "Art. " prefix and any sub-article ref for the tag list
+      q.article.match(/Art\.\s*(\d+)/g)?.forEach(m => {
+        set.add(m.replace(/Art\.\s*/, ""));
+      });
+    }
+  });
+  return Array.from(set).sort((a,b) => Number(a) - Number(b));
+}
+
+function topUnchecked(n) {
+  // sort questions by points ascending (worst first), return top n
+  return QUESTIONS
+    .map((q, i) => ({ q, pts: OPTS.find(o => o.v === answers[i])?.pts ?? 0 }))
+    .filter(x => x.pts < 10)
+    .sort((a, b) => a.pts - b.pts)
+    .slice(0, n);
+}
+
+function renderResult(score) {
+  const b = band(score);
+  scoreVal.textContent = score;
+  scoreMeterFill.style.width = score + "%";
+  scoreMeterFill.className = b === "ok" ? "" : b;
+
+  scoreBand.className = "score-band b-" + b;
+  if (b === "crit") {
+    scoreBand.textContent = "Critical exposure (0–40).";
+  } else if (b === "mat") {
+    scoreBand.textContent = "Material gaps (41–75).";
+  } else {
+    scoreBand.textContent = "Well-positioned (76–100).";
+  }
+
+  // diagnostic
+  let html = "";
+  if (b === "crit") {
+    const top = topUnchecked(3);
+    html += "<h3>Top three exposures</h3><ol>";
+    top.forEach(({q}) => {
+      html += `<li>${escapeHtml(q.text)} <span class="art">[${escapeHtml(q.article)}]</span>
+        <span class="rem">${escapeHtml(q.remediation)}</span></li>`;
+    });
+    html += "</ol>";
+  } else if (b === "mat") {
+    const top = topUnchecked(5);
+    html += "<h3>Gaps to close</h3><ol>";
+    top.forEach(({q}) => {
+      html += `<li>${escapeHtml(q.text)} <span class="art">[${escapeHtml(q.article)}]</span>
+        <span class="rem">${escapeHtml(q.remediation)}</span></li>`;
+    });
+    html += "</ol>";
+  } else {
+    const top = topUnchecked(10);
+    if (top.length === 0) {
+      html += "<h3>No gaps recorded</h3><p>All ten obligations answered Yes. Treat this as a planning baseline; re-run the assessment after any material change to your evaluation pipeline.</p>";
+    } else {
+      html += "<h3>Residual items</h3><ol>";
+      top.forEach(({q}) => {
+        html += `<li>${escapeHtml(q.text)} <span class="art">[${escapeHtml(q.article)}]</span>
+          <span class="rem">${escapeHtml(q.remediation)}</span></li>`;
+      });
+      html += "</ol>";
+    }
+  }
+  diagBody.innerHTML = html;
+
+  // PRML box framing per band
+  if (b === "crit") {
+    prmlBox.classList.remove("honest");
+    prmlBox.innerHTML = `
+      <strong>Where PRML helps you, specifically.</strong>
+      For Articles 12 and 18, a Pre-Registered ML Manifest binds your evaluation claim
+      (metric, threshold, dataset hash, producer) to a SHA-256 <em>before</em> the run.
+      That covers the tamper-evidence and 10-year-retention questions on this page
+      with arithmetic instead of process attestation. It does not solve the
+      organizational items (named retention owner, post-market cadence, incident
+      routing) — those still need humans and a written QMS.`;
+  } else if (b === "mat") {
+    prmlBox.classList.add("honest");
+    prmlBox.innerHTML = `
+      <strong>What PRML solves, and what it doesn't.</strong>
+      PRML covers the record-integrity layer of Articles 12, 18, and 72: hash binding
+      before evaluation, forward-only chain across re-runs, plain-text records readable
+      a decade out. PRML <em>does not</em> constitute a quality management system
+      under Article 17, does not write your post-market monitoring plan, and does not
+      handle inference-time logging. Treat it as one primitive inside a wider
+      compliance posture — not the whole AI Act.`;
+  } else {
+    prmlBox.classList.remove("honest");
+    prmlBox.innerHTML = `
+      <strong>Your team is doing the work.</strong>
+      A score in this band means the evaluation discipline is already in place:
+      automatic logging, content-addressed datasets, a re-evaluation cadence, a
+      named retention owner. PRML formalizes what you already do, by giving those
+      evaluation claims a portable, verifier-friendly format that a notified body
+      can recompute offline. The lift is small; the audit gain is large.`;
+  }
+
+  // URL hash for sharing
+  const arts = articlesUnchecked();
+  const hash = `#score=${score}` + (arts.length ? `&articles=${arts.join(",")}` : "");
+  history.replaceState(null, "", hash);
+  updateOgForSharing(score, b);
+
+  result.style.display = "block";
+  result.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function updateOgForSharing(score, b) {
+  // Best-effort: refresh og:title/description so social cards reflect score
+  const bandText = b === "crit" ? "Critical exposure"
+                 : b === "mat"  ? "Material gaps"
+                 : "Well-positioned";
+  setMeta("og:title", `Article 12 Readiness — score ${score}/100 (${bandText})`);
+  setMeta("og:description",
+    `A 10-question self-assessment for EU AI Act Articles 12, 17, 18, 50, 72, 73. High-risk provisions apply from 2 August 2026.`);
+  document.title = `Article 12 Readiness — ${score}/100`;
+}
+
+function setMeta(prop, content) {
+  let el = document.querySelector(`meta[property="${prop}"]`);
+  if (!el) {
+    el = document.createElement("meta");
+    el.setAttribute("property", prop);
+    document.head.appendChild(el);
+  }
+  el.setAttribute("content", content);
+}
+
+scoreBtn.addEventListener("click", () => {
+  const score = computeScore();
+  renderResult(score);
+});
+
+resetBtn.addEventListener("click", () => {
+  if (!confirm("Reset all answers?")) return;
+  for (let i = 0; i < answers.length; i++) answers[i] = null;
+  renderQuestions();
+  result.style.display = "none";
+  progressFill.style.width = "0%";
+  answeredEl.textContent = "0";
+  scoreBtn.disabled = true;
+  history.replaceState(null, "", location.pathname);
+  document.title = "Article 12 Readiness — Self-Assessment";
+});
+
+retakeBtn.addEventListener("click", () => {
+  result.style.display = "none";
+  for (let i = 0; i < answers.length; i++) answers[i] = null;
+  renderQuestions();
+  progressFill.style.width = "0%";
+  answeredEl.textContent = "0";
+  scoreBtn.disabled = true;
+  history.replaceState(null, "", location.pathname);
+  document.title = "Article 12 Readiness — Self-Assessment";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+copyBtn.addEventListener("click", async () => {
+  const url = location.href;
+  try {
+    await navigator.clipboard.writeText(url);
+  } catch {
+    // fallback
+    const t = document.createElement("textarea");
+    t.value = url;
+    document.body.appendChild(t);
+    t.select();
+    try { document.execCommand("copy"); } catch {}
+    document.body.removeChild(t);
+  }
+  copiedEl.classList.add("show");
+  setTimeout(() => copiedEl.classList.remove("show"), 1600);
+});
+
+printBtn.addEventListener("click", () => window.print());
+
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+// Hydrate from URL hash on load: if #score=NN present, show diagnostic block
+// without prefilling answers (we don't store them). The block reflects band + articles only.
+function hydrateFromHash() {
+  if (!location.hash) return;
+  const m = location.hash.match(/score=(\d+)/);
+  if (!m) return;
+  const score = Math.max(0, Math.min(100, parseInt(m[1], 10)));
+  // Show a degraded view: score band + standard PRML framing, no per-question diagnostic
+  // (since we don't have the actual answers — just a hash).
+  scoreVal.textContent = score;
+  const b = band(score);
+  scoreMeterFill.style.width = score + "%";
+  scoreMeterFill.className = b === "ok" ? "" : b;
+  scoreBand.className = "score-band b-" + b;
+  scoreBand.textContent =
+    b === "crit" ? "Critical exposure (0–40)."
+  : b === "mat"  ? "Material gaps (41–75)."
+                 : "Well-positioned (76–100).";
+
+  const arts = (location.hash.match(/articles=([\d,]+)/) || [,""])[1]
+    .split(",").filter(Boolean);
+  let diag = "";
+  if (arts.length) {
+    diag = `<h3>Articles flagged in the shared result</h3>
+      <p>The shared score indicates unchecked items under: ${
+        arts.map(a => `<span class="art">Art. ${escapeHtml(a)}</span>`).join(" ")
+      }. Take the assessment yourself to get the per-question diagnostic — answers
+      are not stored in the share link, by design.</p>`;
+  } else {
+    diag = `<h3>Shared result</h3>
+      <p>This is a band-only view of a shared score. Take the assessment yourself
+      for the per-question diagnostic — answers are not stored in the share link,
+      by design.</p>`;
+  }
+  diagBody.innerHTML = diag;
+
+  if (b === "crit") {
+    prmlBox.classList.remove("honest");
+    prmlBox.innerHTML = `<strong>Where PRML helps you, specifically.</strong>
+      For Articles 12 and 18, a Pre-Registered ML Manifest binds your evaluation claim
+      to a SHA-256 before the run — covering tamper-evidence and 10-year retention
+      with arithmetic, not process attestation. Organizational items still need a QMS.`;
+  } else if (b === "mat") {
+    prmlBox.classList.add("honest");
+    prmlBox.innerHTML = `<strong>What PRML solves, and what it doesn't.</strong>
+      PRML covers the record-integrity layer of Articles 12, 18, and 72. It does
+      not constitute a quality management system under Article 17, and does not
+      handle inference-time logging. One primitive inside a wider posture.`;
+  } else {
+    prmlBox.classList.remove("honest");
+    prmlBox.innerHTML = `<strong>Your team is doing the work.</strong>
+      PRML formalizes evaluation discipline you already have, by giving those
+      claims a portable, verifier-friendly format a notified body can recompute
+      offline.`;
+  }
+
+  updateOgForSharing(score, b);
+  result.style.display = "block";
+}
+
+renderQuestions();
+hydrateFromHash();
+</script>
+</body>
+</html>
