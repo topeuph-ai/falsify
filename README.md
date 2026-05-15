@@ -106,7 +106,7 @@ Falsify is the reference implementation of **PRML v0.1** — Pre-Registered ML M
 - **[`spec/paper/`](spec/paper/)** — 14-page arXiv preprint (LaTeX, CC BY 4.0)
 - **[`spec/v0.2/ROADMAP.md`](spec/v0.2/ROADMAP.md)** — v0.2 RFC roadmap (freeze 2026-05-22)
 
-**Reference implementations** (four languages, 12 v0.1 + 8 v0.2 candidate vectors = 20 total; multi-lang CI currently runs 18, full 20-vector parity scheduled for v0.2 freeze 2026-05-22):
+**Reference implementations** (four languages, 12 v0.1 + 8 v0.2 candidate vectors = 20 total; multi-lang CI runs all 20 byte-for-byte per push and daily at 04:00 UTC):
 
 - **Python:** [`falsify.py`](falsify.py) — original reference, uses PyYAML
 - **Node.js:** [`impl/js/`](impl/js/) — second reference, ~400 LOC, hand-rolled, zero deps
@@ -428,8 +428,10 @@ ln -sf "$(pwd)/hooks/commit-msg" .git/hooks/commit-msg
 ## Repository layout
 
 - `falsify.py` — single-file Python CLI, stdlib + pyyaml only.
-- `impl/js/falsify.js` — Node.js second reference implementation (12/12 vectors).
-- `spec/PRML-v0.1.md` + `spec/test-vectors/v0.1/` — spec + conformance suite.
+- `impl/js/falsify.js` — Node.js second reference implementation (12/12 v0.1 + 8/8 v0.2 = 20/20 vectors). Also published to npm as [`falsify-js`](https://www.npmjs.com/package/falsify-js).
+- `impl/go/falsify.go` — Go third reference implementation (20/20 vectors).
+- `impl/rust/` — Rust fourth reference implementation (20/20 vectors).
+- `spec/PRML-v0.1.md` + `spec/test-vectors/v0.1/` (12) + `spec/test-vectors/v0.2/` (8) — spec + conformance suite.
 - `spec/analysis/` — positioning + canonicalization portability findings.
 - `spec/compliance/` — EU AI Act mapping + compliance landing copy.
 - `spec/paper/` — 14-page arXiv preprint (LaTeX).
