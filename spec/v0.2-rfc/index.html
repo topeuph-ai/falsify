@@ -189,6 +189,26 @@ footer.colophon a:hover { color: var(--ink); }
   font-size: 13px;
 }
 
+.rfc-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: #0b0f14;
+  color: #fdfdfb;
+  border-bottom: 1px solid #39d98a;
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  text-align: center;
+  padding: 8px 16px;
+  line-height: 1.45;
+}
+.rfc-sticky strong { color: #39d98a; font-weight: 600; }
+.rfc-sticky a { color: #fdfdfb; text-decoration: underline; text-decoration-color: #39d98a; text-underline-offset: 3px; }
+.rfc-sticky a:hover { color: #39d98a; }
+.rfc-sticky code { font-family: "JetBrains Mono", monospace; font-size: 0.9em; background: rgba(57,217,138,0.12); color: #39d98a; padding: 1px 5px; border-radius: 3px; }
+@media print { .rfc-sticky { display: none; } }
+
 @media (max-width: 600px) {
   body { font-size: 16px; }
   .wrap { padding: 40px 18px 80px; }
@@ -207,6 +227,13 @@ footer.colophon a:hover { color: var(--ink); }
 </style>
 </head>
 <body>
+
+<div class="rfc-sticky" role="region" aria-label="RFC comment window">
+  <strong>v0.2 RFC</strong> — comment window closes <strong>2026-05-22 23:59 UTC</strong>.
+  Open an issue with label <a href="https://github.com/studio-11-co/falsify/issues/new?labels=rfc-v0.2&amp;template=rfc-v0.2-comment.md"><code>rfc-v0.2</code></a>
+  or email <a href="mailto:hello@studio-11.co?subject=%5Bv0.2%20RFC%5D">hello@studio-11.co</a>.
+</div>
+
 <div class="wrap">
 
 <header class="masthead">
@@ -239,8 +266,8 @@ footer.colophon a:hover { color: var(--ink); }
     <li><a href="https://github.com/studio-11-co/falsify/blob/main/spec/compliance/landing.md"><strong>Compliance landing</strong></a> — for compliance leads and notified body assessors</li>
     <li><a href="https://github.com/studio-11-co/falsify/tree/main/spec/paper"><strong>arXiv preprint</strong></a> — 14-page LaTeX, CC BY 4.0 (cs.CR submission in flight)</li>
     <li><a href="https://github.com/studio-11-co/falsify/blob/main/spec/v0.2/ROADMAP.md"><strong>v0.2 RFC roadmap</strong></a> — ten changes, five open questions, freeze 2026-05-22</li>
-    <li><a href="https://github.com/studio-11-co/falsify/tree/main/impl/js"><strong>JS second implementation</strong></a> — Node.js, 404 LOC, 12/12 vectors pass</li>
-    <li><a href="https://github.com/studio-11-co/falsify/tree/main/spec/test-vectors/v0.1"><strong>Conformance test vectors</strong></a> — 12 vectors with locked SHA-256 digests</li>
+    <li><a href="https://github.com/studio-11-co/falsify/tree/main/impl"><strong>Four reference implementations</strong></a> — Python, Node.js (<a href="https://www.npmjs.com/package/falsify-js"><code>falsify-js</code></a>), Go, Rust. All pass 20/20 vectors byte-for-byte; CI verifies 4 × 20 = 80 agreements per push.</li>
+    <li><a href="https://github.com/studio-11-co/falsify/tree/main/spec/test-vectors"><strong>Conformance test vectors</strong></a> — 20 vectors total (12 v0.1 normative + 8 v0.2 candidate), all with locked SHA-256 digests.</li>
   </ul>
 </aside>
 
