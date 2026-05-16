@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NIST AI RMF crosswalk for PRML — Govern, Measure, Manage subcategory map</title>
+<meta name="description" content="A subcategory-level map from the NIST AI Risk Management Framework 1.0 (and the 2024 Generative AI Profile) to Pre-Registered ML Manifest fields. Where PRML mechanically supports a control, where it doesn't, and what's still process work.">
+<meta name="author" content="Cüneyt Öztürk">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://spec.falsify.dev/nist-ai-rmf">
+
+<meta property="og:title" content="NIST AI RMF crosswalk for PRML — subcategory map">
+<meta property="og:description" content="Where PRML pre-registered evaluation manifests mechanically support NIST AI RMF 1.0 subcategories, and where they don't. Written for AI risk officers and auditors.">
+<meta property="og:url" content="https://spec.falsify.dev/nist-ai-rmf">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://spec.falsify.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "NIST AI RMF crosswalk for PRML — Govern, Measure, Manage subcategory map",
+  "description": "Subcategory-level map from NIST AI Risk Management Framework 1.0 (NIST AI 100-1) and the 2024 Generative AI Profile (NIST AI 600-1) to Pre-Registered ML Manifest fields.",
+  "author": {"@type":"Person","name":"Cüneyt Öztürk","url":"https://www.linkedin.com/in/cuneyt-ozturk-39812963/"},
+  "publisher": {"@type":"Organization","name":"Studio 11","url":"https://studio-11.co"},
+  "datePublished": "2026-05-16",
+  "dateModified": "2026-05-16",
+  "url": "https://spec.falsify.dev/nist-ai-rmf",
+  "inLanguage": "en",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "keywords": "NIST AI RMF, AI Risk Management Framework, Pre-Registered ML Manifest, PRML, MEASURE, MANAGE, GOVERN, AI 100-1, AI 600-1, Generative AI Profile, evaluation, audit",
+  "citation": {
+    "@type": "CreativeWork",
+    "name": "PRML v0.1 specification",
+    "identifier": "https://doi.org/10.5281/zenodo.20177839",
+    "url": "https://doi.org/10.5281/zenodo.20177839"
+  }
+}
+</script>
+
+<style>
+:root { --bg:#fdfdfb; --ink:#0b0f14; --ink-2:#2b3340; --ink-3:#5a6677; --rule:#d6d9de; --accent:#39d98a; --code-bg:#f4f4f0; --code-ink:#1a1f29; --max:760px; }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body { margin:0; background:var(--bg); color:var(--ink); font-family:"Source Serif 4",Georgia,"Times New Roman",serif; font-size:17px; line-height:1.65; font-feature-settings:"kern","liga","onum"; }
+.wrap { max-width:var(--max); margin:0 auto; padding:64px 28px 120px; }
+header.masthead { border-bottom:1px solid var(--rule); padding-bottom:18px; margin-bottom:36px; font-family:"Space Grotesk",system-ui,sans-serif; font-size:13px; letter-spacing:0.04em; color:var(--ink-3); text-transform:uppercase; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+header.masthead a { color:var(--ink-3); text-decoration:none; border-bottom:1px dotted var(--ink-3); }
+header.masthead a:hover { color:var(--ink); border-color:var(--ink); }
+header.masthead .brand { font-weight:700; color:var(--ink); }
+header.masthead .brand .chev { color:var(--accent); }
+article h1 { font-family:"Space Grotesk",system-ui,sans-serif; font-size:32px; line-height:1.2; font-weight:700; letter-spacing:-0.01em; margin:0 0 12px; }
+article .lede { color:var(--ink-2); font-size:18px; margin:0 0 28px; }
+article h2 { font-family:"Space Grotesk",system-ui,sans-serif; font-size:22px; font-weight:700; margin:48px 0 14px; letter-spacing:-0.005em; border-bottom:1px solid var(--rule); padding-bottom:6px; }
+article h3 { font-family:"Space Grotesk",system-ui,sans-serif; font-size:17px; font-weight:600; margin:32px 0 10px; color:var(--ink-2); }
+article p { margin:0 0 16px; }
+article ul, article ol { margin:0 0 16px; padding-left:24px; }
+article li { margin-bottom:6px; }
+article code { font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace; font-size:0.92em; background:var(--code-bg); color:var(--code-ink); padding:1px 5px; border-radius:3px; }
+article pre { background:var(--code-bg); padding:16px 18px; border-radius:4px; overflow-x:auto; font-size:14px; line-height:1.55; }
+article pre code { background:none; padding:0; }
+article table { width:100%; border-collapse:collapse; margin:18px 0 24px; font-size:15px; }
+article th, article td { padding:9px 12px; text-align:left; border-bottom:1px solid var(--rule); vertical-align:top; }
+article th { font-family:"Space Grotesk",system-ui,sans-serif; font-weight:600; color:var(--ink-2); font-size:13px; text-transform:uppercase; letter-spacing:0.04em; }
+article td.cell-id { font-family:"JetBrains Mono",monospace; font-size:13px; white-space:nowrap; color:var(--ink-2); }
+article td.cell-cov { font-family:"Space Grotesk",system-ui,sans-serif; font-size:12px; text-transform:uppercase; letter-spacing:0.06em; }
+.cov-full { color:#1e7f4f; }
+.cov-partial { color:#9b6e1a; }
+.cov-none { color:#9d3a3a; }
+article a { color:var(--ink); text-decoration:none; border-bottom:1px solid var(--ink-3); }
+article a:hover { border-color:var(--accent); }
+.cta { margin:48px 0 16px; padding:22px 24px; background:#0b0f14; color:#e8eef2; border-radius:4px; font-family:"Space Grotesk",system-ui,sans-serif; font-size:15px; }
+.cta a { color:var(--accent); border-color:var(--accent); }
+.cta a:hover { border-color:#e8eef2; color:#e8eef2; }
+footer.colophon { margin:80px 0 0; padding-top:24px; border-top:1px solid var(--rule); font-family:"Space Grotesk",system-ui,sans-serif; font-size:13px; color:var(--ink-3); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <span class="brand"><span class="chev">&#10095;</span> falsify / spec.falsify.dev</span>
+  <span>
+    <a href="https://falsify.dev">Home</a> ·
+    <a href="https://spec.falsify.dev/v0.1">Spec v0.1</a> ·
+    <a href="https://spec.falsify.dev/v0.2-rfc">RFC v0.2 <span style="color:var(--accent);font-size:0.85em">(open)</span></a> ·
+    <a href="https://registry.falsify.dev">Registry</a> ·
+    <a href="https://github.com/studio-11-co/falsify">GitHub</a>
+  </span>
+</header>
+
+<article>
+
+<h1>NIST AI RMF crosswalk for PRML — Govern, Measure, Manage subcategory map</h1>
+<p class="lede">The NIST AI Risk Management Framework 1.0 (NIST AI 100-1, January 2023) and the Generative AI Profile (NIST AI 600-1, July 2024) are the most-cited voluntary standards for U.S. AI risk programs. Pre-Registered ML Manifests don't replace the framework — they mechanically satisfy a specific slice of it. This page walks subcategory by subcategory.</p>
+
+<h2>Scope and posture</h2>
+<p>PRML (<a href="https://spec.falsify.dev/v0.1">v0.1 spec</a>, Zenodo DOI <a href="https://doi.org/10.5281/zenodo.20177839">10.5281/zenodo.20177839</a>) commits an evaluation claim — metric, comparator, threshold, dataset hash, seed, producer identity — to a SHA-256 hash before the experiment runs. Any retroactive edit breaks the hash. The format is plain UTF-8 YAML; the canonicalization rules are deterministic across four reference implementations.</p>
+
+<p>This is a primitive, not a programme. The AI RMF asks an organization to govern, map, measure, and manage AI risk over the system's lifecycle. PRML lives inside <em>Measure</em> and the parts of <em>Govern</em> and <em>Manage</em> that touch evaluation evidence. It does not, on its own, satisfy MAP (context, stakeholders, capabilities) or the human-process parts of GOVERN.</p>
+
+<p>The three coverage tags used below:</p>
+<ul>
+  <li><strong class="cov-full">FULL</strong> — the subcategory is mechanically satisfied by a PRML manifest plus the registry/CI pattern in <a href="https://falsify.dev/vs">comparison context</a>. No process attestation needed beyond storing the manifest.</li>
+  <li><strong class="cov-partial">PARTIAL</strong> — PRML provides a binding piece of evidence the subcategory requires, but other artifacts (policy text, training records, incident playbooks) are still required.</li>
+  <li><strong class="cov-none">NONE</strong> — PRML does not address this subcategory. Listed only where it would be reasonable to mistake it for in-scope; the rest of the framework is omitted to keep the table readable.</li>
+</ul>
+
+<h2>GOVERN — relevant subcategories</h2>
+<table>
+  <tr><th>Subcat.</th><th>Text (paraphrased)</th><th>PRML mechanism</th><th>Coverage</th></tr>
+  <tr>
+    <td class="cell-id">GOVERN 1.4</td>
+    <td>The organization defines, deploys, and documents processes governing AI design, development, and risk management.</td>
+    <td>Manifest <code>producer.id</code> + the locked SHA-256 are the documented process artefact for the evaluation-decision step of that lifecycle.</td>
+    <td class="cell-cov cov-partial">Partial</td>
+  </tr>
+  <tr>
+    <td class="cell-id">GOVERN 1.5</td>
+    <td>Ongoing monitoring and periodic review of the risk management process and its outcomes are planned.</td>
+    <td>The <code>prior_hash</code> amendment chain is itself the periodic-review evidence. Each re-evaluation produces a forward-only link.</td>
+    <td class="cell-cov cov-partial">Partial</td>
+  </tr>
+  <tr>
+    <td class="cell-id">GOVERN 4.1</td>
+    <td>Organizational policies and practices are in place to foster a critical thinking and safety-first mindset; AI risks are documented.</td>
+    <td>A manifest is a falsifiable commitment. Committing to <code>f1 &gt;= 0.78</code> publicly via the registry is the strongest safety-first signal a producer can emit.</td>
+    <td class="cell-cov cov-partial">Partial</td>
+  </tr>
+  <tr>
+    <td class="cell-id">GOVERN 5.1</td>
+    <td>Organizational policies and procedures are in place to address AI risks, including documentation.</td>
+    <td>The locked manifest <em>is</em> the documentation of the evaluation-risk-acceptance decision. SHA-256 makes it tamper-evident over the system's lifetime.</td>
+    <td class="cell-cov cov-full">Full</td>
+  </tr>
+  <tr>
+    <td class="cell-id">GOVERN 6.1</td>
+    <td>Policies and procedures are in place to address risks associated with third-party software and data.</td>
+    <td>Manifest <code>dataset.hash</code> binds the evaluation to a specific dataset content hash. Third-party dataset drift fails verification.</td>
+    <td class="cell-cov cov-full">Full</td>
+  </tr>
+</table>
+
+<h2>MAP — relevant subcategories</h2>
+<p>PRML is largely out of scope for MAP. MAP asks the organization to understand context, capabilities, and the people affected. A manifest captures a single evaluation-claim, not the surrounding mission, intended-use, or impact-assessment work. Listed for completeness:</p>
+<table>
+  <tr><th>Subcat.</th><th>Text (paraphrased)</th><th>PRML mechanism</th><th>Coverage</th></tr>
+  <tr>
+    <td class="cell-id">MAP 2.3</td>
+    <td>Scientific integrity and TEVV considerations are identified and documented.</td>
+    <td>PRML is a TEVV (test/evaluation/verification/validation) artifact. The manifest is the format in which a single TEVV claim becomes contestable.</td>
+    <td class="cell-cov cov-partial">Partial</td>
+  </tr>
+  <tr>
+    <td class="cell-id">MAP 4.1</td>
+    <td>Approaches for mapping AI technology and legal risks are followed.</td>
+    <td>Manifest fields map directly to EU AI Act Article 12 obligations — see the <a href="https://spec.falsify.dev/eu-ai-act/article-12">Article 12 crosswalk</a>.</td>
+    <td class="cell-cov cov-partial">Partial</td>
+  </tr>
+</table>
+
+<h2>MEASURE — the centre of gravity</h2>
+<p>This is where PRML earns its keep. MEASURE asks the organization to characterise, monitor, and evaluate. A locked manifest is the unit of evaluation evidence the framework keeps referring to without quite naming.</p>
+<table>
+  <tr><th>Subcat.</th><th>Text (paraphrased)</th><th>PRML mechanism</th><th>Coverage</th></tr>
+  <tr>
+    <td class="cell-id">MEASURE 1.1</td>
+    <td>Approaches and metrics for measuring AI risks are followed and the methodology is documented.</td>
+    <td>Manifest <code>metric</code> + <code>comparator</code> + <code>threshold</code> are exactly that documented methodology, hash-bound before the run.</td>
+    <td class="cell-cov cov-full">Full</td>
+  </tr>
+  <tr>
+    <td class="cell-id">MEASURE 2.3</td>
+    <td>AI system performance or assurance criteria are measured qualitatively and quantitatively.</td>
+    <td>Manifest commits the quantitative criterion (<code>threshold</code>) and the dataset against which it is measured. Exit code 0/10 is the deterministic measurement signal.</td>
+    <td class="cell-cov cov-full">Full</td>
+  </tr>
+  <tr>
+    <td class="cell-id">MEASURE 2.7</td>
+    <td>AI system security and resilience are evaluated and documented.</td>
+    <td>Tamper-evidence on the claim itself (exit 3 / TAMPERED on any drift) is a security control over the evaluation surface. Not over the model inference path — that's a separate concern.</td>
+    <td class="cell-cov cov-partial">Partial</td>
+  </tr>
+  <tr>
+    <td class="cell-id">MEASURE 2.8</td>
+    <td>Risks associated with AI system transparency and accountability are examined and documented.</td>
+    <td>Manifest <code>producer.id</code> is the accountability anchor. The public registry permalink is the transparency surface. The <code>prior_hash</code> chain documents accountability across re-evaluations.</td>
+    <td class="cell-cov cov-full">Full</td>
+  </tr>
+  <tr>
+    <td class="cell-id">MEASURE 3.1</td>
+    <td>Approaches, personnel, and documentation for measurement of AI risks are validated.</td>
+    <td>The four byte-equivalent reference implementations (Python, JS, Go, Rust) plus 20 published conformance vectors are the measurement-approach validation.</td>
+    <td class="cell-cov cov-full">Full</td>
+  </tr>
+  <tr>
+    <td class="cell-id">MEASURE 3.3</td>
+    <td>Measurable performance improvements or declines are tracked over time.</td>
+    <td>The amendment chain is exactly this — successive manifests with monotonic timestamps and explicit <code>prior_hash</code> pointers.</td>
+    <td class="cell-cov cov-full">Full</td>
+  </tr>
+  <tr>
+    <td class="cell-id">MEASURE 4.1</td>
+    <td>Approaches for measurement are in place that enable comparison to baselines and benchmarks.</td>
+    <td>Manifest <code>dataset.hash</code> + <code>seed</code> + <code>metric</code> together fix all the comparison-stable inputs. Two manifests on the same dataset hash are comparable by construction.</td>
+    <td class="cell-cov cov-full">Full</td>
+  </tr>
+  <tr>
+    <td class="cell-id">MEASURE 4.2</td>
+    <td>Measurement results regarding AI system trustworthiness are informed by input from independent assessors.</td>
+    <td>Anyone with the manifest and a reference implementation can re-derive the hash and re-run the verification offline. Independent assessment requires no producer trust.</td>
+    <td class="cell-cov cov-full">Full</td>
+  </tr>
+</table>
+
+<h2>MANAGE — relevant subcategories</h2>
+<table>
+  <tr><th>Subcat.</th><th>Text (paraphrased)</th><th>PRML mechanism</th><th>Coverage</th></tr>
+  <tr>
+    <td class="cell-id">MANAGE 2.2</td>
+    <td>Mechanisms are in place to sustain AI system value after deployment.</td>
+    <td>The amendment chain is the sustainment mechanism for the evaluation-claim layer. Re-evaluations link to predecessors via <code>prior_hash</code>.</td>
+    <td class="cell-cov cov-partial">Partial</td>
+  </tr>
+  <tr>
+    <td class="cell-id">MANAGE 4.1</td>
+    <td>Post-deployment AI system monitoring is regularly conducted; documentation is current.</td>
+    <td>Each scheduled re-evaluation produces a new manifest. The chain's terminal hash is the monitoring summary an auditor can verify offline.</td>
+    <td class="cell-cov cov-partial">Partial</td>
+  </tr>
+  <tr>
+    <td class="cell-id">MANAGE 4.2</td>
+    <td>Mechanisms are in place to capture, evaluate, and respond to AI system errors and failures.</td>
+    <td>FAIL (exit 10) and TAMPERED (exit 3) are the deterministic error signals. CI gating on those exit codes is the response mechanism in code.</td>
+    <td class="cell-cov cov-full">Full</td>
+  </tr>
+  <tr>
+    <td class="cell-id">MANAGE 4.3</td>
+    <td>Incidents and errors are communicated to relevant AI actors.</td>
+    <td>A failing PRML verification in CI surfaces a deterministic exit code and the diff between expected and observed hashes. The communication is the build log.</td>
+    <td class="cell-cov cov-full">Full</td>
+  </tr>
+</table>
+
+<h2>NIST AI 600-1 — Generative AI Profile</h2>
+<p>The Generative AI Profile (July 2024) adds 12 categories of GenAI-specific risk. Most of them sit upstream of PRML — data provenance, harmful content moderation, intellectual property handling. Two categories where PRML contributes:</p>
+
+<table>
+  <tr><th>Risk</th><th>PRML mechanism</th><th>Coverage</th></tr>
+  <tr>
+    <td>Confabulation — fabrication of plausible but ungrounded outputs, including for evaluation results.</td>
+    <td>A pre-registered manifest makes it impossible to confabulate an evaluation outcome. The pre-run hash blocks the most common form: silently rewriting a threshold after the model underperforms.</td>
+    <td class="cell-cov cov-full">Full</td>
+  </tr>
+  <tr>
+    <td>Information Integrity — unauthorized changes to training, fine-tuning, or evaluation data.</td>
+    <td>Manifest <code>dataset.hash</code> binds evaluation to specific dataset content. Any swap of the underlying dataset breaks the chain.</td>
+    <td class="cell-cov cov-full">Full</td>
+  </tr>
+</table>
+
+<h2>What this map does not give you</h2>
+<p>The honest read: of NIST AI RMF 1.0's roughly 72 subcategories, PRML contributes evidence to about 13–15. The framework is mostly process and governance work — committee structures, training requirements, stakeholder engagement, incident playbooks, third-party assessments. PRML is the small primitive that makes the <em>evaluation-evidence</em> slice arithmetically verifiable instead of attested. That slice happens to be where most AI risk programs are weakest, which is why it's worth naming.</p>
+
+<p>If your AI risk function is operating against the AI RMF crosswalk because of a procurement requirement, audit finding, or board oversight commitment, the marginal value of PRML is highest at MEASURE 1.1, MEASURE 2.3, MEASURE 2.8, MEASURE 3.3, MEASURE 4.1, and MEASURE 4.2 simultaneously. Those six are where qualitative attestation tends to collapse under audit, and where a deterministic hash is a cleaner artifact than any policy document.</p>
+
+<h2>Pairing PRML with the rest of the framework</h2>
+<p>The framework's GOVERN function expects policy text — actual written policies about how the organization governs AI. PRML doesn't write those. What it does is give the policies something to point at. A policy that says "Evaluation claims for production AI systems must be pre-registered via PRML before release" is a one-sentence policy that an auditor can verify by re-deriving the hash. A policy that says "Evaluation claims must be documented" is verifiable only by reading whatever PDF the team produced, which is the gap NIST keeps trying to close.</p>
+
+<p>Pair the manifest with the rest of the programme:</p>
+<ul>
+  <li>Use PRML for the evaluation-evidence layer.</li>
+  <li>Use ISO/IEC 42001 for the management-system layer.</li>
+  <li>Use the AI Act Article 12/17/18 controls for the EU regulatory layer (see <a href="https://spec.falsify.dev/eu-ai-act/article-12">crosswalk</a>).</li>
+  <li>Use Sigstore or a similar attestation for execution-integrity beyond what PRML §8.1 covers.</li>
+</ul>
+
+<div class="cta">
+<p><strong>Pre-register your first evaluation claim.</strong> Paste a PRML draft into <a href="https://registry.falsify.dev">registry.falsify.dev</a> and get a SHA-256 permalink plus a README badge. No account, no server-side state beyond the hash. The reference implementations are at <a href="https://github.com/studio-11-co/falsify">github.com/studio-11-co/falsify</a> (Python, byte-equivalent JS / Go / Rust in sibling repos).</p>
+</div>
+
+</article>
+
+<aside class="related" style="margin: 60px 0 0; padding: 24px 0 0; border-top: 1px solid var(--rule);">
+  <h2 style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); margin: 0 0 14px; border: 0; padding: 0; font-weight: 600; font-family: 'Space Grotesk', system-ui, sans-serif;">Related</h2>
+  <ul style="list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; font-size: 15px;">
+    <li><a href="https://spec.falsify.dev/eu-ai-act/article-12">EU AI Act Article 12 crosswalk</a> — the equivalent map for high-risk providers in the EU</li>
+    <li><a href="https://spec.falsify.dev/article-12-readiness/">Article 12 readiness self-assessment</a> — 10-question diagnostic, browser-only</li>
+    <li><a href="https://spec.falsify.dev/reproducibility/eval-audit">ML evaluation reproducibility audit method</a></li>
+    <li><a href="https://spec.falsify.dev/pre-registration">Pre-registration for machine learning</a></li>
+    <li><a href="https://spec.falsify.dev/v0.1">PRML v0.1 specification</a> — the format underlying this crosswalk</li>
+    <li><a href="https://registry.falsify.dev">registry.falsify.dev</a> — commit a manifest in a browser</li>
+    <li><a href="https://falsify.dev/audit-firms/">For audit practices</a> — how PRML appears in client deliverables</li>
+  </ul>
+</aside>
+
+<footer class="colophon">
+  Studio 11 · spec.falsify.dev · CC BY 4.0 · not legal advice · published 2026-05-16
+</footer>
+
+</div>
+<script>(function(){try{var i=new Image();i.src="https://registry.falsify.dev/_t?h="+encodeURIComponent(location.host)+"&p="+encodeURIComponent(location.pathname)+"&r="+encodeURIComponent(document.referrer||"")}catch(e){}})();</script></body>
+</html>
