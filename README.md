@@ -43,7 +43,7 @@ TAMPERED  sha256 mismatch — spec modified after locking  (exit 3)
 
 **Already on MLflow?** [`pip install mlflow-falsify`](https://pypi.org/project/mlflow-falsify/) — discoverable plugin that tags every MLflow run with the PRML manifest hash, version, metric, comparator, threshold, and dataset id. Zero code changes to your existing MLflow workflow. Source: [`studio-11-co/mlflow-falsify`](https://github.com/studio-11-co/mlflow-falsify).
 
-**Need it locked for one of your published claims?** [`falsify.dev/sprint`](https://falsify.dev/sprint) — €9,000 / 14-day Diagnostic Sprint: PRML manifest authored, verifier deployed, audit report shipped.
+**Need it locked for one of your published claims?** [`falsify.dev/sprint`](https://falsify.dev/sprint) — Diagnostic Sprint, fixed-scope engagement for regulated AI teams. PRML manifest authored, verifier deployed in CI, audit report shipped. Pricing scoped per client; single-claim review available as a sub-procurement option.
 
 **What is PRML?** [`falsify.dev/what-is-prml`](https://falsify.dev/what-is-prml) — plain-English answer page.
 

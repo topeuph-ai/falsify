@@ -108,3 +108,11 @@ docs/assets/vo_lines/
 docs/assets/vo_lines_callum/
 scripts/radar/
 spec/.wrangler/
+
+# arXiv domain verification token (filename = sha256 challenge)
+spec/*.txt
+!spec/PRML-*.txt
+!spec/README*.txt
+
+# Preprint PDFs (regenerate from source; don't ship binary)
+spec/paper/*.pdf

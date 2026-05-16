@@ -87,11 +87,11 @@ footer.colophon a { color:var(--ink-3); text-decoration:none; border-bottom:1px 
 <header class="masthead">
   <span class="brand"><span class="chev">›</span> falsify · spec</span>
   <span>
-    <a href="https://falsify.dev">falsify.dev</a> ·
-    <a href="https://registry.falsify.dev">registry</a> ·
-    <a href="https://spec.falsify.dev/v0.1">v0.1</a> ·
-    <a href="https://spec.falsify.dev/v0.2-rfc">v0.2 RFC</a> ·
-    <a href="https://github.com/studio-11-co/falsify">github</a>
+    <a href="https://falsify.dev">Home</a> ·
+    <a href="https://spec.falsify.dev/v0.1">Spec v0.1</a> ·
+    <a href="https://spec.falsify.dev/v0.2-rfc">RFC v0.2 <span style="color:var(--accent);font-size:0.85em">(open)</span></a> ·
+    <a href="https://registry.falsify.dev">Registry</a> ·
+    <a href="https://github.com/studio-11-co/falsify">GitHub</a>
   </span>
 </header>
 
@@ -171,7 +171,7 @@ notes: |
   Prospective dataset frozen 2026-03-31 23:59 UTC.
 </code></pre>
 
-<p>The auditor in 2027 doesn't need access to your evaluation harness. They need the manifest, the sidecar, and any of the four <a href="https://github.com/studio-11-co/falsify">reference implementations</a> (Python, JavaScript, Go, Rust — all byte-equivalent on the 12 v0.1 conformance vectors). They recompute the canonical bytes, recompute the hash, compare. Integrity verification requires no trust in the producer's tooling.</p>
+<p>The auditor in 2027 doesn't need access to your evaluation harness. They need the manifest, the sidecar, and any of the four <a href="https://github.com/studio-11-co/falsify">reference implementations</a> (Python, JavaScript, Go, Rust — all byte-equivalent on the 20 conformance vectors (12 v0.1 + 8 v0.2)). They recompute the canonical bytes, recompute the hash, compare. Integrity verification requires no trust in the producer's tooling.</p>
 
 <h2>The amendment chain replaces the "we re-ran it" email</h2>
 <p>Real evaluations get re-run. New holdout sets ship. Distribution shifts force recalibration. The audit-killing question is <em>which version of the claim was authoritative on a given date</em>.</p>
@@ -217,10 +217,21 @@ reason: |
 <p>For regulated contexts, PRML mechanically supports EU AI Act Article 12 logging, Article 18 retention, and Article 72 post-market monitoring — covered in our <a href="https://spec.falsify.dev/eu-ai-act/article-12">Article 12 compliance page</a>. The reproducibility audit and the AI Act audit converge on the same artifact.</p>
 
 <div class="cta">
-<p><strong>Read the spec.</strong> <a href="https://spec.falsify.dev/v0.1">PRML v0.1</a> is 14 pages and CC BY 4.0. The <a href="https://spec.falsify.dev/v0.2-rfc">v0.2 RFC</a> is in public review, frozen 2026-05-22. Reference implementations and the 20-vector conformance suite live on <a href="https://github.com/studio-11-co/falsify">GitHub</a>; <a href="https://registry.falsify.dev">registry.falsify.dev</a> lets you commit your first manifest in a browser.</p>
+<p><strong>Read the spec.</strong> <a href="https://spec.falsify.dev/v0.1">PRML v0.1</a> is CC BY 4.0; the companion arXiv preprint is 14 pages. The <a href="https://spec.falsify.dev/v0.2-rfc">v0.2 RFC</a> is in public review, frozen 2026-05-22. Reference implementations and the 20-vector conformance suite live on <a href="https://github.com/studio-11-co/falsify">GitHub</a>; <a href="https://registry.falsify.dev">registry.falsify.dev</a> lets you commit your first manifest in a browser.</p>
 </div>
 
 </article>
+
+<aside class="related" style="margin: 60px 0 0; padding: 24px 0 0; border-top: 1px solid var(--rule);">
+  <h2 style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); margin: 0 0 14px; border: 0; padding: 0; font-weight: 600; font-family: 'Space Grotesk', system-ui, sans-serif;">Related</h2>
+  <ul style="list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; font-size: 15px;">
+    <li><a href="https://spec.falsify.dev/eu-ai-act/article-12">EU AI Act Article 12 logging — working pattern</a></li>
+    <li><a href="https://spec.falsify.dev/pre-registration">Pre-registration for machine learning</a></li>
+    <li><a href="https://spec.falsify.dev/article-12-readiness/">Article 12 readiness self-assessment</a> — 10-question diagnostic</li>
+    <li><a href="https://spec.falsify.dev/v0.1">PRML v0.1 specification</a></li>
+    <li><a href="https://registry.falsify.dev">registry.falsify.dev</a> — commit a manifest in a browser</li>
+  </ul>
+</aside>
 
 <footer class="colophon">
   Studio 11 · spec.falsify.dev · CC BY 4.0 · published 2026-05-15

@@ -79,7 +79,7 @@ Documentation, brand, and metadata refresh. No functional code changes.
 
 - **Repository transferred** from `github.com/sk8ordie84/falsify` to `github.com/studio-11-co/falsify`. Old URLs 301-redirect to canonical; all in-source references (README, spec, test vectors, preprint .tex, Dockerfile, CITATION.cff, action workflows, package metadata) updated to the new canonical URL.
 - **Editor identity standardised** from `Studio-11` (hyphenated) to `Studio 11` (no hyphen) across spec, CHANGELOG, CITATION, generator footers, and live spec.falsify.dev hosting. Aligns with falsify.dev landing and commercial paperwork.
-- **Pre-commit hook reference** in README updated to `rev: v0.1.3`.
+- **Pre-commit hook reference** in README updated to `rev: v0.1.4`.
 
 ### Why this release
 
