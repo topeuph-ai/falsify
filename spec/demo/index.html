@@ -35,6 +35,7 @@ body { display: flex; align-items: center; justify-content: center; padding: 32p
   border-radius: 6px;
   overflow: hidden;
   position: relative;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(57,217,138,0.1);
 }
 .chrome {
   display: flex;
@@ -58,6 +59,7 @@ body { display: flex; align-items: center; justify-content: center; padding: 32p
   padding: 36px 44px;
   display: flex; flex-direction: column;
   opacity: 0;
+  transform: translateY(20px);
 }
 
 .label {
@@ -89,6 +91,7 @@ h1 {
 h1 .accent { color: var(--signal); }
 p.sub { color: var(--silver); font-size: 15px; line-height: 1.65; max-width: 600px; }
 
+/* YAML typing — each line slides in */
 .yaml {
   background: var(--bg);
   border: 1px solid var(--border);
@@ -96,17 +99,36 @@ p.sub { color: var(--silver); font-size: 15px; line-height: 1.65; max-width: 600
   border-radius: 3px;
   padding: 18px 22px;
   font-family: var(--mono);
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.85;
   color: var(--light);
   white-space: pre;
   flex: 1;
   margin-top: 8px;
+  position: relative;
 }
 .yaml .k { color: var(--signal); }
 .yaml .s { color: var(--light); }
 .yaml .n { color: var(--caution); }
 
+.yaml .line {
+  display: block;
+  opacity: 0;
+  transform: translateX(-6px);
+}
+
+/* Cursor */
+.cursor {
+  display: inline-block;
+  width: 7px; height: 14px;
+  background: var(--signal);
+  vertical-align: -2px;
+  margin-left: 2px;
+  animation: blink 0.8s steps(2) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* Spinner & button */
 .btn {
   background: var(--signal);
   color: var(--bg);
@@ -121,6 +143,7 @@ p.sub { color: var(--silver); font-size: 15px; line-height: 1.65; max-width: 600
   margin-top: 24px;
   display: inline-block;
   width: fit-content;
+  box-shadow: 0 4px 16px rgba(57,217,138,0.3);
 }
 .spinner {
   display: inline-block;
@@ -134,6 +157,22 @@ p.sub { color: var(--silver); font-size: 15px; line-height: 1.65; max-width: 600
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+.progress-bar {
+  background: var(--bg);
+  border-radius: 3px;
+  height: 6px;
+  overflow: hidden;
+  margin-top: 20px;
+  border: 1px solid var(--border);
+}
+.progress-bar .fill {
+  background: var(--signal);
+  height: 100%;
+  width: 0%;
+  box-shadow: 0 0 10px rgba(57,217,138,0.5);
+}
+
+/* Receipt */
 .receipt {
   background: var(--bg);
   border: 1px solid var(--border);
@@ -145,12 +184,22 @@ p.sub { color: var(--silver); font-size: 15px; line-height: 1.65; max-width: 600
   color: var(--light);
   margin-top: 6px;
 }
-.receipt .row { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; padding: 6px 0; }
+.receipt .row { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; padding: 6px 0; opacity: 0; transform: translateY(8px); }
 .receipt .row + .row { border-top: 1px solid var(--border); margin-top: 4px; }
 .receipt .lbl { color: var(--gray); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
 .receipt .val { color: var(--white); font-size: 14px; word-break: break-all; text-align: right; }
 .receipt .val.hash { color: var(--signal); font-weight: 500; }
 
+/* Hash typing reveal */
+.hash-typer {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid var(--signal);
+  vertical-align: bottom;
+}
+
+/* Badge */
 .badge-display {
   display: inline-flex;
   align-items: center;
@@ -160,6 +209,8 @@ p.sub { color: var(--silver); font-size: 15px; line-height: 1.65; max-width: 600
   font-family: var(--mono);
   font-size: 13px;
   margin-top: 12px;
+  transform: scale(0.85);
+  opacity: 0;
 }
 .badge-display .key { padding: 6px 12px; background: #2a3340; color: var(--silver); }
 .badge-display .value { padding: 6px 12px; background: var(--signal); color: var(--bg); font-weight: 700; }
@@ -175,6 +226,7 @@ p.sub { color: var(--silver); font-size: 15px; line-height: 1.65; max-width: 600
   color: var(--silver);
   word-break: break-all;
   position: relative;
+  opacity: 0;
 }
 .copy-tag {
   position: absolute;
@@ -188,6 +240,7 @@ p.sub { color: var(--silver); font-size: 15px; line-height: 1.65; max-width: 600
   padding: 3px 10px;
   border-radius: 2px;
   font-weight: 700;
+  opacity: 0;
 }
 
 .tagline {
@@ -201,20 +254,114 @@ p.sub { color: var(--silver); font-size: 15px; line-height: 1.65; max-width: 600
 }
 .tagline a { color: var(--signal); text-decoration: none; border-bottom: 1px dotted var(--signal); }
 
-/* ─── ACT TIMING (60s total) ─── */
-.act-1 { animation: a1 60s linear infinite; } /* 0-8s intro */
-.act-2 { animation: a2 60s linear infinite; } /* 8-22s yaml */
-.act-3 { animation: a3 60s linear infinite; } /* 22-30s submit */
-.act-4 { animation: a4 60s linear infinite; } /* 30-44s receipt */
-.act-5 { animation: a5 60s linear infinite; } /* 44-56s badge */
-.act-6 { animation: a6 60s linear infinite; } /* 56-60s tagline */
+/* ─── ACT TIMING (60s total cycle) ─── */
+.act-1 { animation: act-slide 60s linear infinite; --in: 0%; --out: 13%; }
+.act-2 { animation: act-slide 60s linear infinite; --in: 13%; --out: 37%; }
+.act-3 { animation: act-slide 60s linear infinite; --in: 37%; --out: 50%; }
+.act-4 { animation: act-slide 60s linear infinite; --in: 50%; --out: 73%; }
+.act-5 { animation: act-slide 60s linear infinite; --in: 73%; --out: 93%; }
+.act-6 { animation: act-slide 60s linear infinite; --in: 93%; --out: 100%; }
 
-@keyframes a1 { 0%,12% { opacity: 1; } 14%,100% { opacity: 0; } }
-@keyframes a2 { 0%,13% { opacity: 0; } 15%,36% { opacity: 1; } 38%,100% { opacity: 0; } }
-@keyframes a3 { 0%,37% { opacity: 0; } 39%,49% { opacity: 1; } 51%,100% { opacity: 0; } }
-@keyframes a4 { 0%,50% { opacity: 0; } 52%,72% { opacity: 1; } 74%,100% { opacity: 0; } }
-@keyframes a5 { 0%,73% { opacity: 0; } 75%,92% { opacity: 1; } 94%,100% { opacity: 0; } }
-@keyframes a6 { 0%,93% { opacity: 0; } 95%,100% { opacity: 1; } }
+/* Each act gets its own keyframe via inline style trick — fallback to individual */
+@keyframes a1 { 0% { opacity:0; transform: translateY(20px); } 3%,11% { opacity:1; transform: translateY(0); } 14%,100% { opacity:0; transform: translateY(-12px); } }
+@keyframes a2 { 0%,12% { opacity:0; transform: translateY(20px); } 15%,35% { opacity:1; transform: translateY(0); } 38%,100% { opacity:0; transform: translateY(-12px); } }
+@keyframes a3 { 0%,36% { opacity:0; transform: translateY(20px); } 39%,48% { opacity:1; transform: translateY(0); } 51%,100% { opacity:0; transform: translateY(-12px); } }
+@keyframes a4 { 0%,49% { opacity:0; transform: translateY(20px); } 52%,71% { opacity:1; transform: translateY(0); } 74%,100% { opacity:0; transform: translateY(-12px); } }
+@keyframes a5 { 0%,72% { opacity:0; transform: translateY(20px); } 75%,91% { opacity:1; transform: translateY(0); } 94%,100% { opacity:0; transform: translateY(-12px); } }
+@keyframes a6 { 0%,92% { opacity:0; transform: translateY(20px); } 95%,100% { opacity:1; transform: translateY(0); } }
+
+.act-1 { animation: a1 60s linear infinite; }
+.act-2 { animation: a2 60s linear infinite; }
+.act-3 { animation: a3 60s linear infinite; }
+.act-4 { animation: a4 60s linear infinite; }
+.act-5 { animation: a5 60s linear infinite; }
+.act-6 { animation: a6 60s linear infinite; }
+
+/* Act 2: YAML line typing — each line slides in during act 2 window (13-37%, 24% wide) */
+/* 12 lines, each takes ~2% = 1.2s to appear */
+.yaml .line {
+  animation: line-type 60s linear infinite;
+}
+.yaml .line:nth-child(1)  { animation-delay: -45.6s; } /* visible at 14% */
+.yaml .line:nth-child(2)  { animation-delay: -44.4s; }
+.yaml .line:nth-child(3)  { animation-delay: -43.2s; }
+.yaml .line:nth-child(4)  { animation-delay: -42.0s; }
+.yaml .line:nth-child(5)  { animation-delay: -40.8s; }
+.yaml .line:nth-child(6)  { animation-delay: -39.6s; }
+.yaml .line:nth-child(7)  { animation-delay: -38.4s; }
+.yaml .line:nth-child(8)  { animation-delay: -37.2s; }
+.yaml .line:nth-child(9)  { animation-delay: -36.0s; }
+.yaml .line:nth-child(10) { animation-delay: -34.8s; }
+.yaml .line:nth-child(11) { animation-delay: -33.6s; }
+.yaml .line:nth-child(12) { animation-delay: -32.4s; }
+
+@keyframes line-type {
+  0%, 23% { opacity: 0; transform: translateX(-8px); }
+  24%, 36% { opacity: 1; transform: translateX(0); }
+  37%, 100% { opacity: 1; transform: translateX(0); }
+}
+
+/* Act 3: progress bar fills 37-48% = 6.6s */
+.progress-bar .fill {
+  animation: pb 60s linear infinite;
+}
+@keyframes pb {
+  0%, 38% { width: 0%; }
+  39%, 47% { width: 100%; }
+  48%, 100% { width: 100%; }
+}
+
+/* Act 3: button press effect at end of act 3 (47-49%) */
+.btn { animation: btn-press 60s linear infinite; }
+@keyframes btn-press {
+  0%, 46% { background: var(--signal); transform: translateY(0); box-shadow: 0 4px 16px rgba(57,217,138,0.3); }
+  47%, 49% { background: #2ba86e; transform: translateY(2px); box-shadow: 0 2px 8px rgba(57,217,138,0.2); }
+  50%, 100% { background: var(--signal); transform: translateY(0); box-shadow: 0 4px 16px rgba(57,217,138,0.3); }
+}
+
+/* Act 4: receipt rows stagger in 50-65% (over ~9s) */
+.receipt .row { animation: row-in 60s linear infinite; }
+.receipt .row:nth-child(1) { animation-delay: -28.5s; }
+.receipt .row:nth-child(2) { animation-delay: -27.0s; }
+.receipt .row:nth-child(3) { animation-delay: -25.5s; }
+.receipt .row:nth-child(4) { animation-delay: -24.0s; }
+@keyframes row-in {
+  0%, 50% { opacity: 0; transform: translateY(8px); }
+  51%, 100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Act 4: hash typing reveal — width grows from 0 to 100% during 51-58% */
+.hash-typer {
+  animation: hash-type 60s linear infinite;
+  width: 0;
+}
+@keyframes hash-type {
+  0%, 50% { width: 0; }
+  51%, 58% { width: 100%; }
+  59%, 100% { width: 100%; }
+}
+
+/* Act 5: badge pop-in at 75%, snippet at 77%, copy-tag at 82% */
+.badge-display { animation: badge-pop 60s linear infinite; }
+@keyframes badge-pop {
+  0%, 73% { opacity: 0; transform: scale(0.85); }
+  76%, 91% { opacity: 1; transform: scale(1); }
+  94%, 100% { opacity: 0; transform: scale(0.85); }
+}
+
+.snippet { animation: snippet-in 60s linear infinite; }
+@keyframes snippet-in {
+  0%, 76% { opacity: 0; }
+  78%, 91% { opacity: 1; }
+  94%, 100% { opacity: 0; }
+}
+
+.copy-tag { animation: copy-flash 60s linear infinite; }
+@keyframes copy-flash {
+  0%, 81% { opacity: 0; transform: translateY(8px); }
+  83%, 87% { opacity: 1; transform: translateY(0); }
+  89%, 100% { opacity: 0; transform: translateY(-4px); }
+}
 
 .progress {
   position: absolute;
@@ -223,6 +370,7 @@ p.sub { color: var(--silver); font-size: 15px; line-height: 1.65; max-width: 600
   background: var(--signal);
   width: 0;
   animation: progress 60s linear infinite;
+  box-shadow: 0 0 8px rgba(57,217,138,0.4);
 }
 @keyframes progress { 0% { width: 0; } 100% { width: 100%; } }
 
@@ -251,6 +399,16 @@ p.sub { color: var(--silver); font-size: 15px; line-height: 1.65; max-width: 600
   color: var(--gray);
   text-transform: uppercase;
 }
+
+/* timeline cursor — current active step highlight */
+.timeline .step:nth-child(1) { animation: step1 60s linear infinite; }
+.timeline .step:nth-child(3) { animation: step2 60s linear infinite; }
+.timeline .step:nth-child(5) { animation: step3 60s linear infinite; }
+.timeline .step:nth-child(7) { animation: step4 60s linear infinite; }
+@keyframes step1 { 0%,12% { color: var(--signal); } 13%,100% { color: var(--gray); } }
+@keyframes step2 { 0%,12% { color: var(--gray); } 13%,49% { color: var(--signal); } 50%,100% { color: var(--gray); } }
+@keyframes step3 { 0%,49% { color: var(--gray); } 50%,72% { color: var(--signal); } 73%,100% { color: var(--gray); } }
+@keyframes step4 { 0%,72% { color: var(--gray); } 73%,92% { color: var(--signal); } 93%,100% { color: var(--gray); } }
 </style>
 </head>
 <body>
@@ -271,38 +429,28 @@ p.sub { color: var(--silver); font-size: 15px; line-height: 1.65; max-width: 600
       <p class="sub">One YAML file. One SHA-256 hash. Any retroactive edit breaks the seal. No account, no server-side state beyond the hash. 60 seconds, end to end.</p>
     </div>
 
-    <!-- ACT 2 (8-22s) — yaml -->
+    <!-- ACT 2 (8-22s) — yaml with typing -->
     <div class="act act-2">
       <div class="label">Step 1 · Paste your manifest</div>
-      <pre class="yaml"><span class="k">version</span>: <span class="s">"prml/0.1"</span>
-<span class="k">claim_id</span>:    <span class="s">"01911000-0000-7000-8000-000000000088"</span>
-<span class="k">created_at</span>:  <span class="s">"2026-05-18T11:00:00Z"</span>
-<span class="k">metric</span>:      <span class="s">"accuracy"</span>
-<span class="k">comparator</span>:  <span class="s">"&gt;="</span>
-<span class="k">threshold</span>:   <span class="n">0.92</span>
-<span class="k">dataset</span>:
-  <span class="k">id</span>:        <span class="s">"imagenet-val-2012"</span>
-  <span class="k">hash</span>:      <span class="s">"e3b0c442…7852b855"</span>
-<span class="k">seed</span>:        <span class="n">42</span>
-<span class="k">producer</span>:
-  <span class="k">id</span>:        <span class="s">"your-org.com"</span></pre>
+      <pre class="yaml"><span class="line"><span class="k">version</span>: <span class="s">"prml/0.1"</span></span><span class="line"><span class="k">claim_id</span>:    <span class="s">"01911000-0000-7000-8000-000000000088"</span></span><span class="line"><span class="k">created_at</span>:  <span class="s">"2026-05-18T11:00:00Z"</span></span><span class="line"><span class="k">metric</span>:      <span class="s">"accuracy"</span></span><span class="line"><span class="k">comparator</span>:  <span class="s">"&gt;="</span></span><span class="line"><span class="k">threshold</span>:   <span class="n">0.92</span></span><span class="line"><span class="k">dataset</span>:</span><span class="line">  <span class="k">id</span>:        <span class="s">"imagenet-val-2012"</span></span><span class="line">  <span class="k">hash</span>:      <span class="s">"e3b0c442…7852b855"</span></span><span class="line"><span class="k">seed</span>:        <span class="n">42</span></span><span class="line"><span class="k">producer</span>:</span><span class="line">  <span class="k">id</span>:        <span class="s">"your-org.com"</span><span class="cursor"></span></span></pre>
     </div>
 
-    <!-- ACT 3 (22-30s) — submit -->
+    <!-- ACT 3 (22-30s) — submit with progress bar + button press -->
     <div class="act act-3">
       <div class="label">Step 2 · Compute canonical SHA-256</div>
-      <h1>Canonicalising 11 fields<span class="spinner"></span></h1>
+      <h1>Canonicalising 12 fields<span class="spinner"></span></h1>
       <p class="sub">Per PRML §3 deterministic rules. Byte-equivalent across four reference implementations &mdash; Python · JavaScript · Go · Rust &mdash; verified by 20 conformance vectors.</p>
+      <div class="progress-bar"><div class="fill"></div></div>
       <div class="btn">Lock manifest →</div>
     </div>
 
-    <!-- ACT 4 (30-44s) — receipt -->
+    <!-- ACT 4 (30-44s) — receipt with hash typing -->
     <div class="act act-4">
       <div class="label">Step 3 · Receipt</div>
       <div class="receipt">
         <div class="row">
           <span class="lbl">SHA-256 hash</span>
-          <span class="val hash">04fa1689ac552fb1…d2fb91a5e7df2c9b62f3</span>
+          <span class="val hash"><span class="hash-typer">04fa1689ac552fb1f7c3eaf9d0f6c2c0e8c1ca9d4ab6d2fb91a5e7df2c9b62f3</span></span>
         </div>
         <div class="row">
           <span class="lbl">Permalink</span>
@@ -320,7 +468,7 @@ p.sub { color: var(--silver); font-size: 15px; line-height: 1.65; max-width: 600
       <p class="sub" style="margin-top: 20px;">Anyone with the manifest text and a SHA-256 implementation can re-derive this hash. No producer trust required, no vendor runtime, no expiry.</p>
     </div>
 
-    <!-- ACT 5 (44-56s) — badge -->
+    <!-- ACT 5 (44-56s) — badge pop + snippet + copy flash -->
     <div class="act act-5">
       <div class="label">Step 4 · Drop in your README</div>
       <div class="badge-display">
@@ -346,8 +494,11 @@ p.sub { color: var(--silver); font-size: 15px; line-height: 1.65; max-width: 600
 
   <div class="timeline">
     <span class="step"><span class="dot"></span>1 YAML</span>
+    <span style="color: var(--muted);">·</span>
     <span class="step"><span class="dot"></span>2 Lock</span>
+    <span style="color: var(--muted);">·</span>
     <span class="step"><span class="dot"></span>3 Receipt</span>
+    <span style="color: var(--muted);">·</span>
     <span class="step"><span class="dot"></span>4 Badge</span>
     <span class="end">60s loop · spec.falsify.dev/demo</span>
   </div>
@@ -361,14 +512,27 @@ p.sub { color: var(--silver); font-size: 15px; line-height: 1.65; max-width: 600
   if (t !== null) {
     var s = parseFloat(t);
     if (!isNaN(s)) {
-      var css = '* { animation-delay: -' + s + 's !important; animation-play-state: paused !important; }';
+      // Inject style that overrides delays so animations jump to exactly N seconds
+      var css = '* { animation-play-state: paused !important; }';
+      // But also need to shift animation-delay by -s for elements that use 60s cycle
+      // Since most elements have their own delays, we add an additional delay shift:
+      css += '.act-1,.act-2,.act-3,.act-4,.act-5,.act-6,.progress,.spinner,.cursor,.label::before,.timeline .step,.progress-bar .fill,.btn,.badge-display,.snippet,.copy-tag,.hash-typer { animation-delay: -' + s + 's !important; animation-play-state: paused !important; }';
+      // For the staggered children, we add to their existing delay
+      for (var i = 1; i <= 12; i++) {
+        var existing = -(46.8 - (i-1) * 1.2);  // matches the line-type delays
+        css += '.yaml .line:nth-child(' + i + ') { animation-delay: ' + (existing - s) + 's !important; animation-play-state: paused !important; }';
+      }
+      var rowDelays = [-28.5, -27.0, -25.5, -24.0];
+      for (var i = 0; i < 4; i++) {
+        css += '.receipt .row:nth-child(' + (i+1) + ') { animation-delay: ' + (rowDelays[i] - s) + 's !important; animation-play-state: paused !important; }';
+      }
       var st = document.createElement('style');
       st.textContent = css;
       document.head.appendChild(st);
     }
   }
 })();
-// Beacon (skip if frozen for capture)
+// Beacon (skip when frozen for capture)
 (function(){
   if (location.search.indexOf('t=') !== -1) return;
   try{var i=new Image();i.src="https://registry.falsify.dev/_t?h="+encodeURIComponent(location.host)+"&p="+encodeURIComponent(location.pathname)+"&r="+encodeURIComponent(document.referrer||"")}catch(e){}
