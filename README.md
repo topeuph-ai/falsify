@@ -59,6 +59,10 @@ Your team claims the model hits **94% accuracy**. You ship it. Three weeks later
 
 The claim was never *falsifiable*. Nobody wrote down — cryptographically, before the experiment ran — what "94%" meant, which dataset, which metric, which threshold. So when the number changed, nobody could say whether the claim was wrong, the data drifted, or the metric got silently relaxed.
 
+**This isn't what MLflow, Docker, or Model Cards do.** MLflow tracks what happened during a run. Docker and DVC let you re-run. Model Cards and Datasheets describe a model after it ships. All three are *post-hoc* — written after the result is known. PRML is *pre-hoc*: the claim is committed before the result is observable. After the fact every other tool still lets you quietly adjust the story; PRML changes the hash and breaks the audit trail the moment you try.
+
+PRML does not prove an ML result is true. It proves that a specific evaluation claim was committed before it could be silently rewritten. That is a smaller guarantee than reproducibility — and a different one.
+
 **Falsify fixes this with a single idea from science:** you must pre-register the claim *before* you run the experiment. If you change the spec after seeing the data, the hash changes, the audit trail breaks, and CI fails with exit code 3.
 
     $ falsify lock accuracy_claim        # SHA-256 the spec

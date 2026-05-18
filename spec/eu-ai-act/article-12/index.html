@@ -73,6 +73,8 @@ article table { width:100%; border-collapse:collapse; margin:0 0 22px; font-size
 article th, article td { text-align:left; padding:8px 12px; border-bottom:1px solid var(--rule); vertical-align:top; }
 article th { font-weight:600; background:var(--code-bg); }
 article blockquote { border-left:2px solid var(--accent); margin:0 0 18px; padding:4px 0 4px 16px; color:var(--ink-2); font-style:italic; }
+.disclaimer { font-family:"Space Grotesk",system-ui,sans-serif; font-size:13px; line-height:1.55; color:var(--ink-2); background:#fdf7e6; border:1px solid #e8d99a; border-left:3px solid #c89c2c; padding:10px 14px; margin:0 0 28px; border-radius:2px; }
+.disclaimer strong { color:var(--ink); font-weight:600; }
 .cta { margin-top:48px; padding:24px; border:1px solid var(--rule); background:var(--code-bg); border-left:3px solid var(--accent); }
 .cta a { font-family:"Space Grotesk",system-ui,sans-serif; font-weight:600; font-size:15px; }
 footer.colophon { margin-top:96px; padding-top:24px; border-top:1px solid var(--rule); font-family:"Space Grotesk",system-ui,sans-serif; font-size:12px; color:var(--ink-3); letter-spacing:0.02em; text-transform:uppercase; }
@@ -99,6 +101,7 @@ footer.colophon a { color:var(--ink-3); text-decoration:none; border-bottom:1px 
 
 <h1>EU AI Act Article 12 logging compliance: a working pattern for high-risk providers</h1>
 <p class="lede">The high-risk obligations in Regulation (EU) 2024/1689 become applicable on <strong>2 August 2026</strong>. Article 12 is the one that most procurement teams underestimate, because "automated logging" reads like a checkbox and turns out to be a system design decision. This page is the technical pattern we use.</p>
+<aside class="disclaimer"><strong>Interpretive mapping, not legal advice.</strong> This crosswalk is published by Studio 11 as an engineering pattern. It is not a legal opinion, a regulatory certification, or a conformity assessment. Article 12 obligations apply to the high-risk AI system as a whole; PRML is an evidence artefact that may support specific logging controls. Verify scope, applicability, and sufficiency with qualified counsel and your notified body before relying on it for compliance decisions.</aside>
 
 <h2>What Article 12 actually requires</h2>
 <p>Article 12(1) of the AI Act states that high-risk AI systems "shall technically allow for the automatic recording of events (<em>logs</em>) over the lifetime of the system." Article 12(2) qualifies that logging must be appropriate to the intended purpose. Article 12(3) enumerates the events that must be captured for systems referred to in Annex III §1(a) — biometric identification — and Article 12(4)–(5) extends logging to facilitate post-market monitoring under Article 72 and operation monitoring under Article 26(5).</p>
