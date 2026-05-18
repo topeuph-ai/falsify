@@ -108,6 +108,13 @@ Falsify is the reference implementation of **PRML v0.1** — Pre-Registered ML M
 - **[`spec/paper/`](spec/paper/)** — 14-page arXiv preprint (LaTeX, CC BY 4.0)
 - **[`spec/v0.2/ROADMAP.md`](spec/v0.2/ROADMAP.md)** — v0.2 RFC roadmap (freeze 2026-05-22)
 
+**Audit & compliance crosswalks** (subcategory-by-subcategory maps from major AI governance frameworks to PRML fields, FULL/PARTIAL/NONE tagged):
+
+- **[EU AI Act Article 12](https://spec.falsify.dev/eu-ai-act/article-12/)** — code-level pattern for the 2 August 2026 high-risk applicability deadline
+- **[Article 12 readiness diagnostic](https://spec.falsify.dev/article-12-readiness/)** — 10-question browser-only self-assessment
+- **[NIST AI RMF 1.0 crosswalk](https://spec.falsify.dev/nist-ai-rmf/)** — GOVERN / MAP / MEASURE / MANAGE subcategory map (incl. AI 600-1 GenAI Profile)
+- **[ISO/IEC 42001:2023 crosswalk](https://spec.falsify.dev/iso-42001/)** — AIMS clause-by-clause evidence map (Clauses 7-9 + Annex A controls)
+
 **Reference implementations** (four languages, 12 v0.1 + 8 v0.2 candidate vectors = 20 total; multi-lang CI runs all 20 byte-for-byte per push and daily at 04:00 UTC):
 
 - **Python:** [`falsify.py`](falsify.py) — original reference, uses PyYAML
@@ -119,7 +126,7 @@ Hosted spec at [spec.falsify.dev/v0.1](https://spec.falsify.dev/v0.1). Public re
 
 **Companion projects** (separate repos under `studio-11-co`, each MIT or CC0 licensed):
 
-- **[`falsify-cookbook`](https://github.com/studio-11-co/falsify-cookbook)** — field manual for the spec: 10 patterns + 4 anti-patterns, every one a single page with a runnable example. CC0.
+- **[`falsify-cookbook`](https://github.com/studio-11-co/falsify-cookbook)** — field manual for the spec: 11 patterns + 4 anti-patterns, every one a single page with a runnable example, including [Pattern 11: PRML + Sigstore for execution integrity](https://github.com/studio-11-co/falsify-cookbook/blob/main/patterns/11-sigstore-execution.md) closing the §8.1 gap. CC0.
 - **[`falsify-integrity-index`](https://github.com/studio-11-co/falsify-integrity-index)** — public scorecard of how 25+ well-known ML eval claims meet the 9 PRML falsifiability criteria. Live at [falsify.dev/integrity](https://falsify.dev/integrity). CC0 data, MIT tooling.
 - **[`falsify-inspect`](https://github.com/studio-11-co/falsify-inspect)** — Inspect AI adapter: anchor an Inspect AI eval claim's threshold to a SHA-256 hash before the run, verify the post-run log against it. MIT.
 - **[`prml-verify-action`](https://github.com/studio-11-co/prml-verify-action)** — composite GitHub Action ([listed on Marketplace](https://github.com/marketplace/actions/prml-verify)) for CI integration. MIT.
