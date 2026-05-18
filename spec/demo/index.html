@@ -101,13 +101,28 @@ body { display: flex; align-items: center; justify-content: center; padding: 32p
   left: 0; top: 0;
   opacity: 0;
 }
-.chrome .url .path .u1 { animation: u 60s linear infinite; }
-.chrome .url .path .u2 { animation: u 60s linear infinite; animation-delay: -45s; }
-.chrome .url .path .u3 { animation: u 60s linear infinite; animation-delay: -30s; }
-.chrome .url .path .u4 { animation: u 60s linear infinite; animation-delay: -10s; }
-@keyframes u {
-  0%, 13%   { opacity: 1; }
-  15%, 100% { opacity: 0; }
+.chrome .url .path .u1 { animation: u1 60s linear infinite; }
+.chrome .url .path .u2 { animation: u2 60s linear infinite; }
+.chrome .url .path .u3 { animation: u3 60s linear infinite; }
+.chrome .url .path .u4 { animation: u4 60s linear infinite; }
+/* Tile the full 60s cycle across four URL phases — each act sees a coherent URL state */
+@keyframes u1 {  /* Act 1 (intro): homepage 0-13% */
+  0%, 11% { opacity: 1; }
+  13%, 100% { opacity: 0; }
+}
+@keyframes u2 {  /* Acts 2-3 (paste + compute): /commit  13-50% */
+  0%, 11% { opacity: 0; }
+  14%, 48% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+@keyframes u3 {  /* Act 4 (receipt): /04fa1689…  50-72% */
+  0%, 48% { opacity: 0; }
+  51%, 70% { opacity: 1; }
+  72%, 100% { opacity: 0; }
+}
+@keyframes u4 {  /* Acts 5-6 (badge + tagline): /04fa1689 · locked  72-100% */
+  0%, 70% { opacity: 0; }
+  73%, 100% { opacity: 1; }
 }
 .chrome .url .path .anchor { color: transparent; }
 .chrome .meta {
