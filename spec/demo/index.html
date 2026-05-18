@@ -86,25 +86,32 @@ body { display: flex; align-items: center; justify-content: center; padding: 32p
   border-radius: 3px;
   flex: 0 1 460px;
   font-size: 12.5px;
-  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1px;
   overflow: hidden;
   white-space: nowrap;
+  height: 22px;
 }
 .chrome .url .scheme { color: var(--signal); }
 .chrome .url .path {
-  display: inline-block;
   position: relative;
+  flex: 1;
+  height: 16px;
 }
 .chrome .url .path span {
-  display: inline-block;
   position: absolute;
   left: 0; top: 0;
+  line-height: 16px;
+  white-space: nowrap;
   opacity: 0;
+  color: var(--silver);
 }
 .chrome .url .path .u1 { animation: u1 60s linear infinite; }
 .chrome .url .path .u2 { animation: u2 60s linear infinite; }
-.chrome .url .path .u3 { animation: u3 60s linear infinite; }
-.chrome .url .path .u4 { animation: u4 60s linear infinite; }
+.chrome .url .path .u3 { animation: u3 60s linear infinite; color: var(--light); }
+.chrome .url .path .u4 { animation: u4 60s linear infinite; color: var(--light); }
+.chrome .url .path .u4 b { color: var(--signal); }
 /* Tile the full 60s cycle across four URL phases — each act sees a coherent URL state */
 @keyframes u1 {  /* Act 1 (intro): homepage 0-13% */
   0%, 11% { opacity: 1; }
@@ -620,7 +627,7 @@ p.body {
   <!-- ──── Browser chrome (persistent) ──── -->
   <div class="chrome">
     <div class="dots"><span></span><span></span><span></span></div>
-    <div class="url"><span class="scheme">https://</span><span class="path"><span class="anchor">registry.falsify.dev/commit?id=04fa1689ac552fb1</span><span class="u1">registry.falsify.dev</span><span class="u2">registry.falsify.dev/commit</span><span class="u3">registry.falsify.dev/04fa1689ac552fb1…</span><span class="u4">registry.falsify.dev/04fa1689 · locked</span></span></div>
+    <div class="url"><span class="scheme">https://</span><span class="path"><span class="u1">registry.falsify.dev</span><span class="u2">registry.falsify.dev/commit</span><span class="u3">registry.falsify.dev/04fa1689ac552fb1…</span><span class="u4">registry.falsify.dev/04fa1689 <b>· locked</b></span></span></div>
     <div class="meta"><b>PRML</b> &middot; v0.1 &middot; CC BY 4.0</div>
   </div>
 
