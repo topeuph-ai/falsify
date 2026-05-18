@@ -69,11 +69,13 @@ Deterministic exit codes are the API. CI gates on them. Humans read the audit tr
 
 ---
 
-## 90-second demo
+## 60-second demo
 
-[**▶ Watch the 90-second demo on YouTube**](https://youtu.be/vVZTNeak5PA)
+[![60-second walkthrough — paste YAML, lock, get SHA-256, drop badge](https://spec.falsify.dev/demo/demo.gif)](https://spec.falsify.dev/demo/)
 
-Lock a claim, run it, watch it PASS. Then tamper with the threshold and watch CI refuse to run. Full storyboard in [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md).
+*Click for the live looping version, or watch the [MP4](https://spec.falsify.dev/demo/demo.mp4). Full storyboard in [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md).*
+
+[**▶ Watch the longer 90-second walkthrough on YouTube**](https://youtu.be/vVZTNeak5PA) (lock, run, tamper, CI block).
 
 ---
 

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PRML — 60-second demo</title>
+<meta name="description" content="Pre-Register, get a SHA-256 receipt, drop a badge in your README. 60 seconds.">
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://spec.falsify.dev/demo/">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0b0f14;
+  --surface: #0f1319;
+  --elevated: #141921;
+  --border: #1a2230;
+  --muted: #4a5568;
+  --gray: #6a7585;
+  --silver: #8a94a0;
+  --light: #c8c9d4;
+  --white: #e8eef2;
+  --signal: #39d98a;
+  --signal-dim: #163126;
+  --caution: #d4a843;
+  --display: 'Space Grotesk','DM Sans',system-ui,sans-serif;
+  --mono: 'JetBrains Mono','SF Mono',Consolas,monospace;
+}
+html, body { height: 100%; background: var(--bg); color: var(--white); font-family: var(--display); }
+body { display: flex; align-items: center; justify-content: center; padding: 32px; }
+.stage {
+  width: 100%;
+  max-width: 960px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+.chrome {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--elevated);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--silver);
+}
+.chrome .dots { display: flex; gap: 6px; }
+.chrome .dots span { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); }
+.chrome .url { margin-left: 12px; padding: 4px 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 3px; flex: 1; max-width: 360px; }
+.chrome .url .scheme { color: var(--signal); }
+
+.viewport { position: relative; height: 540px; overflow: hidden; }
+.act {
+  position: absolute; inset: 0;
+  padding: 36px 44px;
+  display: flex; flex-direction: column;
+  opacity: 0;
+}
+
+.label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--signal);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.label::before {
+  content: '';
+  width: 6px; height: 6px; border-radius: 50%; background: var(--signal);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100% { opacity:0.4; transform:scale(1); } 50% { opacity:1; transform:scale(1.5); } }
+
+h1 {
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 18px;
+  color: var(--white);
+  line-height: 1.2;
+}
+h1 .accent { color: var(--signal); }
+p.sub { color: var(--silver); font-size: 15px; line-height: 1.65; max-width: 600px; }
+
+.yaml {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--signal);
+  border-radius: 3px;
+  padding: 18px 22px;
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--light);
+  white-space: pre;
+  flex: 1;
+  margin-top: 8px;
+}
+.yaml .k { color: var(--signal); }
+.yaml .s { color: var(--light); }
+.yaml .n { color: var(--caution); }
+
+.btn {
+  background: var(--signal);
+  color: var(--bg);
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 3px;
+  margin-top: 24px;
+  display: inline-block;
+  width: fit-content;
+}
+.spinner {
+  display: inline-block;
+  width: 16px; height: 16px;
+  border: 2px solid var(--border);
+  border-top-color: var(--signal);
+  border-radius: 50%;
+  margin-left: 12px;
+  vertical-align: -3px;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.receipt {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 22px 26px;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--light);
+  margin-top: 6px;
+}
+.receipt .row { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; padding: 6px 0; }
+.receipt .row + .row { border-top: 1px solid var(--border); margin-top: 4px; }
+.receipt .lbl { color: var(--gray); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
+.receipt .val { color: var(--white); font-size: 14px; word-break: break-all; text-align: right; }
+.receipt .val.hash { color: var(--signal); font-weight: 500; }
+
+.badge-display {
+  display: inline-flex;
+  align-items: center;
+  background: #1a2230;
+  border-radius: 4px;
+  overflow: hidden;
+  font-family: var(--mono);
+  font-size: 13px;
+  margin-top: 12px;
+}
+.badge-display .key { padding: 6px 12px; background: #2a3340; color: var(--silver); }
+.badge-display .value { padding: 6px 12px; background: var(--signal); color: var(--bg); font-weight: 700; }
+
+.snippet {
+  background: var(--bg);
+  border: 1px dashed var(--border);
+  border-radius: 3px;
+  padding: 14px 18px;
+  margin-top: 18px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--silver);
+  word-break: break-all;
+  position: relative;
+}
+.copy-tag {
+  position: absolute;
+  top: -10px; right: 14px;
+  background: var(--signal);
+  color: var(--bg);
+  font-family: var(--display);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 2px;
+  font-weight: 700;
+}
+
+.tagline {
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--gray);
+  margin-top: 26px;
+  text-transform: uppercase;
+}
+.tagline a { color: var(--signal); text-decoration: none; border-bottom: 1px dotted var(--signal); }
+
+/* ─── ACT TIMING (60s total) ─── */
+.act-1 { animation: a1 60s linear infinite; } /* 0-8s intro */
+.act-2 { animation: a2 60s linear infinite; } /* 8-22s yaml */
+.act-3 { animation: a3 60s linear infinite; } /* 22-30s submit */
+.act-4 { animation: a4 60s linear infinite; } /* 30-44s receipt */
+.act-5 { animation: a5 60s linear infinite; } /* 44-56s badge */
+.act-6 { animation: a6 60s linear infinite; } /* 56-60s tagline */
+
+@keyframes a1 { 0%,12% { opacity: 1; } 14%,100% { opacity: 0; } }
+@keyframes a2 { 0%,13% { opacity: 0; } 15%,36% { opacity: 1; } 38%,100% { opacity: 0; } }
+@keyframes a3 { 0%,37% { opacity: 0; } 39%,49% { opacity: 1; } 51%,100% { opacity: 0; } }
+@keyframes a4 { 0%,50% { opacity: 0; } 52%,72% { opacity: 1; } 74%,100% { opacity: 0; } }
+@keyframes a5 { 0%,73% { opacity: 0; } 75%,92% { opacity: 1; } 94%,100% { opacity: 0; } }
+@keyframes a6 { 0%,93% { opacity: 0; } 95%,100% { opacity: 1; } }
+
+.progress {
+  position: absolute;
+  bottom: 0; left: 0;
+  height: 3px;
+  background: var(--signal);
+  width: 0;
+  animation: progress 60s linear infinite;
+}
+@keyframes progress { 0% { width: 0; } 100% { width: 100%; } }
+
+.timeline {
+  display: flex;
+  background: var(--elevated);
+  border-top: 1px solid var(--border);
+  padding: 12px 22px;
+  gap: 14px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--gray);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.timeline .step .dot { display:inline-block; width: 6px; height: 6px; border-radius: 50%; background: currentColor; margin-right: 4px; vertical-align: 1px; }
+.timeline .end { margin-left: auto; color: var(--gray); }
+
+.brand-mark {
+  position: absolute;
+  top: 36px;
+  right: 36px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--gray);
+  text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="chrome">
+    <div class="dots"><span></span><span></span><span></span></div>
+    <div class="url"><span class="scheme">https://</span>registry.falsify.dev</div>
+  </div>
+
+  <div class="viewport">
+
+    <!-- ACT 1 (0-8s) — intro -->
+    <div class="act act-1">
+      <div class="brand-mark">PRML · v0.1</div>
+      <div class="label">Pre-Registered ML Manifest</div>
+      <h1>Lock your eval claim<br><span class="accent">before the run.</span></h1>
+      <p class="sub">One YAML file. One SHA-256 hash. Any retroactive edit breaks the seal. No account, no server-side state beyond the hash. 60 seconds, end to end.</p>
+    </div>
+
+    <!-- ACT 2 (8-22s) — yaml -->
+    <div class="act act-2">
+      <div class="label">Step 1 · Paste your manifest</div>
+      <pre class="yaml"><span class="k">version</span>: <span class="s">"prml/0.1"</span>
+<span class="k">claim_id</span>:    <span class="s">"01911000-0000-7000-8000-000000000088"</span>
+<span class="k">created_at</span>:  <span class="s">"2026-05-18T11:00:00Z"</span>
+<span class="k">metric</span>:      <span class="s">"accuracy"</span>
+<span class="k">comparator</span>:  <span class="s">"&gt;="</span>
+<span class="k">threshold</span>:   <span class="n">0.92</span>
+<span class="k">dataset</span>:
+  <span class="k">id</span>:        <span class="s">"imagenet-val-2012"</span>
+  <span class="k">hash</span>:      <span class="s">"e3b0c442…7852b855"</span>
+<span class="k">seed</span>:        <span class="n">42</span>
+<span class="k">producer</span>:
+  <span class="k">id</span>:        <span class="s">"your-org.com"</span></pre>
+    </div>
+
+    <!-- ACT 3 (22-30s) — submit -->
+    <div class="act act-3">
+      <div class="label">Step 2 · Compute canonical SHA-256</div>
+      <h1>Canonicalising 11 fields<span class="spinner"></span></h1>
+      <p class="sub">Per PRML §3 deterministic rules. Byte-equivalent across four reference implementations &mdash; Python · JavaScript · Go · Rust &mdash; verified by 20 conformance vectors.</p>
+      <div class="btn">Lock manifest →</div>
+    </div>
+
+    <!-- ACT 4 (30-44s) — receipt -->
+    <div class="act act-4">
+      <div class="label">Step 3 · Receipt</div>
+      <div class="receipt">
+        <div class="row">
+          <span class="lbl">SHA-256 hash</span>
+          <span class="val hash">04fa1689ac552fb1…d2fb91a5e7df2c9b62f3</span>
+        </div>
+        <div class="row">
+          <span class="lbl">Permalink</span>
+          <span class="val">registry.falsify.dev/04fa1689…</span>
+        </div>
+        <div class="row">
+          <span class="lbl">Locked at</span>
+          <span class="val">2026-05-18T11:00:23.471Z</span>
+        </div>
+        <div class="row">
+          <span class="lbl">Verifiable by</span>
+          <span class="val">any of 4 reference impls, offline</span>
+        </div>
+      </div>
+      <p class="sub" style="margin-top: 20px;">Anyone with the manifest text and a SHA-256 implementation can re-derive this hash. No producer trust required, no vendor runtime, no expiry.</p>
+    </div>
+
+    <!-- ACT 5 (44-56s) — badge -->
+    <div class="act act-5">
+      <div class="label">Step 4 · Drop in your README</div>
+      <div class="badge-display">
+        <span class="key">PRML locked</span>
+        <span class="value">04fa1689ac55</span>
+      </div>
+      <div class="snippet">
+        <span class="copy-tag">Copied</span>
+        [![PRML locked · 04fa1689ac55](https://registry.falsify.dev/badge/04fa1689…svg)](https://registry.falsify.dev/04fa1689…)
+      </div>
+      <p class="sub" style="margin-top: 20px;">The badge is a re-derivable claim. A reviewer who suspects the threshold was tweaked after the result reads the manifest from the permalink, re-hashes the canonical bytes, and either gets the same digest or they don't.</p>
+    </div>
+
+    <!-- ACT 6 (56-60s) — tagline -->
+    <div class="act act-6" style="justify-content: center; text-align: center;">
+      <div class="label" style="justify-content: center;">Open spec · CC BY 4.0 · MIT reference implementations</div>
+      <h1 style="font-size: 36px; line-height: 1.2;">The threshold,<br><span class="accent">before the data.</span></h1>
+      <p class="tagline" style="margin-top: 32px;"><a href="https://spec.falsify.dev/v0.1">spec.falsify.dev</a> &middot; <a href="https://registry.falsify.dev">registry.falsify.dev</a> &middot; <a href="https://github.com/studio-11-co/falsify">github.com/studio-11-co/falsify</a></p>
+    </div>
+
+    <div class="progress"></div>
+  </div>
+
+  <div class="timeline">
+    <span class="step"><span class="dot"></span>1 YAML</span>
+    <span class="step"><span class="dot"></span>2 Lock</span>
+    <span class="step"><span class="dot"></span>3 Receipt</span>
+    <span class="step"><span class="dot"></span>4 Badge</span>
+    <span class="end">60s loop · spec.falsify.dev/demo</span>
+  </div>
+</div>
+
+<script>
+// ?t=N — freeze all animations at second N (for headless screenshot capture)
+(function(){
+  var p = new URLSearchParams(location.search);
+  var t = p.get('t');
+  if (t !== null) {
+    var s = parseFloat(t);
+    if (!isNaN(s)) {
+      var css = '* { animation-delay: -' + s + 's !important; animation-play-state: paused !important; }';
+      var st = document.createElement('style');
+      st.textContent = css;
+      document.head.appendChild(st);
+    }
+  }
+})();
+// Beacon (skip if frozen for capture)
+(function(){
+  if (location.search.indexOf('t=') !== -1) return;
+  try{var i=new Image();i.src="https://registry.falsify.dev/_t?h="+encodeURIComponent(location.host)+"&p="+encodeURIComponent(location.pathname)+"&r="+encodeURIComponent(document.referrer||"")}catch(e){}
+})();
+</script>
+</body>
+</html>
