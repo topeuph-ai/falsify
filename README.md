@@ -29,7 +29,7 @@ TAMPERED  sha256 mismatch — spec modified after locking  (exit 3)
 ![python](https://img.shields.io/badge/python-3.11%2B-blue)
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)
 [![SchemaStore](https://img.shields.io/badge/schema-in%20SchemaStore-blue.svg)](https://github.com/SchemaStore/schemastore/pull/5673)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20177839.svg)](https://doi.org/10.5281/zenodo.20177839)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20177839-blue.svg)](https://doi.org/10.5281/zenodo.20177839)
 
 > Code: MIT. "FALSIFY" name and chevron logo: ™ reserved. See [NOTICE](NOTICE) · [docs/COMMERCIAL.md](docs/COMMERCIAL.md).
 
