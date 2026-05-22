@@ -25,7 +25,7 @@ from typing import Any, Callable
 
 import yaml
 
-__version__ = "0.1.4"
+__version__ = "0.2.0"
 
 EXIT_PASS = 0
 EXIT_FAIL = 10
@@ -37,7 +37,7 @@ TEMPLATE_PATH = SCRIPT_DIR / "examples" / "template.yaml"
 SCHEMA_PATH = SCRIPT_DIR / "hypothesis.schema.yaml"
 FALSIFY_DIR = Path(".falsify")
 
-# Inlined data files (v0.1.4): pyproject.toml's py-modules layout cannot ship
+# Inlined data files (v0.2.0): pyproject.toml's py-modules layout cannot ship
 # data files in the wheel under setuptools, so the file paths above only resolve
 # in dev mode. The constants below are the source of truth bundled inside the
 # Python module itself, ensuring `falsify init` and `falsify lock` work on a
