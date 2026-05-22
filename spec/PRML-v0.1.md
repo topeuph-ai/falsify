@@ -168,6 +168,43 @@ sidecar. v0.2 normatively adopts this sidecar convention.
 > withdrawn. Existing v0.1 implementations that signed over the hash should
 > re-sign over the canonical bytes before any regulatory submission.
 
+#### 2.3.4 `created_at` — declared time vs. anchor time
+
+The `created_at` field is the time the **producer declares** to have authored
+the manifest. It is part of the canonical bytes and therefore part of the
+hash: any change to `created_at` changes the hash. This is sufficient to
+prevent a producer from retroactively editing the timestamp on a published
+manifest without breaking the signature chain.
+
+It is **not** sufficient to prove the manifest existed at the declared time.
+A producer can write any RFC 3339 string into `created_at` at any moment;
+the spec has no way to constrain that string against a wall clock the
+producer does not control.
+
+Audit-strength timestamps come from **anchor mechanisms** external to the
+manifest:
+
+- Git commit author/committer timestamps in a public repository,
+- Registry receipt timestamps (e.g. `registry.falsify.dev` records the
+  server-side wall clock at which it first observed a given manifest hash),
+- RFC 3161 timestamping authorities,
+- Sigstore Rekor transparency log entries,
+- arXiv submission timestamps and DOI registration dates,
+- CI run timestamps recorded in public workflow logs.
+
+A verifier evaluating "when was this committed?" **MUST** treat the
+`created_at` field as a producer-side claim and look to one or more anchor
+mechanisms for the authoritative answer. A v0.1-conforming producer
+**SHOULD** anchor every published manifest in at least one such mechanism
+and document the choice. v0.2 makes this a normative SHOULD; v0.1 leaves
+the choice informative.
+
+This distinction matters for §8.1 threat-model analysis: the
+threat that `created_at` defends against is the producer **retroactively
+editing** a published manifest. The threat that anchoring defends against is
+the producer **back-dating** a manifest that was authored after the fact.
+The two are different and require different mechanisms.
+
 ---
 
 ## 3. Canonical Serialization

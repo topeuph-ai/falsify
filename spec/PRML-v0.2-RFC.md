@@ -120,12 +120,29 @@ This is informative (non-normative) — the spec defines the format, not the tes
 
 ## Proposals deferred to v0.3+
 
-The following were considered and deferred:
+The following were considered and deferred. Each is a tracking issue against `studio-11-co/falsify` with label `rfc-v0.3`.
 
-- **Native Sigstore signing** (deferred — wraps better around than into PRML)
-- **Multi-metric manifests** (deferred — composability is a registry concern, not a manifest concern)
-- **Granular field-level permissions** (out of scope — registries can implement)
-- **Privacy-preserving variant** (deferred — needs separate threat-model document)
+- **Claim tree / suite manifests** (deferred — multi-metric eval batteries like HELM, Big-Bench, LMSYS Arena, LiveCodeBench need one manifest covering N (metric, dataset) pairs. v0.2 position: represent as N separate v0.1 manifests with a shared `claim_group` string. v0.3 will design a normative tree structure that hashes deterministically over its leaves.)
+- **Producer cryptographic binding** (deferred — `producer` remains a plain string in v0.2 with a non-normative recommendation to anchor via git-commit SHA, Sigstore bundle, or GPG-signed manifest. v0.3 proposal: upgrade to a structured `producer: {id, key_id, signature?, sigstore_bundle?}` with SHOULD-level identity binding. Identity levels 0–4 are documented in the cookbook before v0.3 opens.)
+- **Tolerance / epsilon field** (deferred — GPU floating-point non-determinism, CUDA atomic kernels, and `flash-attention`-class libraries cause sub-permille variance across hardware. A claim locked at `>= 0.9400` can FAIL on identical code, identical seed, different GPU. v0.3 proposal: optional `tolerance` numeric or `tolerance_method` enum. v0.2 explicitly does not include this — a producer who needs slack today must encode it in the threshold.)
+- **Native Sigstore signing** (deferred — wraps better around than into PRML; see cookbook Pattern 11.)
+- **Multi-metric manifests** (superseded by claim tree above.)
+- **Granular field-level permissions** (out of scope — registries can implement.)
+- **Privacy-preserving variant** (deferred — needs separate threat-model document.)
+
+## Freeze-day editorial decisions (binding at 2026-05-22 23:59 UTC)
+
+These are not new proposals; they are clarifications the editor is locking into the freeze record so that v0.2 readers do not relitigate them downstream.
+
+1. **Selective non-publication remains out of scope.** A producer who locks ten manifests and publishes two is not detectable by PRML alone. v0.1 §8.1 stated this; v0.2 restates it as a freeze-day decision. Publication completeness is a registry-policy, journal-policy, or signed-execution-pipeline concern that sits on top of PRML. PRML is a per-claim commitment primitive, not a publication-integrity system.
+
+2. **Multi-metric claims are represented as multiple manifests.** Until the v0.3 claim-tree design lands, an evaluation suite reporting ten metrics is ten v0.1/v0.2 manifests with a shared `claim_group` identifier. The hash of a suite is the ordered concatenation of leaf hashes; no normative wrapper exists in v0.2.
+
+3. **Manifest timestamp is producer-declared. Audit value lives in the anchor timestamp.** The `timestamp` field inside the manifest is the time the producer claims to have authored the manifest. It is not externally verifiable on its own — a producer can write any ISO-8601 string. The audit-strength timestamp is the *anchor* timestamp: git commit time, registry receipt time, Sigstore/Rekor log time, arXiv submission time, DOI publication time, or CI run time. When a reviewer asks "when was this committed?", the answer is the anchor, not the manifest field. See §3.6 of v0.1.
+
+4. **`producer` stays a plain string in v0.2 with SHOULD-level external anchoring.** A v0.2-conforming producer SHOULD anchor manifest identity to at least one externally observable artefact (git commit, registry receipt, signature) and SHOULD document the chosen identity level. The structured `producer` upgrade is v0.3 territory; v0.2 does not break the string field.
+
+5. **P-02 `attestation_uri` distinction (contributed by Ceri John, Topeuph AI / ValiChord).** The P-02 field note distinguishes between *execution attestation* (who ran the eval and when, e.g. Sigstore as documented in Cookbook Pattern 11) and *independence attestation* (verdicts produced by parties that could not coordinate outcomes, e.g. blind commit-reveal as documented in Cookbook Pattern 13). Both address different parts of the §8.1 gap and are complementary, not alternative. The distinction surfaces during v0.2 review on Discussion #11 and lands here verbatim; Pattern 13 ships in the cookbook as a co-authored entry.
 
 ## Comment summary template
 

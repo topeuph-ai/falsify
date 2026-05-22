@@ -4,10 +4,79 @@ All notable changes to Falsification Engine are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com); version
 numbers follow [Semantic Versioning](https://semver.org).
 
+## [v0.2.0] — 2026-05-22 (spec freeze)
+
+PRML v0.2 specification frozen. Eight new conformance vectors promoted from
+candidate to normative. Four reference implementations (Python, JavaScript,
+Go, Rust) pass the full 20-vector suite byte-for-byte.
+
+**Breaking changes: none.** Every v0.1 manifest remains a valid v0.2 manifest;
+hash-equivalence is preserved. See `spec/MIGRATION-v0.1-to-v0.2.md`.
+
+### Added — specification
+
+- **`spec/MIGRATION-v0.1-to-v0.2.md`** — migration guide covering breaking-change
+  audit, optional field reference, identity levels, and v0.3 deferral.
+- **§2.3.4 timestamp anchor distinction** in `spec/PRML-v0.1.md` — clarifies
+  manifest `created_at` is producer-declared; audit-strength timestamps come
+  from external anchor mechanisms (git, registry, RFC 3161, Sigstore Rekor,
+  arXiv, DOI, CI logs).
+- **Freeze-day editorial decisions** in `spec/PRML-v0.2-RFC.md` and
+  `spec/v0.2-rfc/PRML-v0.2-RFC.md`:
+  1. Selective non-publication remains out of scope (§8.1 restated).
+  2. Multi-metric claims = multiple manifests (claim-tree deferred to v0.3).
+  3. Manifest timestamp = producer-declared, audit value lives in anchor.
+  4. `producer` stays plain string with SHOULD-level external anchoring.
+  5. **P-02 `attestation_uri` distinction** (contributed by Ceri John,
+     Topeuph AI / ValiChord) — execution attestation (Pattern 11, Sigstore)
+     vs. independence attestation (Pattern 13, blind commit-reveal).
+- **`spec/v0.3-backlog/`** — three deferred RFC issues:
+  - `01-claim-tree.md` — multi-metric suite manifests
+  - `02-producer-struct.md` — structured producer with key_id / signature
+  - `03-tolerance.md` — GPU floating-point non-determinism epsilon
+
+### Added — cookbook (companion repo `studio-11-co/falsify-cookbook`)
+
+- **Pattern 13 — PRML + commit-reveal validation for independence attestation**
+  (co-authored with Ceri John, Topeuph AI / ValiChord). Cookbook's first
+  co-authored entry. License CC0-1.0.
+- **`IDENTITY-LEVELS.md`** — non-normative ladder for `producer` binding
+  strength (Level 0 unsigned to Level 4 institutional).
+- **Pattern 11 author metadata block** added retroactively for cookbook
+  consistency.
+
+### Added — crosswalk pages
+
+- Interpretive-mapping disclaimer banners on EU AI Act Article 12, NIST AI
+  RMF, and ISO/IEC 42001 crosswalk pages (`spec.falsify.dev/eu-ai-act/`,
+  `nist-ai-rmf/`, `iso-42001/`). Each page now explicitly states the
+  crosswalk is not legal advice, regulatory acceptance, or certification.
+
+### Changed — registry
+
+- `countUniqueProducers()` in the live registry worker normalises quoted vs
+  unquoted `producer.id` values and targets the `producer:` block specifically
+  in regex fallback. The previous version mis-counted `dataset.id` and
+  `model.id` as producer IDs when YAML parsing failed on truncated previews.
+  Lock #1 `unique_producer_count` corrects from a displayed 8 to the actual 2
+  (two test placeholders, `example.com` and `onboarding-walkthrough-test`).
+  Live as of 2026-05-20.
+
+### Locks (meta pre-registration)
+
+- **Lock #2** — `external_contributor_count` for the v0.2 RFC, target ≥ 3,
+  resolved 2026-05-22 23:59 UTC at **0 / 3**. Lock failed. Post-mortem at
+  `/notes/lock-2-postmortem/`. The mechanism worked; the outreach didn't.
+- Lock #1 remains pending (target ≥ 25 unique producers on registry,
+  resolves 2026-06-15).
+
+---
+
 ## [Unreleased]
 
-Specification-track changes between 0.1.4 and the next CLI release. No
-behaviour changes in the installed `falsify` Python package.
+Specification-track changes after 0.2.0 will accumulate here. No
+behaviour changes in the installed `falsify` Python package between
+0.1.4 and 0.2.0.
 
 ### Added — specification
 
