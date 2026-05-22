@@ -66,6 +66,20 @@ Canonicalization rules:
 - **Partial publication detection.** Should the suite enumerate the
   required leaves up front (preventing later silent drop), or list
   observed leaves only?
+
+  **Proposed answer (Ceri John, Topeuph AI / ValiChord, 2026-05-22):**
+  commit a `leaves_total` count at suite lock-time. Analogous to the
+  `samples_total` commitment already used by `valichord_attestation`
+  (the Merkle library for AI evaluation attestation bundles) where the
+  bundle commits the full sample count upfront, before any selective
+  disclosure: a verifier receiving a proof batch smaller than
+  `samples_total` knows unconditionally that items were omitted. Same
+  shape at the suite level: a verifier observing fewer than
+  `leaves_total` leaves knows silent drops occurred without requiring
+  every leaf to be enumerated in the suite document itself. Symmetry
+  between bundle-side and suite-side count commitments is the natural
+  resolution to the "enumerate required up front vs list observed
+  only" fork. v0.3 design picks this up.
 - **Subgroup reporting.** Many leaderboards report aggregate + per-subgroup
   numbers from the same run. Are subgroups separate leaves, or a nested
   structure inside one leaf?
