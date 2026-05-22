@@ -70,11 +70,12 @@ Canonicalization rules:
   **Proposed answer (Ceri John, Topeuph AI / ValiChord, 2026-05-22):**
   commit a `leaves_total` count at suite lock-time. Analogous to the
   `samples_total` commitment already used by `valichord_attestation`
-  (the Merkle library for AI evaluation attestation bundles) where the
-  bundle commits the full sample count upfront, before any selective
-  disclosure: a verifier receiving a proof batch smaller than
-  `samples_total` knows unconditionally that items were omitted. Same
-  shape at the suite level: a verifier observing fewer than
+  v1.2.0 (the Merkle library for AI evaluation attestation bundles,
+  shipped in [ValiChord v0.5.3](https://github.com/topeuph-ai/ValiChord/releases/tag/v0.5.3)),
+  where the bundle commits the full sample count upfront, before any
+  selective disclosure: a verifier receiving a proof batch smaller
+  than `samples_total` knows unconditionally that items were omitted.
+  Same shape at the suite level: a verifier observing fewer than
   `leaves_total` leaves knows silent drops occurred without requiring
   every leaf to be enumerated in the suite document itself. Symmetry
   between bundle-side and suite-side count commitments is the natural
