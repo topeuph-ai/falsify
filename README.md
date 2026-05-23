@@ -16,7 +16,7 @@ $ falsify verdict claim.yaml
 TAMPERED  sha256 mismatch — spec modified after locking  (exit 3)
 ```
 
-4 reference implementations — Python, JavaScript, Go, Rust — byte-equivalent on the 12 v0.1 conformance vectors (8 v0.2 candidates ship alongside, full 20-vector parity targeted for v0.2 freeze 2026-05-22). Designed for ML eval rigor. Maps to EU AI Act Article 12 evidence as a side effect.
+4 reference implementations (Python, JavaScript, Go, Rust) byte-equivalent on all 20 conformance vectors (12 v0.1 stable + 8 v0.2). PRML v0.2 frozen 2026-05-22. The same day, Lock #2 (a public hypothesis on the spec's own distribution, target ≥3 external contributors in 14 days) resolved at 0/3. The mechanism worked, the post-mortem is at [falsify.dev/notes/lock-2-postmortem](https://falsify.dev/notes/lock-2-postmortem/). Designed for ML eval rigor. Maps to EU AI Act Article 12 evidence as a side effect.
 
 > **Pre-registration + CI for AI-agent claims.** Lock the claim and threshold with SHA-256 *before* running the experiment — or the result doesn't count.
 
@@ -49,7 +49,7 @@ TAMPERED  sha256 mismatch — spec modified after locking  (exit 3)
 
 ---
 
-> **Latest — 2026-05-14** · v0.1 published on Zenodo: citable DOI [10.5281/zenodo.20177839](https://doi.org/10.5281/zenodo.20177839). PRML JSON Schema [merged into SchemaStore](https://github.com/SchemaStore/schemastore/pull/5673) (2026-05-11) by Mads Kristensen (Microsoft) — `.prml.yaml` files now autocomplete in VS Code, JetBrains, Helix, Zed, and Cursor. [OECD.AI Catalogue submission](https://oecd.ai/en/catalogue/tools) filed, vetting in progress. NIST AI 800-2 late comment archived. JTC 21 routed via Dr. Sebastian Hallensleben. `registry.falsify.dev` live with README badges at `registry.falsify.dev/badge/<hash>.svg`. **v0.1.4 released** ([release notes](https://github.com/studio-11-co/falsify/releases/tag/v0.1.4) · `pip install falsify==0.1.4`). PRML v0.1 specification published with **four reference implementations** (Python · [JavaScript](impl/js/) · [Go](impl/go/) · [Rust](impl/rust/)) all reproducing the [12 v0.1 vectors](spec/test-vectors/v0.1/) and [8 v0.2 candidate vectors](spec/test-vectors/v0.2/) byte-for-byte (20 vectors total). [14-page arXiv preprint](spec/paper/) and [v0.2 RFC](https://spec.falsify.dev/v0.2-rfc) (freeze 2026-05-22) open for public review.
+> **Latest — 2026-05-23** · **PRML v0.2 frozen** with all 20 conformance vectors (12 v0.1 stable + 8 v0.2) passing byte-for-byte across the four reference implementations. Lock #2 (public hypothesis on spec's own distribution) resolved at **0/3 external contributors**, mechanism worked, [post-mortem published](https://falsify.dev/notes/lock-2-postmortem/). **`mlflow-falsify` v0.2.0** shipped with `MLFLOW_FALSIFY_TAG_SCOPE=experiment` for HPO sweeps; [MLflow community plugin showcase PR](https://github.com/mlflow/mlflow/pull/23569) is live and under review. Five long-form working notes published for EU AI Act readiness: [readiness assessment](https://falsify.dev/eu-ai-act-readiness/), [2 August 2026 deadline](https://falsify.dev/ai-act-deadline-august-2026/), [Article 12 ten-item checklist](https://falsify.dev/article-12-checklist/), [notified body evidence](https://falsify.dev/notified-body-evidence/), [ISO/IEC 42001 readiness](https://falsify.dev/iso-42001-readiness/). DOI [10.5281/zenodo.20177839](https://doi.org/10.5281/zenodo.20177839). PRML JSON Schema in [SchemaStore](https://github.com/SchemaStore/schemastore/pull/5673) (Mads Kristensen / Microsoft) — `.prml.yaml` files autocomplete in VS Code, JetBrains, Helix, Zed, and Cursor. `registry.falsify.dev` live with README badges at `registry.falsify.dev/badge/<hash>.svg`.
 
 ---
 
@@ -96,7 +96,7 @@ See [docs/CASE_STUDIES.md](docs/CASE_STUDIES.md) for three concrete adoption sto
 
 ---
 
-**Current version:** 0.1.0 — run `python3 falsify.py --version`.
+**Current version:** 0.2.0 — run `python3 falsify.py --version`.
 **Working with Claude Code?** See [CLAUDE.md](CLAUDE.md).
 
 ---
@@ -120,6 +120,15 @@ Falsify is the reference implementation of **PRML v0.1** — Pre-Registered ML M
 - **[Article 12 readiness diagnostic](https://spec.falsify.dev/article-12-readiness/)** — 10-question browser-only self-assessment
 - **[NIST AI RMF 1.0 crosswalk](https://spec.falsify.dev/nist-ai-rmf/)** — GOVERN / MAP / MEASURE / MANAGE subcategory map (incl. AI 600-1 GenAI Profile)
 - **[ISO/IEC 42001:2023 crosswalk](https://spec.falsify.dev/iso-42001/)** — AIMS clause-by-clause evidence map (Clauses 7-9 + Annex A controls)
+
+**Long-form working notes** (2026-05-23, written for compliance leads, AI governance officers, and notified body assessors preparing for the 2 August 2026 deadline; CC BY 4.0):
+
+- **[EU AI Act readiness assessment](https://falsify.dev/eu-ai-act-readiness/)** — six binding articles, ten-question gap check, evidence shape per obligation
+- **[2 August 2026 deadline](https://falsify.dev/ai-act-deadline-august-2026/)** — three application dates, Article 99 penalty structure, ten-week plan
+- **[Article 12 logging checklist](https://falsify.dev/article-12-checklist/)** — ten closeable questions, six event categories, printable single-page summary
+- **[Notified body evidence](https://falsify.dev/notified-body-evidence/)** — Annex VI vs Annex VII conformity assessment, six artefact families
+- **[ISO/IEC 42001 readiness](https://falsify.dev/iso-42001-readiness/)** — seven clauses, EU AI Act Article 17 overlap, twelve-month certification path
+- **[Lock #2 post-mortem](https://falsify.dev/notes/lock-2-postmortem/)** — field report on running a falsifiable spec in public
 
 **Reference implementations** (four languages, 12 v0.1 + 8 v0.2 candidate vectors = 20 total; multi-lang CI runs all 20 byte-for-byte per push and daily at 04:00 UTC):
 
@@ -491,10 +500,10 @@ See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 Two roadmaps run alongside each other:
 
-- **CLI tool roadmap:** [ROADMAP.md](ROADMAP.md) — `falsify` features, integrations, dependencies. CLI v0.2 targeted 2026-06-15.
-- **Specification roadmap:** [spec/v0.2/ROADMAP.md](spec/v0.2/ROADMAP.md) — PRML format evolution, canonicalization grammar, conformance. Spec v0.2 freeze 2026-05-22.
+- **CLI tool roadmap:** [ROADMAP.md](ROADMAP.md) — `falsify` features, integrations, dependencies. **CLI v0.2.0 shipped 2026-05-22.** v0.3 features tracked alongside the v0.3 spec backlog.
+- **Specification roadmap:** [spec/v0.2/ROADMAP.md](spec/v0.2/ROADMAP.md) — PRML format evolution, canonicalization grammar, conformance. **Spec v0.2 frozen 2026-05-22.** v0.3 design backlog open under [`spec/v0.3-backlog/`](spec/v0.3-backlog/) (claim trees, suite manifests, selective-disclosure resistance via `leaves_total`).
 
-The CLI is downstream of the spec: when spec v0.2 freezes, CLI v0.2 follows about three weeks later. CLI v0.3 is loosely scoped for Q4 2026.
+The CLI is downstream of the spec: spec v0.2 frozen 2026-05-22, CLI v0.2.0 shipped to PyPI the same week. CLI v0.3 is loosely scoped for Q4 2026, tracking the v0.3 spec backlog.
 
 ## Trust model
 
