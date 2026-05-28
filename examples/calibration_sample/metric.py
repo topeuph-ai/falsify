@@ -1,8 +1,8 @@
-"""Brier score metric for the JUJU anonymized sample.
+"""Brier score metric for the calibration sample.
 
 Stdlib only (csv). Mean squared error between predicted_prob and
 outcome over the rows of a CSV with the columns:
-event_id, predicted_prob, outcome, stake_usd, timestamp.
+sample_id, predicted_prob, outcome, weight, timestamp.
 """
 
 from __future__ import annotations

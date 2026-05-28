@@ -32,8 +32,8 @@ class CIWorkflowTests(unittest.TestCase):
         self.assertIn("unittest", self.text)
         self.assertIn("smoke_test", self.text)
 
-    def test_workflow_runs_juju_e2e(self) -> None:
-        self.assertIn("falsify.py verdict juju", self.text)
+    def test_workflow_runs_calibration_e2e(self) -> None:
+        self.assertIn("falsify.py verdict calibration", self.text)
 
     def test_workflow_has_skill_lint_job(self) -> None:
         jobs = self.parsed.get("jobs", {})

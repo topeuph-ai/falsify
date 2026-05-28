@@ -6,7 +6,7 @@ help:
 	@echo "  make test         — run unittest suite"
 	@echo "  make smoke        — run smoke_test.sh"
 	@echo "  make ci           — run the same checks as GitHub Actions"
-	@echo "  make demo         — run the JUJU end-to-end demo"
+	@echo "  make demo         — run the calibration end-to-end demo"
 	@echo "  make demo-script  — run the auto-narrated ./demo.sh walkthrough"
 	@echo "  make doctor       — run falsify doctor"
 	@echo "  make lint-skills  — validate skill/agent frontmatter"
@@ -30,9 +30,9 @@ smoke:
 ci: test smoke demo lint-skills dogfood
 
 demo:
-	python3 falsify.py lock juju
-	python3 falsify.py run juju
-	python3 falsify.py verdict juju
+	python3 falsify.py lock calibration
+	python3 falsify.py run calibration
+	python3 falsify.py verdict calibration
 
 demo-script:
 	./demo.sh

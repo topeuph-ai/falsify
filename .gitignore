@@ -103,7 +103,7 @@ docs/assets/demo_v*.mp4
 docs/assets/demo_hd.mp4
 docs/assets/concat.txt
 docs/assets/vo_lines/
-.falsify/juju/
+.falsify/calibration/
 .claude/scheduled_tasks.lock
 docs/assets/vo_lines_callum/
 scripts/radar/

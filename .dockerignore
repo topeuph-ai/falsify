@@ -16,4 +16,4 @@ dist/
 build/
 *.egg-info/
 
-# Keep committed fixtures (examples/juju_sample/) — do NOT ignore them.
+# Keep committed fixtures (examples/calibration_sample/) — do NOT ignore them.

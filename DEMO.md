@@ -19,29 +19,29 @@ block any later text that contradicts the result.
 - `pip install pyyaml` (inside a venv if your system blocks global pip)
 - Clone this repo, `cd` into it.
 
-## Step 1 — Lock a hypothesis (JUJU sample)
+## Step 1 — Lock a hypothesis (calibration sample)
 
 ```bash
-mkdir -p .falsify/juju
-cp examples/juju_sample/spec.yaml .falsify/juju/spec.yaml
-python3 falsify.py lock juju
+mkdir -p .falsify/calibration
+cp examples/calibration_sample/spec.yaml .falsify/calibration/spec.yaml
+python3 falsify.py lock calibration
 ```
 
 Expected:
 
 ```
-✓ Locked juju @ 97c1b9bc4a8c
+✓ Locked calibration @ 97c1b9bc4a8c
   claim: brier_score below 0.25
 ```
 
 The spec's canonical YAML is SHA-256 hashed and stored in
-`.falsify/juju/spec.lock.json`. Any semantic edit to `spec.yaml`
+`.falsify/calibration/spec.lock.json`. Any semantic edit to `spec.yaml`
 after this invalidates the lock and blocks `run` with exit 3.
 
 ## Step 2 — Run the experiment
 
 ```bash
-python3 falsify.py run juju
+python3 falsify.py run calibration
 ```
 
 Expected:
@@ -53,13 +53,13 @@ Expected:
 `experiment.command` executed with a 5-minute timeout; stdout, stderr,
 a copy of the lock, and a metadata file (host, python version,
 duration, return code) are written under
-`.falsify/juju/runs/<timestamp>/`. The run is reproducible from those
+`.falsify/calibration/runs/<timestamp>/`. The run is reproducible from those
 artifacts alone.
 
 ## Step 3 — Get the verdict
 
 ```bash
-python3 falsify.py verdict juju
+python3 falsify.py verdict calibration
 ```
 
 Expected:
@@ -70,7 +70,7 @@ Verdict: PASS
   threshold: below 0.25
 ```
 
-The `metric_fn` (`examples.juju_sample.metric:brier_score`) was
+The `metric_fn` (`examples.calibration_sample.metric:brier_score`) was
 imported and checked against the locked criterion. PASS → exit 0,
 FAIL → exit 10. `verdict.json` is written so downstream tools
 (`list`, `guard`, the `claim-auditor` subagent) can read it without
@@ -86,7 +86,7 @@ Expected:
 
 ```
 NAME  LOCKED        LAST RUN                 VERDICT  OBSERVED
-juju  97c1b9bc4a8c  20260421T184500_000000Z  PASS     0.214265
+calibration  97c1b9bc4a8c  20260421T184500_000000Z  PASS     0.214265
 ```
 
 For CI or scripts, `python3 falsify.py list --json` emits the same
@@ -99,10 +99,10 @@ data as a JSON array.
 python3 falsify.py guard
 
 # Text mode: block affirmative language that contradicts a logged verdict.
-python3 falsify.py guard "we've proven the JUJU ledger is well-calibrated"
+python3 falsify.py guard "we've proven the model predictions is well-calibrated"
 ```
 
-Because the JUJU verdict is PASS, the text call exits 0 — the
+Because the calibration verdict is PASS, the text call exits 0 — the
 affirmative language matches a *passing* claim. If the latest verdict
 had been FAIL or INCONCLUSIVE, the same sentence would have exited
 11 with a `BLOCKED:` breakdown on stderr.
@@ -128,8 +128,8 @@ End-to-end diagnostic — what's OK, what needs attention.
 ## Bonus — detect a tampered spec
 
 ```bash
-sed -i 's/threshold: 0.25/threshold: 0.20/' .falsify/juju/spec.yaml
-python3 falsify.py diff juju
+sed -i 's/threshold: 0.25/threshold: 0.20/' .falsify/calibration/spec.yaml
+python3 falsify.py diff calibration
 ```
 
 diff proves the spec was tampered with — you see exactly what changed
@@ -176,7 +176,7 @@ for a live badge that turns red when claims start failing.
 ## Bonus — spotting drift
 
 ```bash
-python3 falsify.py trend juju
+python3 falsify.py trend calibration
 ```
 
 ASCII sparkline of the metric across every recorded run, with the
@@ -187,14 +187,14 @@ regression before it tips a claim into FAIL.
 ## Bonus — explaining a verdict
 
 ```bash
-python3 falsify.py why juju
+python3 falsify.py why calibration
 ```
 
 Output (STALE case, right after someone edits the spec without
 re-locking):
 
 ```
-claim: juju
+claim: calibration
 state: STALE
 reasoning: the spec has been edited (sha256:1038219d75a8) but no run
   exists against this hash. Last run was against sha256:164f619d4860.
@@ -247,7 +247,7 @@ time?" sanity check before a release.
 ## See also
 
 - `tests/smoke_test.sh` — full pipeline in one bash driver.
-- `.github/workflows/falsify.yml` — unittest + smoke + JUJU e2e in CI.
+- `.github/workflows/falsify.yml` — unittest + smoke + calibration e2e in CI.
 - `.claude/skills/` — `falsify` (orchestrator), `hypothesis-author`
   (NL → locked spec), `claim-audit` (fast text audit + subagent).
 - `.claude/agents/claim-auditor.md` — semantic PR/release auditor.

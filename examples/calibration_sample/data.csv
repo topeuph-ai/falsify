@@ -1,4 +1,4 @@
-event_id,predicted_prob,outcome,stake_usd,timestamp
+sample_id,predicted_prob,outcome,weight,timestamp
 a3f9c12b,0.75,1,25.50,2026-01-15
 b4e8d23c,0.60,0,10.00,2026-01-22
 c5d7e34d,0.82,1,50.00,2026-02-01

@@ -2,8 +2,8 @@
 #
 # demo.sh — auto-narrated end-to-end walkthrough of Falsification Engine.
 #
-# Runs the JUJU fixture through lock/run/verdict (PASS), then tampers the
-# threshold inside .falsify/juju/spec.yaml and shows diff → re-lock → FAIL
+# Runs the calibration fixture through lock/run/verdict (PASS), then tampers the
+# threshold inside .falsify/calibration/spec.yaml and shows diff → re-lock → FAIL
 # → guard block. Restores state at the end so the repo is clean after.
 #
 # Usage:
@@ -54,49 +54,49 @@ if [ ! -f falsify.py ]; then
     echo "demo.sh: falsify.py not found — run from the repo root" >&2
     exit 1
 fi
-if [ ! -d examples/juju_sample ]; then
-    echo "demo.sh: examples/juju_sample/ missing" >&2
+if [ ! -d examples/calibration_sample ]; then
+    echo "demo.sh: examples/calibration_sample/ missing" >&2
     exit 1
 fi
 
-# Pre-flight backup: if anything goes sideways, examples/juju_sample/spec.yaml
+# Pre-flight backup: if anything goes sideways, examples/calibration_sample/spec.yaml
 # can be recovered from this copy. Trap restores it on abnormal exit.
-SPEC_BACKUP="/tmp/juju_spec_demo_backup.$$.yaml"
-cp examples/juju_sample/spec.yaml "$SPEC_BACKUP"
+SPEC_BACKUP="/tmp/calibration_spec_demo_backup.$$.yaml"
+cp examples/calibration_sample/spec.yaml "$SPEC_BACKUP"
 
 cleanup() {
     local code=$?
     if [ "$code" -ne 0 ] && [ -f "$SPEC_BACKUP" ]; then
-        cp "$SPEC_BACKUP" examples/juju_sample/spec.yaml
+        cp "$SPEC_BACKUP" examples/calibration_sample/spec.yaml
     fi
     rm -f \
-        examples/juju_sample/spec.yaml.tmp \
-        examples/juju_sample/spec.yaml.bak \
-        .falsify/juju/spec.yaml.bak \
+        examples/calibration_sample/spec.yaml.tmp \
+        examples/calibration_sample/spec.yaml.bak \
+        .falsify/calibration/spec.yaml.bak \
         "$SPEC_BACKUP" 2>/dev/null || true
 }
 trap cleanup EXIT
 
 # Idempotent clean slate: reset the threshold line to 0.25 regardless of
-# whatever a previous demo run left behind, and wipe any prior .falsify/juju.
-sed -i.tmp 's/threshold: 0\.[0-9][0-9]*$/threshold: 0.25/' examples/juju_sample/spec.yaml
-rm -f examples/juju_sample/spec.yaml.tmp
+# whatever a previous demo run left behind, and wipe any prior .falsify/calibration.
+sed -i.tmp 's/threshold: 0\.[0-9][0-9]*$/threshold: 0.25/' examples/calibration_sample/spec.yaml
+rm -f examples/calibration_sample/spec.yaml.tmp
 
-rm -rf .falsify/juju
-mkdir -p .falsify/juju
-cp examples/juju_sample/spec.yaml .falsify/juju/spec.yaml
+rm -rf .falsify/calibration
+mkdir -p .falsify/calibration
+cp examples/calibration_sample/spec.yaml .falsify/calibration/spec.yaml
 
 # ----------------------------------------------------------------------
 section "Scene 1 — Lock the hypothesis"
 narrate "We declare the claim and lock the spec with a SHA-256 hash."
-python3 falsify.py lock juju
+python3 falsify.py lock calibration
 pause
 
 # ----------------------------------------------------------------------
 section "Scene 2 — Run and verdict (expect PASS)"
-python3 falsify.py run juju
+python3 falsify.py run calibration
 set +e
-python3 falsify.py verdict juju
+python3 falsify.py verdict calibration
 VERDICT_PASS=$?
 set -e
 printf "%sExit code: %d%s\n" "$GREEN" "$VERDICT_PASS" "$RESET"
@@ -105,9 +105,9 @@ pause
 # ----------------------------------------------------------------------
 section "Scene 3 — Tamper with the threshold"
 narrate "Someone tightens threshold from 0.25 to 0.15 after the fact."
-sed -i.bak 's/threshold: 0\.25$/threshold: 0.15/' .falsify/juju/spec.yaml
+sed -i.bak 's/threshold: 0\.25$/threshold: 0.15/' .falsify/calibration/spec.yaml
 set +e
-python3 falsify.py diff juju
+python3 falsify.py diff calibration
 DIFF_EXIT=$?
 set -e
 printf "%sDiff exit code: %d%s\n" "$RED" "$DIFF_EXIT" "$RESET"
@@ -115,10 +115,10 @@ pause
 
 # ----------------------------------------------------------------------
 section "Scene 4 — Re-lock, re-run, verdict (expect FAIL)"
-python3 falsify.py lock juju --force
-python3 falsify.py run juju
+python3 falsify.py lock calibration --force
+python3 falsify.py run calibration
 set +e
-python3 falsify.py verdict juju
+python3 falsify.py verdict calibration
 VERDICT_FAIL=$?
 set -e
 printf "%sExit code: %d%s\n" "$RED" "$VERDICT_FAIL" "$RESET"
@@ -135,9 +135,9 @@ pause
 
 # ----------------------------------------------------------------------
 section "Restoring state"
-cp examples/juju_sample/spec.yaml .falsify/juju/spec.yaml
-python3 falsify.py lock juju --force >/dev/null
-rm -f .falsify/juju/spec.yaml.bak
+cp examples/calibration_sample/spec.yaml .falsify/calibration/spec.yaml
+python3 falsify.py lock calibration --force >/dev/null
+rm -f .falsify/calibration/spec.yaml.bak
 printf "%sDone. spec.yaml restored to threshold 0.25.%s\n" "$GREEN" "$RESET"
 
 # ----------------------------------------------------------------------

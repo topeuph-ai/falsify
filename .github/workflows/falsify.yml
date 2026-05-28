@@ -25,13 +25,13 @@ jobs:
       - name: Run end-to-end smoke test
         run: bash tests/smoke_test.sh
 
-      - name: Run JUJU sample end-to-end
+      - name: Run calibration sample end-to-end
         run: |
-          mkdir -p .falsify/juju
-          cp examples/juju_sample/spec.yaml .falsify/juju/spec.yaml
-          python3 falsify.py lock juju
-          python3 falsify.py run juju
-          python3 falsify.py verdict juju
+          mkdir -p .falsify/calibration
+          cp examples/calibration_sample/spec.yaml .falsify/calibration/spec.yaml
+          python3 falsify.py lock calibration
+          python3 falsify.py run calibration
+          python3 falsify.py verdict calibration
 
       - name: Guard self-check (text mode, no violations expected)
         run: python3 falsify.py guard "brier score below 0.25 holds"

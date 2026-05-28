@@ -26,18 +26,18 @@ Total budget 180 seconds. Hard cap 210 seconds.
 
 Commands (typed live):
 
-    python3 falsify.py init juju
-    python3 falsify.py lock juju
+    python3 falsify.py init calibration
+    python3 falsify.py lock calibration
 
 - Voiceover: "We declare the claim, metric, threshold before running anything. Lock it. Hash freezes the spec."
-- Visual highlight: zoom on LOCKED juju — hash a3f9c12b.
+- Visual highlight: zoom on LOCKED calibration — hash a3f9c12b.
 
 ## Scene 3 — Run and verdict PASS (0:55–1:20, 25s)
 
 Commands:
 
-    python3 falsify.py run juju
-    python3 falsify.py verdict juju
+    python3 falsify.py run calibration
+    python3 falsify.py verdict calibration
 
 - Voiceover: "Run. Verdict is deterministic — brier 0.21, below threshold 0.25, n=20. PASS. Exit code zero."
 - Visual: green PASS line, echo $? shows 0.
@@ -48,7 +48,7 @@ Commands:
 
 Commands:
 
-    python3 falsify.py diff juju
+    python3 falsify.py diff calibration
 
 - Voiceover: "Someone edits the threshold after the fact. Diff shows exactly what changed. Hash no longer matches the lock. Exit code three."
 - Visual: red diff lines, minus threshold 0.25, plus threshold 0.15.
@@ -57,9 +57,9 @@ Commands:
 
 Commands:
 
-    python3 falsify.py lock juju
-    python3 falsify.py run juju
-    python3 falsify.py verdict juju
+    python3 falsify.py lock calibration
+    python3 falsify.py run calibration
+    python3 falsify.py verdict calibration
     echo "brier below 0.15 confirmed" | xargs python3 falsify.py guard
 
 - Voiceover: "Now FAIL — brier exceeds the new threshold. And if someone tries to commit a contradicting claim, the guard blocks it. Exit code eleven."
@@ -97,7 +97,7 @@ Visual: split screen, file tree on left with highlights:
 
 - Terminal font size at least 18pt
 - Warp clean session, no prior history visible
-- rm -rf .falsify/juju before Scene 2
+- rm -rf .falsify/calibration before Scene 2
 - spec.yaml reverted to threshold 0.25
 - Editor ready on second window for Scene 4 edit
 - Microphone levels tested (voiceover can be post-recorded)

@@ -101,7 +101,7 @@ by a single-line verdict:
 | Input claim                              | Matched spec         | Verdict state | Confidence |
 |------------------------------------------|----------------------|---------------|------------|
 | "accuracy above 90%"                     | acc_spec             | PASS          | HIGH       |
-| "brier score below 0.25"                 | juju                 | PASS          | HIGH       |
+| "brier score below 0.25"                 | calibration                 | PASS          | HIGH       |
 | "it always works"                        | —                    | —             | LOW        |
 
 ✅ 2/3 claims match a PASS verdict. 1 claim unsupported — consider handing off to the `claim-auditor` subagent for semantic review, or register it with `falsify init`.

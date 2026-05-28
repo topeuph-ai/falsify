@@ -31,7 +31,7 @@ choose the option that makes dishonesty more visible, not less.
 - `managed_agents/` — Anthropic Console deployment manifests.
 - `claims/` — user-facing claim sources (spec + metric + data)
   when using `init --template`.
-- `examples/` — committed fixtures: `juju_sample/`, `hello_claim/`.
+- `examples/` — committed fixtures: `calibration_sample/`, `hello_claim/`.
 - `docs/` — `ARCHITECTURE.md`, `ADVERSARIAL.md`, `EXAMPLES.md`,
   `PR_REVIEW.md`, `DEMO_SHOT_LIST.md`, and more.
 - `tests/` — stdlib `unittest` suite plus `smoke_test.sh`.

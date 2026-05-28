@@ -194,7 +194,7 @@ a tampered file would exit 10.
 
 - [DEMO.md](DEMO.md) — the 5-step walkthrough used in the hackathon
   demo video.
-- [examples/juju_sample/](examples/juju_sample/) — a realistic
+- [examples/calibration_sample/](examples/calibration_sample/) — a realistic
   20-row prediction-ledger fixture with a Brier score metric.
 - [docs/EXAMPLES.md](docs/EXAMPLES.md) — four more claim types
   (accuracy, latency, calibration, LLM agreement, AB).

@@ -1,0 +1,18 @@
+claim: "Model predictions are better calibrated than chance (brier below 0.25)"
+
+falsification:
+  failure_criteria:
+    - metric: brier_score
+      direction: below
+      threshold: 0.25
+  minimum_sample_size: 20
+  stopping_rule: "fixed sample of the entire 20-row prediction set"
+
+experiment:
+  command: "python3 examples/calibration_sample/metric.py examples/calibration_sample/data.csv"
+  dataset: "examples/calibration_sample/data.csv"
+  metric_fn: "examples.calibration_sample.metric:brier_score"
+
+environment:
+  python: "3.11"
+  packages: []

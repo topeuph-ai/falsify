@@ -84,9 +84,9 @@ An example comment the skill might post on a PR:
     # Claim review — 2 findings
     
     ## CRITICAL
-    - `claims/juju/spec.yaml` — `failure_criteria.threshold` changed
+    - `claims/calibration/spec.yaml` — `failure_criteria.threshold` changed
       `0.25 → 0.20` without a matching re-lock. Run
-      `falsify lock juju --force` to regenerate `spec.lock.json`
+      `falsify lock calibration --force` to regenerate `spec.lock.json`
       and commit the new hash alongside this change.
     
     ## INFO

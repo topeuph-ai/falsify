@@ -386,7 +386,7 @@ verdict refresh, multi-metric specs.
 - **Canonical YAML + SHA-256** hashing for spec locks — the same
   logical claim always hashes identically across machines; any
   semantic edit invalidates the lock.
-- **JUJU anonymized sample** (`examples/juju_sample/`) — a 20-row
+- **calibration sample** (`examples/calibration_sample/`) — a 20-row
   prediction ledger fixture with a Brier score metric, for the
   hackathon demo.
 - **Additional CLI subcommands**: `stats` (aggregate dashboard
@@ -405,7 +405,7 @@ verdict refresh, multi-metric specs.
   arbitrary text against the verdict log), `verdict-refresher`
   (autonomous refresh of STALE / INCONCLUSIVE / UNRUN verdicts).
 - **GitHub Actions CI** (`.github/workflows/falsify.yml`) —
-  unittest suite + `tests/smoke_test.sh` + JUJU end-to-end
+  unittest suite + `tests/smoke_test.sh` + calibration end-to-end
   (`lock` → `run` → `verdict`) + guard self-check, plus a dedicated
   skill-lint job that validates every `SKILL.md` and agent file.
 - **Documentation**: `README.md` (jury-facing front door),

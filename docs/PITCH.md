@@ -32,7 +32,7 @@ one whose length matches the slot.
 > tampered with the spec after locking. A commit-msg git hook
 > blocks commits whose messages contradict a locked verdict.
 >
-> The repo ships a 20-row JUJU prediction-ledger fixture that runs
+> The repo ships a 20-row calibration prediction-ledger fixture that runs
 > lock → run → verdict end-to-end in under 100ms and demonstrates
 > a Brier-score PASS. Three Claude Code skills (hypothesis-author,
 > falsify orchestrator, claim-audit) handle spec drafting and text

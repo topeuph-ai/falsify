@@ -73,6 +73,6 @@ Because the bug you're hunting is almost never in the metric. It's in canonicali
 ## See also
 
 - [`humaneval-walkthrough/`](../humaneval-walkthrough/) — same shape on a real benchmark (164-problem HumanEval, pass@1 ≥ 0.65)
-- [`juju_sample/`](../juju_sample/) — a deliberately non-trivial claim shape with multiple failure criteria
+- [`calibration_sample/`](../calibration_sample/) — a deliberately non-trivial claim shape with multiple failure criteria
 - [PRML v0.1 specification](https://spec.falsify.dev/v0.1)
 - [registry.falsify.dev](https://registry.falsify.dev) — paste a manifest, get a SHA-256 permalink

@@ -108,7 +108,7 @@ line: *"All verdicts are current — nothing to refresh."*
 
 - **Before a release** — so the changelog's performance claims are
   backed by verdicts from this week, not last month's.
-- **Before a demo** — the JUJU sample and any sibling specs should
+- **Before a demo** — the calibration sample and any sibling specs should
   all report current PASS before jurors run the walkthrough.
 - **After a long absence from the repo** — on returning from a
   break, running this agent once surfaces what's drifted and what's

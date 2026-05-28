@@ -279,7 +279,7 @@ or the directory with `--dir`.
 make install   # pip install pyyaml
 make test      # run unittest suite
 make smoke     # run tests/smoke_test.sh
-make demo      # JUJU end-to-end (lock → run → verdict)
+make demo      # calibration end-to-end (lock → run → verdict)
 ```
 
 See [Makefile](Makefile) for all targets (`make help`).
@@ -296,7 +296,7 @@ Feature matrix vs adjacent tools: [docs/COMPARISON.md](docs/COMPARISON.md).
 move is:
 
 ```
-claim: juju
+claim: calibration
 state: STALE
 reasoning: the spec has been edited (sha256:1038219d75a8) but no run
   exists against this hash. Last run was against sha256:164f619d4860.
@@ -317,7 +317,7 @@ the trajectory as **improving**, **degrading**, **flat**, or
 **mixed**.
 
 ```
-claim: juju
+claim: calibration
 threshold: 0.25 (direction: below)
 runs: 20 shown (of 20)
 
@@ -404,7 +404,7 @@ compose the skills and CLI.
 
 **CI** (`.github/workflows/falsify.yml`) — on every push and PR,
 the workflow runs the unittest suite, `tests/smoke_test.sh`, the
-JUJU end-to-end (`lock` → `run` → `verdict`), a guard self-check,
+calibration end-to-end (`lock` → `run` → `verdict`), a guard self-check,
 and a skill-lint pass over every SKILL.md and agent file.
 
 ## Demo
@@ -472,7 +472,7 @@ ln -sf "$(pwd)/hooks/commit-msg" .git/hooks/commit-msg
 - `hypothesis.schema.yaml` — spec schema (claim, falsification,
   experiment, environment, artifacts).
 - `examples/hello_claim/` — tiny smoke-test fixture.
-- `examples/juju_sample/` — anonymized 20-row prediction ledger
+- `examples/calibration_sample/` — anonymized 20-row prediction ledger
   for the Brier score demo.
 - `hooks/commit-msg` — the guard hook.
 - `tests/` — `unittest` suite plus `smoke_test.sh` end-to-end driver.

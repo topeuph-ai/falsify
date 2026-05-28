@@ -68,7 +68,7 @@ class DemoScriptTests(unittest.TestCase):
         )
 
     def test_demo_script_restores_spec(self) -> None:
-        spec_path = self.work / "examples" / "juju_sample" / "spec.yaml"
+        spec_path = self.work / "examples" / "calibration_sample" / "spec.yaml"
         text = spec_path.read_text()
         self.assertIn("threshold: 0.25", text)
         self.assertNotIn("threshold: 0.15", text)

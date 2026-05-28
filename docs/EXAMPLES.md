@@ -82,8 +82,8 @@ Spec sketch:
       metric_fn: calibration.brier:compute
 
 Run `falsify why <name>` for a plain-English explanation of the
-current state. Behavior: this is exactly the JUJU sample in
-`examples/juju_sample/` — the generalization. PASS = calibrated,
+current state. Behavior: this is exactly the calibration sample in
+`examples/calibration_sample/` — the generalization. PASS = calibrated,
 FAIL = re-train or re-price.
 
 ## Example 4 — Code review LLM agreement

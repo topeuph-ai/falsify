@@ -56,7 +56,7 @@ By participating, you agree to uphold the Code of Conduct. See
 2. Install the one dependency: `make install` (or
    `pip install -e .` for an editable install that also exposes
    the `falsify` console entry point).
-3. Run the full local CI suite: `make ci` (unittest + smoke + JUJU
+3. Run the full local CI suite: `make ci` (unittest + smoke + calibration
    end-to-end + skill lint).
 4. All of those must pass before you open a PR.
 5. *(Recommended)* Install pre-commit hooks so style + guard
