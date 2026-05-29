@@ -14,10 +14,13 @@ except ImportError:  # pragma: no cover
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PYPROJECT = REPO_ROOT / "pyproject.toml"
 FALSIFY = REPO_ROOT / "falsify.py"
+FALSIFY_PRML = REPO_ROOT / "falsify_prml.py"
 
 
-def _load_falsify_version() -> str:
-    spec = importlib.util.spec_from_file_location("falsify_mod", FALSIFY)
+def _load_prml_cli_version() -> str:
+    # The package version tracks the shipped `falsify` command, which is the
+    # PRML CLI (falsify_prml). The `falsify-engine` module keeps its own version.
+    spec = importlib.util.spec_from_file_location("falsify_prml_mod", FALSIFY_PRML)
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -44,14 +47,14 @@ class PyprojectTests(unittest.TestCase):
     def test_has_project_name_falsify(self) -> None:
         self.assertEqual(self.data["project"]["name"], "falsify")
 
-    def test_version_matches_falsify_version(self) -> None:
+    def test_version_matches_prml_cli_version(self) -> None:
         pyproject_version = self.data["project"]["version"]
-        module_version = _load_falsify_version()
+        module_version = _load_prml_cli_version()
         self.assertEqual(
             pyproject_version,
             module_version,
             f"pyproject version {pyproject_version!r} "
-            f"doesn't match falsify.__version__ {module_version!r}",
+            f"doesn't match falsify_prml.__version__ {module_version!r}",
         )
 
     def test_has_pyyaml_dependency(self) -> None:
@@ -64,7 +67,8 @@ class PyprojectTests(unittest.TestCase):
     def test_has_console_script(self) -> None:
         scripts = self.data["project"].get("scripts", {})
         self.assertIn("falsify", scripts)
-        self.assertEqual(scripts["falsify"], "falsify:main")
+        self.assertEqual(scripts["falsify"], "falsify_prml:main")
+        self.assertEqual(scripts.get("falsify-engine"), "falsify:main")
 
     def test_license_is_mit(self) -> None:
         license_field = self.data["project"].get("license")
