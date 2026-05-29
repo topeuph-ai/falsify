@@ -1,6 +1,6 @@
 # PRML v0.2 — RFC
 
-**Status:** Draft (open for community comment)
+**Status:** Frozen — v0.2.0 (2026-05-22). The comment window has closed.
 **Editor:** Cüneyt Öztürk · hello@falsify.dev
 **Comment window:** 2026-05-08 → 2026-05-22 (14 days)
 **Freeze date:** 2026-05-22, 23:59 UTC
