@@ -63,7 +63,7 @@ jobs:
               "threshold": 0.85,
               "dataset": {"id": "fixture-good", "hash": "0" * 64},
               "seed": 42,
-              "producer": {"id": "studio-11.co"},
+              "producer": {"id": "falsify.dev"},
           }
           tampered = dict(good)
           tampered["claim_id"] = "01900000-0000-7000-8000-000000000011"

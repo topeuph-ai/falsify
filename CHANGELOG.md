@@ -147,7 +147,7 @@ Documentation, brand, and metadata refresh. No functional code changes.
 ### Changed
 
 - **Repository transferred** from `github.com/sk8ordie84/falsify` to `github.com/studio-11-co/falsify`. Old URLs 301-redirect to canonical; all in-source references (README, spec, test vectors, preprint .tex, Dockerfile, CITATION.cff, action workflows, package metadata) updated to the new canonical URL.
-- **Editor identity standardised** from `Studio-11` (hyphenated) to `Studio 11` (no hyphen) across spec, CHANGELOG, CITATION, generator footers, and live spec.falsify.dev hosting. Aligns with falsify.dev landing and commercial paperwork.
+- **Editor identity standardised** to `Cüneyt Öztürk` across spec, CHANGELOG, CITATION, generator footers, and live spec.falsify.dev hosting. Aligns with falsify.dev landing.
 - **Pre-commit hook reference** in README updated to `rev: v0.1.4`.
 
 ### Why this release
@@ -160,7 +160,7 @@ The PRML specification day — three reference implementations across Python, Ja
 
 ### Added — specification
 
-- **PRML v0.1 specification** at `spec.falsify.dev/v0.1` (RFC-style, CC BY 4.0, ~18 pages). Editor: Studio 11 (Independent).
+- **PRML v0.1 specification** at `spec.falsify.dev/v0.1` (RFC-style, CC BY 4.0, ~18 pages). Editor: Cüneyt Öztürk (Independent).
 - **Twelve v0.1 conformance test vectors** with locked SHA-256 digests under `spec/test-vectors/v0.1/`.
 - **Six v0.2 candidate vectors** (TV-013 through TV-018) under `spec/v0.2/test-vectors-candidates.json`. Five pass byte-for-byte across all three reference implementations; TV-018 surfaces Finding 4 (small-magnitude float rendering diverges three ways across language stdlibs).
 - **arXiv preprint** in `spec/paper/prml-v0.1-preprint.tex` — 14-page LaTeX working draft, CC BY 4.0, cs.CR submission in flight.
