@@ -27,8 +27,10 @@ class ReadmeTests(unittest.TestCase):
         # console entry point) or `falsify.py <cmd>` (run-as-script).
         for cmd in ("init", "verdict"):
             self.assertTrue(
-                f"falsify {cmd}" in self.text or f"falsify.py {cmd}" in self.text,
-                f"Quickstart missing `falsify {cmd}` / `falsify.py {cmd}`",
+                f"falsify {cmd}" in self.text
+                or f"falsify.py {cmd}" in self.text
+                or f"falsify-engine {cmd}" in self.text,
+                f"Quickstart missing a `{cmd}` command (falsify / falsify.py / falsify-engine)",
             )
 
     def test_mentions_all_three_skills(self) -> None:

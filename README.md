@@ -2,20 +2,23 @@
 
 **ML evaluation claims should be locked before the experiment runs, not reported after.**
 
-PRML commits a claim — metric, threshold, dataset hash, seed — as a SHA-256 manifest. Run the eval. The hash either matches or it doesn't. Verify any manifest in-browser at [registry.falsify.dev](https://registry.falsify.dev) (no install), or with a reference CLI (`falsify-js` on npm, plus Go and Rust binaries):
+PRML commits a claim — metric, threshold, dataset hash, seed — as a SHA-256 manifest. Run the eval. The hash either matches or it doesn't.
 
 ```bash
-$ falsify-js lock claim.prml.yaml
+$ pip install falsify
+$ falsify lock claim.prml.yaml
 locked: claim.prml.yaml
-  sha256:  c30dba8e0f566d1beebf4f8d468e6e07c821f0c72562dfb64ddf6596796f7797
+  sha256:          c30dba8e0f566d1beebf4f8d468e6e07c821f0c72562dfb64ddf6596796f7797
 
-$ falsify-js verify claim.prml.yaml --observed 0.934
+$ falsify verify claim.prml.yaml --observed 0.934
 PASS  metric=accuracy  observed=0.934  >=  threshold=0.9
 
 # spec edited after locking → hash no longer matches:
-$ falsify-js verify claim.prml.yaml --observed 0.934
+$ falsify verify claim.prml.yaml --observed 0.934
 TAMPERED  (exit 3)
 ```
+
+No install? Verify any manifest in-browser at [registry.falsify.dev](https://registry.falsify.dev). Byte-equivalent reference CLIs also ship for JS (`npm i -g falsify-js`), Go, and Rust.
 
 4 reference implementations (Python, JavaScript, Go, Rust) byte-equivalent on all 20 conformance vectors (12 v0.1 stable + 8 v0.2). PRML v0.2 frozen 2026-05-22. The same day, Lock #2 (a public hypothesis on the spec's own distribution, target ≥3 external contributors in 14 days) resolved at 0/3. The mechanism worked, the post-mortem is at [falsify.dev/notes/lock-2-postmortem](https://falsify.dev/notes/lock-2-postmortem/). Designed for ML eval rigor. Maps to EU AI Act Article 12 evidence as a side effect.
 
@@ -62,9 +65,9 @@ PRML does not prove an ML result is true. It proves that a specific evaluation c
 
 **Falsify fixes this with a single idea from science:** you must pre-register the claim *before* you run the experiment. If you change the spec after seeing the data, the hash changes, the audit trail breaks, and CI fails with exit code 3.
 
-    $ falsify lock accuracy_claim        # SHA-256 the spec
-    $ falsify run  accuracy_claim        # reproducible experiment
-    $ falsify verdict accuracy_claim     # exit 0 = PASS, 10 = FAIL, 3 = tampered
+    $ falsify-engine lock accuracy_claim        # SHA-256 the spec
+    $ falsify-engine run  accuracy_claim        # reproducible experiment
+    $ falsify-engine verdict accuracy_claim     # exit 0 = PASS, 10 = FAIL, 3 = tampered
 
 Deterministic exit codes are the API. CI gates on them. Humans read the audit trail. The claim either survives contact with the data or it doesn't.
 
@@ -93,7 +96,7 @@ See [docs/CASE_STUDIES.md](docs/CASE_STUDIES.md) for three concrete adoption sto
 
 ---
 
-**Current version:** 0.2.0 — run `python3 falsify.py --version`.
+**Current version:** falsify 0.3.0 (PRML CLI) · falsify-engine 0.2.0 — `falsify --version`.
 **Working with Claude Code?** See [CLAUDE.md](CLAUDE.md).
 
 ---
@@ -190,7 +193,7 @@ is at <https://falsify.dev>, and the project page is at
 
 Requires Python **3.11+**.
 
-> **Two tools in one repo.** `pip install falsify` is the pre-registration *workflow* engine — the `init` → `lock` → `run` → `verdict` loop in the Quickstart below, with its own claim/falsification spec. To hash or verify a PRML *manifest* (`*.prml.yaml`), use a reference implementation (`falsify-js` on npm, or the Go/Rust binaries) or [registry.falsify.dev](https://registry.falsify.dev), as shown at the top.
+> **Two commands, one install.** `falsify` is the **PRML manifest CLI** — `lock` / `verify` / `hash` / `init` / `test-vectors` on a `*.prml.yaml` manifest (shown at the top). `falsify-engine` is the separate **pre-registration workflow engine** — the `init` → `lock` → `run` → `verdict` / `guard` loop over `.falsify/<name>/` specs. The workflow sections further down use `falsify-engine`; substitute it for `falsify` there. No install needed to verify a manifest: paste it at [registry.falsify.dev](https://registry.falsify.dev).
 
 ### Development install (from the repo)
 
@@ -233,16 +236,25 @@ exported hooks and how this repo eats its own dog food.
 ## Quickstart
 
 ```bash
-./demo.sh   # auto-narrated: PASS → tamper → FAIL → guard block
+# The falsify PRML CLI — lock a manifest, run your eval, verify.
+falsify init accuracy.prml.yaml          # writes a skeleton manifest
+# edit accuracy.prml.yaml: metric, comparator, threshold, dataset.hash, seed, producer
+falsify lock accuracy.prml.yaml          # canonicalize + SHA-256 + write sidecar
+# ... run your eval, get the observed value ...
+falsify verify accuracy.prml.yaml --observed 0.934
+# PASS (exit 0) · FAIL below threshold (exit 10) · TAMPERED if the spec changed (exit 3)
+```
 
-# Either form works — `falsify` is the installed entry point,
-# `python3 falsify.py` is the uninstalled fallback.
-falsify init my_claim
+The pre-registration **workflow engine** (claim/falsification specs, `init` → `lock` → `run` → `verdict` → `guard` over `.falsify/<name>/`) ships in the same install as the `falsify-engine` command:
+
+```bash
+./demo.sh                                # auto-narrated engine demo (PASS → tamper → FAIL → guard)
+falsify-engine init my_claim
 # edit .falsify/my_claim/spec.yaml to fill in the template
-falsify lock my_claim
-falsify run my_claim
-falsify verdict my_claim
-falsify hook install      # enable the commit-msg guard
+falsify-engine lock my_claim
+falsify-engine run my_claim
+falsify-engine verdict my_claim
+falsify-engine hook install      # enable the commit-msg guard
 ```
 
 Exit code `0` on PASS, `10` on FAIL. Everything else is documented
@@ -255,8 +267,8 @@ New to pre-registration? Walk through [TUTORIAL.md](TUTORIAL.md) — 15 minutes,
 ```bash
 falsify init --template accuracy
 falsify lock accuracy
-falsify run accuracy
-falsify verdict accuracy
+falsify-engine run accuracy
+falsify-engine verdict accuracy
 ```
 
 Five templates ship with a runnable spec + metric + dataset:
@@ -290,7 +302,7 @@ Feature matrix vs adjacent tools: [docs/COMPARISON.md](docs/COMPARISON.md).
 
 ### Explain any claim
 
-`falsify why <name>` is the human-friendly companion to `verdict`
+`falsify-engine why <name>` is the human-friendly companion to `verdict`
 — it always exits `0` and tells you exactly what the next honest
 move is:
 
@@ -301,7 +313,7 @@ reasoning: the spec has been edited (sha256:1038219d75a8) but no run
   exists against this hash. Last run was against sha256:164f619d4860.
 locked: yes (sha256:164f619d4860, 2h ago)
 last run: 2026-04-22T02:10:17+00:00 (2h ago)
-next action: `falsify run <name>` to produce a fresh verdict against
+next action: `falsify-engine run <name>` to produce a fresh verdict against
   the current spec.
 ```
 
@@ -310,7 +322,7 @@ and the last five runs.
 
 ### Spot drift with a sparkline
 
-`falsify trend <name>` draws an ASCII sparkline of the metric
+`falsify-engine trend <name>` draws an ASCII sparkline of the metric
 across its recorded runs, marks the threshold line, and classifies
 the trajectory as **improving**, **degrading**, **flat**, or
 **mixed**.
@@ -338,14 +350,14 @@ trend: degrading
 
 ### Measure the CLI itself
 
-`falsify bench` spawns each subcommand under a fresh temporary
+`falsify-engine bench` spawns each subcommand under a fresh temporary
 directory and records per-command latency (min / median / p95 /
 max / mean / stddev). Useful as a sanity check before a release
 or when investigating a suspected startup-time regression.
 
 ```bash
-falsify bench --runs 5 --commands "--help,list,stats,score"
-falsify bench --runs 5 --json     # machine-readable output
+falsify-engine bench --runs 5 --commands "--help,list,stats,score"
+falsify-engine bench --runs 5 --json     # machine-readable output
 ```
 
 `--runs <N>` sets the timed-iteration count (default 5, capped at
