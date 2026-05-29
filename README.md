@@ -2,18 +2,19 @@
 
 **ML evaluation claims should be locked before the experiment runs, not reported after.**
 
-`falsify` commits a claim — metric, threshold, dataset hash, seed — as a SHA-256 manifest. Run the eval. The hash either matches or it doesn't.
+PRML commits a claim — metric, threshold, dataset hash, seed — as a SHA-256 manifest. Run the eval. The hash either matches or it doesn't. Verify any manifest in-browser at [registry.falsify.dev](https://registry.falsify.dev) (no install), or with a reference CLI (`falsify-js` on npm, plus Go and Rust binaries):
 
 ```bash
-$ falsify lock claim.yaml
-locked: sha256:a3f9...c821
+$ falsify-js lock claim.prml.yaml
+locked: claim.prml.yaml
+  sha256:  c30dba8e0f566d1beebf4f8d468e6e07c821f0c72562dfb64ddf6596796f7797
 
-$ falsify verdict claim.yaml
-PASS  accuracy 0.934 >= 0.90  (hash verified)
+$ falsify-js verify claim.prml.yaml --observed 0.934
+PASS  metric=accuracy  observed=0.934  >=  threshold=0.9
 
-# tampered:
-$ falsify verdict claim.yaml
-TAMPERED  sha256 mismatch — spec modified after locking  (exit 3)
+# spec edited after locking → hash no longer matches:
+$ falsify-js verify claim.prml.yaml --observed 0.934
+TAMPERED  (exit 3)
 ```
 
 4 reference implementations (Python, JavaScript, Go, Rust) byte-equivalent on all 20 conformance vectors (12 v0.1 stable + 8 v0.2). PRML v0.2 frozen 2026-05-22. The same day, Lock #2 (a public hypothesis on the spec's own distribution, target ≥3 external contributors in 14 days) resolved at 0/3. The mechanism worked, the post-mortem is at [falsify.dev/notes/lock-2-postmortem](https://falsify.dev/notes/lock-2-postmortem/). Designed for ML eval rigor. Maps to EU AI Act Article 12 evidence as a side effect.
@@ -99,7 +100,7 @@ See [docs/CASE_STUDIES.md](docs/CASE_STUDIES.md) for three concrete adoption sto
 
 ## Specification artifacts
 
-Falsify is the reference implementation of **PRML v0.1** — Pre-Registered ML Manifest Specification. The spec, conformance suite, and adjacent documents live under `spec/`:
+This repository is the home of **PRML v0.1** — Pre-Registered ML Manifest Specification. The spec, conformance suite, reference implementations (`impl/`, JS/Go/Rust + a Python reference target), and adjacent documents live under `spec/`:
 
 - **[`spec/PRML-v0.1.md`](spec/PRML-v0.1.md)** — the spec (RFC-style, CC BY 4.0)
 - **[`spec/test-vectors/v0.1/`](spec/test-vectors/v0.1/)** — 12 conformance vectors with locked SHA-256 digests
@@ -188,6 +189,8 @@ is at <https://falsify.dev>, and the project page is at
 <https://pypi.org/project/falsify>.
 
 Requires Python **3.11+**.
+
+> **Two tools in one repo.** `pip install falsify` is the pre-registration *workflow* engine — the `init` → `lock` → `run` → `verdict` loop in the Quickstart below, with its own claim/falsification spec. To hash or verify a PRML *manifest* (`*.prml.yaml`), use a reference implementation (`falsify-js` on npm, or the Go/Rust binaries) or [registry.falsify.dev](https://registry.falsify.dev), as shown at the top.
 
 ### Development install (from the repo)
 
