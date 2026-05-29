@@ -49,10 +49,6 @@ TAMPERED  sha256 mismatch — spec modified after locking  (exit 3)
 
 ---
 
-> **Latest — 2026-05-23** · **PRML v0.2 frozen** with all 20 conformance vectors (12 v0.1 stable + 8 v0.2) passing byte-for-byte across the four reference implementations. Lock #2 (public hypothesis on spec's own distribution) resolved at **0/3 external contributors**, mechanism worked, [post-mortem published](https://falsify.dev/notes/lock-2-postmortem/). **`mlflow-falsify` v0.2.0** shipped with `MLFLOW_FALSIFY_TAG_SCOPE=experiment` for HPO sweeps; [MLflow community plugin showcase PR](https://github.com/mlflow/mlflow/pull/23569) is live and under review. Five long-form working notes published for EU AI Act readiness: [readiness assessment](https://falsify.dev/eu-ai-act-readiness/), [2 August 2026 deadline](https://falsify.dev/ai-act-deadline-august-2026/), [Article 12 ten-item checklist](https://falsify.dev/article-12-checklist/), [notified body evidence](https://falsify.dev/notified-body-evidence/), [ISO/IEC 42001 readiness](https://falsify.dev/iso-42001-readiness/). DOI [10.5281/zenodo.20177839](https://doi.org/10.5281/zenodo.20177839). PRML JSON Schema in [SchemaStore](https://github.com/SchemaStore/schemastore/pull/5673) (Mads Kristensen / Microsoft) — `.prml.yaml` files autocomplete in VS Code, JetBrains, Helix, Zed, and Cursor. `registry.falsify.dev` live with README badges at `registry.falsify.dev/badge/<hash>.svg`.
-
----
-
 ## The problem
 
 Your team claims the model hits **94% accuracy**. You ship it. Three weeks later a customer proves the real number is **71%**.
@@ -495,6 +491,8 @@ Run `make dogfood` to re-verify. CI runs these on every PR.
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for release history.
+
+> **Latest — 2026-05-23** · **PRML v0.2 frozen** with all 20 conformance vectors (12 v0.1 stable + 8 v0.2) passing byte-for-byte across the four reference implementations. Lock #2 (public hypothesis on spec's own distribution) resolved at **0/3 external contributors**, mechanism worked, [post-mortem published](https://falsify.dev/notes/lock-2-postmortem/). **`mlflow-falsify` v0.2.0** shipped with `MLFLOW_FALSIFY_TAG_SCOPE=experiment` for HPO sweeps; [MLflow community plugin showcase PR](https://github.com/mlflow/mlflow/pull/23569) is live and under review. Five long-form working notes published for EU AI Act readiness: [readiness assessment](https://falsify.dev/eu-ai-act-readiness/), [2 August 2026 deadline](https://falsify.dev/ai-act-deadline-august-2026/), [Article 12 ten-item checklist](https://falsify.dev/article-12-checklist/), [notified body evidence](https://falsify.dev/notified-body-evidence/), [ISO/IEC 42001 readiness](https://falsify.dev/iso-42001-readiness/). DOI [10.5281/zenodo.20177839](https://doi.org/10.5281/zenodo.20177839). PRML JSON Schema in [SchemaStore](https://github.com/SchemaStore/schemastore/pull/5673) (Mads Kristensen / Microsoft) — `.prml.yaml` files autocomplete in VS Code, JetBrains, Helix, Zed, and Cursor. `registry.falsify.dev` live with README badges at `registry.falsify.dev/badge/<hash>.svg`.
 
 ## Roadmap
 
