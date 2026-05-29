@@ -17,7 +17,7 @@ The fastest path: **Overleaf** (free, no install).
 
 If you prefer local: install MacTeX (`brew install --cask mactex-no-gui`, ~2GB), then:
 ```bash
-cd /Users/cuneytozturk/Desktop/falsify-hackathon/spec/paper
+cd spec/paper
 pdflatex prml-v0.1-preprint.tex
 pdflatex prml-v0.1-preprint.tex   # second pass for refs
 ```

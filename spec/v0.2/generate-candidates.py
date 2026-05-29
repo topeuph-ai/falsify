@@ -284,7 +284,7 @@ for v in VECTORS:
         }
     json_data.append(entry)
 
-with open("/Users/cuneytozturk/Desktop/falsify-hackathon/spec/v0.2/test-vectors-candidates.json", "w") as f:
+with open("spec/v0.2/test-vectors-candidates.json", "w") as f:
     json.dump(json_data, f, indent=2, ensure_ascii=False)
 
 
@@ -380,7 +380,7 @@ out.append("")
 out.append("*Working draft, CC BY 4.0. Promotion to v0.2 normative on 2026-05-22.*")
 
 text = "\n".join(out) + "\n"
-with open("/Users/cuneytozturk/Desktop/falsify-hackathon/spec/v0.2/test-vectors-candidates.md", "w") as f:
+with open("spec/v0.2/test-vectors-candidates.md", "w") as f:
     f.write(text)
 
 print(f"Generated {len(VECTORS)} candidate vectors:")

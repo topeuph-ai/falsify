@@ -51,7 +51,7 @@ returns 404. After this step, any ML engineer can try falsify in
 
 ### 2b. Test build locally
 ```bash
-cd /Users/cuneytozturk/Desktop/falsify-hackathon
+cd /path/to/falsify
 .venv/bin/python -m pip install --upgrade build twine
 .venv/bin/python -m build
 ls dist/  # falsify-0.1.1-py3-none-any.whl + .tar.gz

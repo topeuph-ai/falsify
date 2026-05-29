@@ -16,7 +16,7 @@
 set -u
 set -o pipefail
 
-REPO="${REPO:-/Users/cuneytozturk/Desktop/falsify-hackathon}"
+REPO="${REPO:-.}"
 VENV="$REPO/.venv-demo"
 TYPING="${TYPING:-1}"
 PRE_SLEEP="${PRE_SLEEP:-2.0}"

@@ -8,7 +8,7 @@
 
 ## v3.1 user feedback — fix these FIRST, before anything else
 
-User watched `docs/assets/v2/falsify_demo_final_with_vo.mp4` and flagged 6 specific issues. Screenshots live in `/Users/cuneytozturk/Desktop/haq/1..6.png`. Address each before re-rendering.
+User watched `docs/assets/v2/falsify_demo_final_with_vo.mp4` and flagged 6 specific issues. Screenshots live in the local review folder. Address each before re-rendering.
 
 ### FIX 1 — sc01 subtitle font fallback
 "radiology classifier — production" renders as italic serif (system fallback). Base64 font embed did not take for this scene. Target: **JetBrains Mono 400, 14px, color #7A8896, letter-spacing 0.08em, uppercase**. Verify `@font-face` block exists and base64 data URL is valid in `scripts/slides_html/01_hook.html`. Run `brand/inject_fonts.py` after edit.
@@ -128,7 +128,7 @@ Do NOT record VO before user approves silent cut.
 3. `scripts/render_video_assets.py` — Playwright renderer, `scene <n>` and `radar-hero` modes
 4. `scripts/radar/claim-radar.html` — deterministic radar, keep as-is
 5. `docs/assets/v2/falsify_demo_final.mp4` — current 3/10 output (watch once, note what's flat)
-6. `/Users/cuneytozturk/Downloads/FaxMachine1987Promo_standalone.html` — user's reference for pacing and fax-printer motion language
+6. a local reference for pacing and motion language
 
 ---
 
