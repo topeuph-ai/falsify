@@ -4,6 +4,24 @@ All notable changes to Falsification Engine are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com); version
 numbers follow [Semantic Versioning](https://semver.org).
 
+## [v0.3.0] — 2026-05-30
+
+The `falsify` command is now the **PRML reference CLI** — `lock` / `verify` / `hash` / `init` / `test-vectors` operating directly on a `*.prml.yaml` manifest, byte-equivalent to the JavaScript / Go / Rust reference implementations (passes all 20 conformance vectors). `pip install falsify` finally gives a tool that hashes and verifies PRML manifests.
+
+**Breaking change.** The pre-registration *workflow engine* (the previous `falsify` command: `init` → `lock` → `run` → `verdict` → `guard` over `.falsify/<name>/` claim specs) is now the **`falsify-engine`** command, shipped in the same install. Replace `falsify` with `falsify-engine` for workflow-engine usage.
+
+**Conformance: unchanged.** All 20 vectors and their locked hashes are untouched; the canonicalization contract is identical.
+
+### Added
+
+- **`falsify_prml.py`** — the PRML CLI (new `falsify` entry point). PASS / FAIL / TAMPERED with exit codes 0 / 10 / 3.
+- **`tests/test_prml_cli.py`** — conformance gate: the shipped CLI reproduces all 20 locked vectors (v0.1 + v0.2) byte-for-byte, plus predicate and exit-code checks.
+
+### Changed
+
+- **`pyproject.toml`** — `falsify = falsify_prml:main`, `falsify-engine = falsify:main`; version `0.3.0`.
+- **`prml-verify-action`** gains a `manifest` mode that runs `falsify verify` for genuine PRML-manifest hash/tamper verification; the engine modes (`guard` / `verdict` / `lock`) now invoke `falsify-engine`.
+
 ## [v0.2.0] — 2026-05-22 (spec freeze)
 
 PRML v0.2 specification frozen. Eight new conformance vectors promoted from
