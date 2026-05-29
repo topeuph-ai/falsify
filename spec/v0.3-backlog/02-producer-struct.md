@@ -10,11 +10,11 @@ mapping with `id` and `signature`). Two limitations surface in audit
 practice:
 
 1. **No machine-checkable identity binding.** A manifest claiming
-   `producer: studio-11.co` is signed by anyone who possesses the canonical
+   `producer: falsify.dev` is signed by anyone who possesses the canonical
    bytes; nothing in the manifest ties the producer string to a
    cryptographic key.
 2. **No identity-strength signalling.** A registry observing two manifests
-   with `producer: studio-11.co` has no way to distinguish one that was
+   with `producer: falsify.dev` has no way to distinguish one that was
    anchored against an OIDC-bound Sigstore certificate from one that was
    typed into a YAML file by hand.
 
@@ -35,7 +35,7 @@ binding:
 
 ```yaml
 producer:
-  id: studio-11.co                       # required, free-form
+  id: falsify.dev                       # required, free-form
   key_id: sha256:fingerprint             # optional, identifies signing key
   signature: <detached signature over canonical bytes>  # optional
   sigstore_bundle: <inline JSON bundle>  # optional, alternative to signature

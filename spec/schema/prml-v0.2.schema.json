@@ -162,7 +162,7 @@
       "threshold": 1300,
       "dataset": {"id": "lmsys-arena-live", "hash": "n/a-streaming"},
       "seed": null,
-      "producer": {"id": "studio-11.co"},
+      "producer": {"id": "falsify.dev"},
       "model": {"id": "claude-3.5-sonnet@2025-10-01"},
       "sample_size": 1000,
       "pre_registered_from": "2026-05-01T00:00:00Z",
@@ -177,7 +177,7 @@
       "threshold": 0.92,
       "dataset": {"id": "imagenet-val-2012", "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
       "seed": 42,
-      "producer": {"id": "studio-11.co"},
+      "producer": {"id": "falsify.dev"},
       "revoked_at": "2026-05-15T10:00:00Z",
       "revocation_reason": "dataset_compromised"
     }

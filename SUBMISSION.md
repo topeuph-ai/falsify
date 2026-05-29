@@ -183,7 +183,7 @@ regressions were caught before merge. Every commit carries a
 ## Team
 
 Solo — Cüneyt Öztürk (Istanbul). GitHub: [`sk8ordie84`](https://github.com/sk8ordie84).
-Studio: [`studio-11.co`](https://studio-11.co) (`hello@falsify.dev`).
+Studio: [`falsify.dev`](https://falsify.dev) (`hello@falsify.dev`).
 
 ## License
 

@@ -354,7 +354,7 @@ PRML provides the primitive that ML evaluation has lacked: a cryptographic recor
 - [ ] Code release URL stable (github.com/studio-11-co/falsify pinned commit)
 - [ ] Spec URL stable (spec.falsify.dev/v0.1)
 - [ ] Test vectors public + reproducible
-- [ ] Author affiliation: "Studio 11 (Independent)" — no university, no employer
+- [ ] Author affiliation: "Cüneyt Öztürk (Independent)" — no university, no employer
 - [ ] Conflict-of-interest statement: none
 - [ ] Funding statement: self-funded
 - [ ] Ethics statement: PRML is a primitive; deployment ethics are out of scope

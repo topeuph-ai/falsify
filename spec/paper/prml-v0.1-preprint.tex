@@ -1,6 +1,6 @@
 % PRML v0.1 — arXiv preprint
-% Author: Studio 11 (Independent)
-% Correspondence: hello@studio-11.co
+% Author: Cüneyt Öztürk
+% Correspondence: hello@falsify.dev
 % Spec: https://spec.falsify.dev/v0.1
 % Code: https://github.com/studio-11-co/falsify
 % License: CC BY 4.0
@@ -34,7 +34,7 @@
   urlcolor=blue!50!black,
   citecolor=blue!50!black,
   pdftitle={Pre-Registered ML Manifests: A Content-Addressed Format for Verifiable Evaluation Claims},
-  pdfauthor={Cuneyt Ozturk (Studio 11)},
+  pdfauthor={Cuneyt Ozturk},
   pdfkeywords={machine learning, evaluation, reproducibility, pre-registration, cryptographic verification, EU AI Act}
 }
 
@@ -69,7 +69,7 @@
 A Content-Addressed Format for Verifiable Evaluation Claims}
 
 \author[1]{C\"uneyt \"Ozt\"urk}
-\affil[1]{Studio 11. Correspondence: \href{mailto:hello@studio-11.co}{hello@studio-11.co}\\
+\affil[1]{Independent. Correspondence: \href{mailto:hello@falsify.dev}{hello@falsify.dev}\\
 Spec: \href{https://spec.falsify.dev/v0.1}{spec.falsify.dev/v0.1} \quad
 Code: \href{https://github.com/studio-11-co/falsify}{github.com/studio-11-co/falsify} \quad
 DOI: \href{https://doi.org/10.5281/zenodo.20177839}{10.5281/zenodo.20177839}}
@@ -211,7 +211,7 @@ dataset:
   id: "imagenet-val-2012"
 seed: 42
 producer:
-  id: "studio-11.co"
+  id: "falsify.dev"
 \end{lstlisting}
 
 The canonical UTF-8 encoding of this document, hashed with SHA-256, produces a 64-character hex digest. The digest is stored alongside the manifest in a sidecar file \texttt{<claim\_id>.prml.sha256} containing one line: the hex digest followed by an LF.
@@ -546,7 +546,7 @@ PRML provides the primitive that machine-learning evaluation has lacked: a crypt
 
 \section*{Acknowledgements}
 
-This work was conducted independently at Studio 11, with no external funding. We thank the Open Science Framework, ClinicalTrials.gov, and the Sigstore community for proving the design space. Errors are the authors' alone.
+This work was conducted independently, with no external funding. We thank the Open Science Framework, ClinicalTrials.gov, and the Sigstore community for proving the design space. Errors are the authors' alone.
 
 \section*{Reproducibility statement}
 
@@ -607,10 +607,10 @@ ISO/IEC (2023). \emph{ISO/IEC 42001:2023 --- Information technology --- Artifici
 European Parliament and Council (2024). \emph{Regulation (EU) 2024/1689 (AI Act)}. Official Journal of the European Union.
 
 \bibitem{prml2026spec}
-Studio 11 (2026). \emph{PRML v0.1 --- Pre-Registered ML Manifest Specification}. \url{https://spec.falsify.dev/v0.1}.
+Öztürk, C. (2026). \emph{PRML v0.1 --- Pre-Registered ML Manifest Specification}. \url{https://spec.falsify.dev/v0.1}.
 
 \bibitem{prml2026compliance}
-Studio 11 (2026). \emph{PRML v0.1 --- EU AI Act Article 12/17/18/50 Mapping}. \url{https://github.com/studio-11-co/falsify/blob/main/spec/compliance/AI-Act-mapping-v0.1.md}.
+Öztürk, C. (2026). \emph{PRML v0.1 --- EU AI Act Article 12/17/18/50 Mapping}. \url{https://github.com/studio-11-co/falsify/blob/main/spec/compliance/AI-Act-mapping-v0.1.md}.
 
 \end{thebibliography}
 

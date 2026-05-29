@@ -63,7 +63,7 @@ pre_registered_from: '2026-05-01T00:00:00Z'
 pre_registered_to: '2026-06-01T00:00:00Z'
 prml_mode: streaming
 producer:
-  id: studio-11.co
+  id: falsify.dev
 sample_size: 1000
 seed: null
 threshold: 1300
@@ -94,7 +94,7 @@ metric: refusal_rate
 model:
   id: claude-3.5-sonnet@2025-10-01
 producer:
-  id: studio-11.co
+  id: falsify.dev
 runner_attestation: sigstore://rekor.sigstore.dev/api/v1/log/entries/24296fb24b8ad77a
 seed: 42
 threshold: 0.95
@@ -122,7 +122,7 @@ dataset:
   id: imagenet-val-2012
 metric: accuracy
 producer:
-  id: studio-11.co
+  id: falsify.dev
 revocation_reason: dataset_compromised
 revoked_at: '2026-05-15T10:00:00Z'
 seed: 42

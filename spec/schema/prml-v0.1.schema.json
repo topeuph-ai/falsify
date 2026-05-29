@@ -85,7 +85,7 @@
         "id": {
           "type": "string",
           "minLength": 1,
-          "description": "Identifier of the producing entity. Domain (e.g. 'studio-11.co'), GitHub handle, ORCID, or any stable identifier."
+          "description": "Identifier of the producing entity. Domain (e.g. 'falsify.dev'), GitHub handle, ORCID, or any stable identifier."
         },
         "signature": {
           "type": "string",
@@ -145,7 +145,7 @@
       },
       "seed": 42,
       "producer": {
-        "id": "studio-11.co"
+        "id": "falsify.dev"
       }
     },
     {
@@ -161,7 +161,7 @@
         "uri": "https://huggingface.co/datasets/openai/openai_humaneval"
       },
       "seed": 42,
-      "producer": {"id": "studio-11.co"},
+      "producer": {"id": "falsify.dev"},
       "model": {"id": "meta-llama/Llama-3.1-8B-Instruct"},
       "notes": "HumanEval pass@1, n=164 problems, temperature 0.0, single completion per problem."
     }

@@ -146,7 +146,7 @@ Same shape as v0.1 conclusion: the cost of adoption is one hash function call; t
 |---|---|
 | 2026-05-23 → 2026-05-29 | RFC freeze; final draft of v0.2 spec; conformance vectors locked |
 | 2026-05-30 → 2026-06-13 | First-pass paper draft (Cüneyt) |
-| 2026-06-14 → 2026-06-20 | Internal review (Studio 11 co-founder + 1–2 trusted external reviewers) |
+| 2026-06-14 → 2026-06-20 | Internal review (author + 1–2 trusted external reviewers) |
 | 2026-06-21 → 2026-06-30 | Revision; arXiv replacement upload |
 | 2026-Q3 | REFORMS-style workshop submission window |
 

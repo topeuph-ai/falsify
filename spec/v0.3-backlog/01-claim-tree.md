@@ -39,7 +39,7 @@ leaf manifests and hashes deterministically over its leaves. Sketch:
 version: prml/0.3-suite
 suite_id: 01900000-0000-7000-8000-000000000099
 producer:
-  id: studio-11.co
+  id: falsify.dev
 created_at: '2026-09-01T00:00:00Z'
 leaves:
   - manifest_ref: ./mmlu-stem.prml.yaml

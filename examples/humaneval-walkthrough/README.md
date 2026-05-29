@@ -72,7 +72,7 @@ model:
   uri: "https://anthropic.com/news/claude-opus-4-7"
 seed: 314159
 producer:
-  id: "studio-11.co"
+  id: "falsify.dev"
 notes: "Pre-registered before any evaluation run. Threshold of 0.65 chosen as the deployment target for the tier-2 code review system."
 ```
 
