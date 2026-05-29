@@ -1,7 +1,7 @@
 # PRML v0.1 — arXiv Preprint
 
 **File:** `prml-v0.1-preprint.tex` (694 lines, ~12 page output)
-**Author:** Studio 11 (Independent)
+**Author:** Cüneyt Öztürk
 **Target arXiv categories:** `cs.CR` (primary), `cs.CY` (cross), `cs.SE` (cross)
 
 ---
@@ -29,7 +29,7 @@ pdflatex prml-v0.1-preprint.tex   # second pass for refs
 ### 1. arXiv account
 
 If no account: register at https://arxiv.org/user/register
-- Use email: `hello@studio-11.co` (matches paper correspondence)
+- Use email: `hello@falsify.dev` (matches paper correspondence)
 - Affiliation: `Studio 11`
 - ORCID optional but boosts credibility
 

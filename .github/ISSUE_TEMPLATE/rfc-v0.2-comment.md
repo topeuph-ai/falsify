@@ -29,4 +29,4 @@ if you have one. -->
 
 ---
 
-**Confidential / institutional comments** (JTC 21, AISI, audit firms): email `hello@studio-11.co` with subject prefix `[v0.2 RFC]` instead of opening a public issue.
+**Confidential / institutional comments** (JTC 21, AISI, audit firms): email `hello@falsify.dev` with subject prefix `[v0.2 RFC]` instead of opening a public issue.

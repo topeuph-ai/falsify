@@ -130,7 +130,7 @@ The cost is one hash function call per claim. The output is a record that surviv
 | An ML team lead | The [reference implementation](https://github.com/studio-11-co/falsify) and [GitHub Action](https://github.com/studio-11-co/falsify/tree/main/.github/actions/falsify-verify) |
 | A specification reviewer | The [v0.1 spec](https://spec.falsify.dev/v0.1) and the [Discussion #6](https://github.com/studio-11-co/falsify/discussions/6) |
 
-For substantive feedback on the regulatory mapping, the threat model, or the specification: `hello@studio-11.co`.
+For substantive feedback on the regulatory mapping, the threat model, or the specification: `hello@falsify.dev`.
 
 The **v0.2 freeze is targeted 2026-05-22**. Three-week window for substantive review. Comments on the field-to-obligation bindings carry the most weight at this stage.
 

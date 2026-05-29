@@ -13,8 +13,8 @@ abstract: >-
 authors:
   - family-names: "Öztürk"
     given-names: "Cüneyt"
-    affiliation: "Studio 11 Turkey Ltd. Şti."
-    email: "hello@studio-11.co"
+    affiliation: "Independent"
+    email: "hello@falsify.dev"
 type: software
 license: MIT
 repository-code: "https://github.com/studio-11-co/falsify"
@@ -58,4 +58,4 @@ references:
         given-names: "Cüneyt"
     year: 2026
     url: "https://spec.falsify.dev/v0.1"
-    notes: "Working draft preprint, CC BY 4.0. arXiv submission in flight."
+    notes: "Working draft preprint, CC BY 4.0. Zenodo DOI 10.5281/zenodo.20177839."

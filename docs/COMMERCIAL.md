@@ -10,7 +10,7 @@ written commercial agreement your legal team can sign.
 
 ## When to reach out
 
-Contact [`hello@studio-11.co`](mailto:hello@studio-11.co) if
+Contact [`hello@falsify.dev`](mailto:hello@falsify.dev) if
 you are:
 
 - Deploying falsify in a SaaS product and want vendor support.
@@ -65,4 +65,4 @@ from the community.
 ## Contact
 
 Cüneyt Öztürk — Istanbul, Turkey
-`hello@studio-11.co`
+`hello@falsify.dev`

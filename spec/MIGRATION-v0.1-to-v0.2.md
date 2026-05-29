@@ -2,7 +2,7 @@
 
 **Status:** Stable. v0.2 freezes 2026-05-22 23:59 UTC.
 **License:** CC BY 4.0
-**Editor:** Cüneyt Öztürk · Studio 11
+**Editor:** Cüneyt Öztürk
 
 ---
 

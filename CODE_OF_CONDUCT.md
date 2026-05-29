@@ -42,7 +42,7 @@ or offline event.
 
 Instances of abusive, harassing, or otherwise unacceptable behavior
 may be reported by contacting the maintainer at
-`hello@studio-11.co`. All complaints will be reviewed and investigated
+`hello@falsify.dev`. All complaints will be reviewed and investigated
 promptly and fairly.
 
 Project maintainers are obligated to respect the privacy and

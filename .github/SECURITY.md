@@ -16,7 +16,7 @@ If you find a way to:
   `experiment.command` beyond what the user explicitly authored.
 
 **Please do not open a public issue.** Email the maintainer directly
-at `hello@studio-11.co`. A fix typically lands within 14 days; we'll
+at `hello@falsify.dev`. A fix typically lands within 14 days; we'll
 coordinate a disclosure window with you.
 
 ## What counts as a vulnerability

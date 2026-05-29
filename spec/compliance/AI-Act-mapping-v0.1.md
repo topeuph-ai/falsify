@@ -1,7 +1,7 @@
 # PRML v0.1 — EU AI Act Compliance Mapping
 
 **Working draft for legal & compliance review.**
-**Editor:** Studio 11 — `hello@studio-11.co`
+**Editor:** Cüneyt Öztürk — `hello@falsify.dev`
 **Date:** 2026-05-01
 **Spec under review:** [PRML v0.1](https://spec.falsify.dev/v0.1)
 **Regulation:** Regulation (EU) 2024/1689 of 13 June 2024 ("AI Act")
@@ -233,7 +233,7 @@ PRML does not replace these obligations. It makes them auditable.
 4. For SMEs invoking Article 62 derogations, can PRML manifests substitute for parts of the Annex IV documentation, given their compactness?
 5. Algorithm agility: when SHA-256 is deprecated (post-quantum era, est. 2030+), how does a 10-year retention obligation interact with hash migration?
 
-These questions are open. The spec author invites compliance lawyers to weigh in on the GitHub Discussion thread or via `hello@studio-11.co`.
+These questions are open. The spec author invites compliance lawyers to weigh in on the GitHub Discussion thread or via `hello@falsify.dev`.
 
 ---
 
@@ -259,4 +259,4 @@ The author's position is that PRML provides a defensible technical foundation fo
 
 ---
 
-*Document v0.1, drafted 2026-05-01 by Studio 11. Public review via GitHub Discussions on `studio-11-co/falsify` or `hello@studio-11.co`. CC BY 4.0.*
+*Document v0.1, drafted 2026-05-01 by Cüneyt Öztürk. Public review via GitHub Discussions on `studio-11-co/falsify` or `hello@falsify.dev`. CC BY 4.0.*

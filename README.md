@@ -137,7 +137,7 @@ Falsify is the reference implementation of **PRML v0.1** — Pre-Registered ML M
 - **Go:** [`impl/go/`](impl/go/) — third reference, ~450 LOC, hand-rolled, stdlib only
 - **Rust:** [`impl/rust/`](impl/rust/) — fourth reference, ~600 LOC, hand-rolled, two deps (`serde_json`, `sha2`)
 
-Hosted spec at [spec.falsify.dev/v0.1](https://spec.falsify.dev/v0.1). Public review thread at [GitHub Discussion #6](https://github.com/studio-11-co/falsify/discussions/6). Comments via `hello@studio-11.co`.
+Hosted spec at [spec.falsify.dev/v0.1](https://spec.falsify.dev/v0.1). Public review thread at [GitHub Discussion #6](https://github.com/studio-11-co/falsify/discussions/6). Comments via `hello@falsify.dev`.
 
 **Companion projects** (separate repos under `studio-11-co`, each MIT or CC0 licensed):
 

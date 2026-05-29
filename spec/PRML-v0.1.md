@@ -3,7 +3,7 @@
 **Version:** 0.1 (Draft)
 **Date:** 2026-05-01
 **Status:** Working Draft — Public Review
-**Editor:** Studio 11 \<hello@studio-11.co\>
+**Editor:** Cüneyt Öztürk \<hello@falsify.dev\>
 **Reference Implementation:** [falsify](https://github.com/studio-11-co/falsify) (MIT)
 **Canonical URL:** https://spec.falsify.dev/v0.1
 **License:** CC BY 4.0
@@ -31,7 +31,7 @@ including the EU AI Act (Regulation 2024/1689) Articles 12 and 18.
 
 This document is a working draft published for public review. It is **not** a
 finished standard. Comments are invited at
-`github.com/studio-11-co/falsify/discussions` or by email to `hello@studio-11.co`.
+`github.com/studio-11-co/falsify/discussions` or by email to `hello@falsify.dev`.
 
 The next planned revision (v0.2) will incorporate review feedback and freeze the
 canonicalization rules of §3.

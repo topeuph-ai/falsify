@@ -219,4 +219,4 @@ These are deliberately out of scope and remain v0.3+:
 
 ---
 
-*Working draft, CC BY 4.0. Comments via [GitHub Discussions](https://github.com/studio-11-co/falsify/discussions/6) or `hello@studio-11.co`.*
+*Working draft, CC BY 4.0. Comments via [GitHub Discussions](https://github.com/studio-11-co/falsify/discussions/6) or `hello@falsify.dev`.*
