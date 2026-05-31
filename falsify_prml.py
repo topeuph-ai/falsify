@@ -33,7 +33,7 @@ import os
 import re
 import sys
 
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 
 EXIT_PASS = 0
 EXIT_BAD = 2
@@ -67,10 +67,22 @@ def _require_yaml():
 # Canonicalisation — PRML v0.1 §4 (matches spec/test-vectors reference-target.py)
 # ─────────────────────────────────────────────────────────────────────────
 
+# PRML v0.1 §2 fixes `threshold` as float64: an integer-valued threshold MUST
+# canonicalize as a float ("1.0"), matching the JS/Go/Rust reference impls.
+# v0.2 relaxes threshold to int|float, so the coercion is v0.1-only.
+_FLOAT_FIELDS_V01 = ("threshold",)
+
+
 def canonicalize(manifest: dict) -> str:
     yaml = _require_yaml()
+    m = dict(manifest)
+    if m.get("version") == "prml/0.1":
+        for field in _FLOAT_FIELDS_V01:
+            v = m.get(field)
+            if isinstance(v, int) and not isinstance(v, bool):
+                m[field] = float(v)
     canonical = yaml.safe_dump(
-        manifest,
+        m,
         default_flow_style=False,
         sort_keys=True,
         width=float("inf"),

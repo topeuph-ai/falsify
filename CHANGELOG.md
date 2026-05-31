@@ -4,6 +4,12 @@ All notable changes to Falsification Engine are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com); version
 numbers follow [Semantic Versioning](https://semver.org).
 
+## [v0.3.1] — 2026-05-31
+
+### Fixed
+
+- **PRML CLI: integer-valued `threshold` now canonicalizes as a float in v0.1.** PRML v0.1 fixes `threshold` as float64, but the shipped `falsify` CLI emitted a bare integer (`threshold: 1`) when a manifest used an integer literal, producing a SHA-256 that disagreed with the JavaScript / Go / Rust reference implementations and the public registry (a spurious `TAMPERED`). It now coerces an integer-valued `threshold` to `1.0` for `prml/0.1`, matching the other implementations. v0.2 (where `threshold` is `int|float`) is unchanged, and all 20 locked conformance vectors still pass byte-for-byte. Regression test added in `tests/test_prml_cli.py`.
+
 ## [v0.3.0] — 2026-05-30
 
 The `falsify` command is now the **PRML reference CLI** — `lock` / `verify` / `hash` / `init` / `test-vectors` operating directly on a `*.prml.yaml` manifest, byte-equivalent to the JavaScript / Go / Rust reference implementations (passes all 20 conformance vectors). `pip install falsify` finally gives a tool that hashes and verifies PRML manifests.

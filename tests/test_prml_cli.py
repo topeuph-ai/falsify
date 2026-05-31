@@ -68,6 +68,49 @@ class PRMLCLIConformance(unittest.TestCase):
         self.assertEqual(falsify_prml.EXIT_TAMPERED, 3)
         self.assertEqual(falsify_prml.EXIT_FAIL, 10)
 
+    def test_v01_integer_threshold_canonicalizes_as_float(self) -> None:
+        # PRML v0.1 fixes `threshold` as float64. An integer-valued threshold
+        # (written as `1`, not `1.0`) MUST canonicalize as "1.0" so the hash
+        # matches the JS/Go/Rust reference impls and the public registry.
+        base = {
+            "version": "prml/0.1",
+            "claim_id": "01900000-0000-7000-8000-000000000000",
+            "created_at": "2026-05-01T12:00:00Z",
+            "metric": "accuracy",
+            "comparator": ">=",
+            "dataset": {
+                "id": "imagenet-val-2012",
+                "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            },
+            "seed": 42,
+            "producer": {"id": "acme.example"},
+        }
+        as_int = dict(base, threshold=1)
+        as_float = dict(base, threshold=1.0)
+        self.assertIn("threshold: 1.0", falsify_prml.canonicalize(as_int))
+        self.assertEqual(
+            falsify_prml.manifest_hash(as_int),
+            falsify_prml.manifest_hash(as_float),
+            msg="integer and float threshold must canonicalize identically in v0.1",
+        )
+        # Cross-impl anchor: this is the hash the JS/Go reference impls produce.
+        self.assertEqual(
+            falsify_prml.manifest_hash(as_int),
+            "444c5a0fcd43372d2255930c237249cf88949c70c24f9f9a695649c56e211919",
+        )
+
+    def test_v02_integer_threshold_stays_integer(self) -> None:
+        # v0.2 relaxes threshold to int|float; an integer threshold must NOT be
+        # coerced to float (it stays "1300"), so v0.1 coercion is version-gated.
+        m = {
+            "version": "prml/0.2",
+            "metric": "elo",
+            "comparator": ">=",
+            "threshold": 1300,
+        }
+        self.assertIn("threshold: 1300", falsify_prml.canonicalize(m))
+        self.assertNotIn("1300.0", falsify_prml.canonicalize(m))
+
 
 if __name__ == "__main__":
     unittest.main()
