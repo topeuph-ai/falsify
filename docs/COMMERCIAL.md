@@ -64,5 +64,5 @@ from the community.
 
 ## Contact
 
-Cüneyt Öztürk — Istanbul, Turkey
+Cüneyt Öztürk
 `hello@falsify.dev`

@@ -1,7 +1,7 @@
 # falsify launch playbook — Day 0
 
-**When:** The moment hackathon results are announced (April 28, ~19:45
-Turkey / 12:45 EST), regardless of outcome.
+**When:** The moment hackathon results are announced (April 28, ~12:45
+EST), regardless of outcome.
 
 **Same-day target:** 50% of this list.
 **Week 1 target:** 100%.

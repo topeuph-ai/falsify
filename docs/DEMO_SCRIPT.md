@@ -3,7 +3,7 @@
 ## Target
 
 90-second run-time, 1080p60, silent-compatible with captions burned
-in. Human voiceover preferred — the Turkish creator's voice reads
+in. Human voiceover preferred — the creator's voice reads
 cleaner at this pace than any TTS. Fallback: ElevenLabs "Adam"
 (lower register, slower). No on-camera presenter. Designed for
 end-to-end offline recording; no live typing.
