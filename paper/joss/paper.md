@@ -15,7 +15,7 @@ authors:
     corresponding: true
     affiliation: 1
 affiliations:
-  - name: Independent researcher, Istanbul, Türkiye
+  - name: Independent researcher
     index: 1
 date: 18 May 2026
 bibliography: paper.bib
