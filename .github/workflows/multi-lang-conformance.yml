@@ -1,9 +1,9 @@
 name: Multi-language conformance
 
 # Asserts that every reference implementation (Python, Node.js, Go, Rust)
-# reproduces the v0.1 normative suite (12 vectors) AND the v0.2 candidate
+# reproduces the v0.1 normative suite (13 vectors) AND the v0.2 candidate
 # suite (8 vectors) byte-for-byte. Total verification surface per run:
-# 4 implementations × 20 vectors = 80 byte-for-byte agreements.
+# 4 implementations × 21 vectors = 84 byte-for-byte agreements.
 #
 # A failure in any language is a portability regression. Treat it as a
 # specification-level event: either the canonicalizer in that language
@@ -48,16 +48,16 @@ jobs:
       - name: Install pyyaml
         run: pip install pyyaml
 
-      - name: Conformance — v0.1 normative suite (12 vectors)
+      - name: Conformance — v0.1 normative suite (13 vectors)
         run: |
           python3 - <<'PY'
           import json, hashlib, sys
           sys.path.insert(0, '.')
-          import falsify
+          import falsify_prml
           vectors = json.load(open('spec/test-vectors/v0.1/test-vectors.json'))
           fails = 0
           for v in vectors:
-              produced = falsify._canonicalize(v['input'])
+              produced = falsify_prml.canonicalize(v['input'])
               h = hashlib.sha256(produced.encode('utf-8')).hexdigest()
               ok = produced == v['canonical'] and h == v['hash']
               status = 'PASS' if ok else 'FAIL'
@@ -73,11 +73,11 @@ jobs:
           python3 - <<'PY'
           import json, hashlib, sys
           sys.path.insert(0, '.')
-          import falsify
+          import falsify_prml
           vectors = json.load(open('spec/test-vectors/v0.2/test-vectors.json'))
           fails = 0
           for v in vectors:
-              produced = falsify._canonicalize(v['input'])
+              produced = falsify_prml.canonicalize(v['input'])
               h = hashlib.sha256(produced.encode('utf-8')).hexdigest()
               ok = produced == v['canonical'] and h == v['hash']
               status = 'PASS' if ok else 'FAIL'
@@ -98,7 +98,7 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Conformance — v0.1 normative suite (12 vectors)
+      - name: Conformance — v0.1 normative suite (13 vectors)
         run: node impl/js/falsify.js test-vectors spec/test-vectors/v0.1/test-vectors.json
 
       - name: Conformance — v0.2 candidate suite (8 vectors)
@@ -119,7 +119,7 @@ jobs:
           cd impl/go
           go build -o falsify-go ./falsify.go
 
-      - name: Conformance — v0.1 normative suite (12 vectors)
+      - name: Conformance — v0.1 normative suite (13 vectors)
         run: ./impl/go/falsify-go test-vectors spec/test-vectors/v0.1/test-vectors.json
 
       - name: Conformance — v0.2 candidate suite (8 vectors)
@@ -150,7 +150,7 @@ jobs:
           cd impl/rust
           cargo build --release --quiet
 
-      - name: Conformance — v0.1 normative suite (12 vectors)
+      - name: Conformance — v0.1 normative suite (13 vectors)
         run: ./impl/rust/target/release/falsify-rs test-vectors spec/test-vectors/v0.1/test-vectors.json
 
       - name: Conformance — v0.2 candidate suite (8 vectors)
@@ -180,4 +180,4 @@ jobs:
             echo "    in spec/analysis/canonicalization-portability-v0.1.md."
             exit 1
           fi
-          echo "::notice::All four reference implementations passed all 20 vectors byte-for-byte."
+          echo "::notice::All four reference implementations passed all 21 vectors byte-for-byte."
