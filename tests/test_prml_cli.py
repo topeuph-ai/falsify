@@ -48,7 +48,7 @@ class PRMLCLIConformance(unittest.TestCase):
                     msg=f"{vf.parent.name}/{v.get('id', '?')}: hash mismatch "
                         f"(expected {expected[:12]}, got {got[:12]})",
                 )
-        self.assertGreaterEqual(total, 20, "expected at least 20 conformance vectors")
+        self.assertGreaterEqual(total, 21, "expected at least 21 conformance vectors")
 
     def test_canonical_bytes_match(self) -> None:
         for vf in VECTOR_FILES:

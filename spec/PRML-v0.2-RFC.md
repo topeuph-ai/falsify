@@ -106,7 +106,7 @@ revocation_reason: "dataset_compromised"
 
 ### P-04 — Conformance vector format
 
-**Problem.** v0.1's "12 conformance vectors" are documented in prose. Future implementations cannot mechanically run them.
+**Problem.** v0.1's "13 conformance vectors" are documented in prose. Future implementations cannot mechanically run them.
 
 **Proposal.** Standardise the conformance vector format as a directory of `<vector_name>/manifest.yaml` and `<vector_name>/expected_hash.txt`. Tooling SHOULD provide a `falsify conform <impl-binary>` command that runs every vector through a target implementation and reports byte/hash match.
 

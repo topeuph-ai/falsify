@@ -2,7 +2,7 @@
 Generate v0.2 candidate test vectors (TV-013 to TV-018).
 
 These vectors use the v0.1 grammar (PyYAML safe_dump canonicalization, same as
-the existing 12 vectors) but exercise edge cases not covered in the normative
+the existing 13 vectors) but exercise edge cases not covered in the normative
 v0.1 suite. They are *candidates* for promotion to v0.2 normative status when
 the spec freeze lands on 2026-05-22.
 

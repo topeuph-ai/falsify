@@ -16,8 +16,8 @@ This roadmap is directional, not a commitment. Items move as the community uses 
 Since the v0.1.0 release on 2026-04-21:
 
 - **PRML v0.1 specification** at [spec.falsify.dev/v0.1](https://spec.falsify.dev/v0.1) — RFC-style, CC BY 4.0, 18 pages.
-- **Conformance test suite** — 12 v0.1 normative vectors under [`spec/test-vectors/v0.1/`](spec/test-vectors/v0.1/) plus 8 v0.2 candidate vectors under [`spec/test-vectors/v0.2/`](spec/test-vectors/v0.2/) (20 vectors total, all locked with SHA-256 digests).
-- **Four reference implementations** — Python (PyYAML), Node.js (~400 LOC), Go (~450 LOC), Rust (~600 LOC); all four pass 20/20 vectors byte-for-byte. CI verifies 4 × 20 = 80 byte-for-byte agreements per push. See [`impl/`](impl/).
+- **Conformance test suite** — 13 v0.1 normative vectors under [`spec/test-vectors/v0.1/`](spec/test-vectors/v0.1/) plus 8 v0.2 candidate vectors under [`spec/test-vectors/v0.2/`](spec/test-vectors/v0.2/) (21 vectors total, all locked with SHA-256 digests).
+- **Four reference implementations** — Python (PyYAML), Node.js (~400 LOC), Go (~450 LOC), Rust (~600 LOC); all four pass 20/21 vectors byte-for-byte. CI verifies 4 × 20 = 84 byte-for-byte agreements per push. See [`impl/`](impl/).
 - **GitHub Action** [`falsify-verify`](.github/actions/falsify-verify) — composite action that scans `**/*.prml.yaml`, verifies against sidecars, fails on tampered or falsified.
 - **EU AI Act mapping document** — Articles 12, 17, 18, 50, 72, 73 with field-level bindings; see [`spec/compliance/AI-Act-mapping-v0.1.md`](spec/compliance/AI-Act-mapping-v0.1.md).
 - **arXiv preprint** — 14-page LaTeX working draft, CC BY 4.0; cs.CR submission in flight. See [`spec/paper/`](spec/paper/).
@@ -97,7 +97,7 @@ Honest scope boundaries — unchanged from v0.1.0:
 
 - For **specification** changes (format, canonicalization, fields, threat model): comment in [GitHub Discussion #6](https://github.com/studio-11-co/falsify/discussions/6) before the v0.2 freeze on 2026-05-22. The five open RFC questions in [`spec/v0.2/ROADMAP.md`](spec/v0.2/ROADMAP.md) are where outside opinion carries the most weight right now.
 - For **CLI** changes (UX, integrations, performance): open a GitHub issue with the `roadmap` label describing the use case you need.
-- For a **third-language reference implementation** (Rust, Go, Java, Swift, OCaml…): the [12 conformance vectors](spec/test-vectors/v0.1/) are the contract. If your canonicalizer reproduces all twelve byte-for-byte, your implementation is conformant. Open a PR against `impl/<language>/`.
+- For a **third-language reference implementation** (Rust, Go, Java, Swift, OCaml…): the [13 conformance vectors](spec/test-vectors/v0.1/) are the contract. If your canonicalizer reproduces all twelve byte-for-byte, your implementation is conformant. Open a PR against `impl/<language>/`.
 - For private or commercial inquiries, contact the maintainer directly: email in [`.github/SECURITY.md`](.github/SECURITY.md), or `hello@falsify.dev`.
 
 ---

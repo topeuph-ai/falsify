@@ -171,7 +171,7 @@ notes: |
   Prospective dataset frozen 2026-03-31 23:59 UTC.
 </code></pre>
 
-<p>The auditor in 2027 doesn't need access to your evaluation harness. They need the manifest, the sidecar, and any of the four <a href="https://github.com/studio-11-co/falsify">reference implementations</a> (Python, JavaScript, Go, Rust — all byte-equivalent on the 20 conformance vectors (12 v0.1 + 8 v0.2)). They recompute the canonical bytes, recompute the hash, compare. Integrity verification requires no trust in the producer's tooling.</p>
+<p>The auditor in 2027 doesn't need access to your evaluation harness. They need the manifest, the sidecar, and any of the four <a href="https://github.com/studio-11-co/falsify">reference implementations</a> (Python, JavaScript, Go, Rust — all byte-equivalent on the 21 conformance vectors (13 v0.1 + 8 v0.2)). They recompute the canonical bytes, recompute the hash, compare. Integrity verification requires no trust in the producer's tooling.</p>
 
 <h2>The amendment chain replaces the "we re-ran it" email</h2>
 <p>Real evaluations get re-run. New holdout sets ship. Distribution shifts force recalibration. The audit-killing question is <em>which version of the claim was authoritative on a given date</em>.</p>

@@ -20,7 +20,7 @@ Default: option 1. Picks up from the v0.1 paper's title pattern; signals what's 
 
 ## Abstract (target ≤ 200 words)
 
-> PRML v0.1 (Öztürk, 2026) introduced a content-addressed YAML serialisation that binds a pre-registered ML evaluation claim to a SHA-256 hash. The format covered the canonical case — a single batch evaluation against a fixed threshold — and deliberately deferred three classes of claim: live streaming evaluations, post-publication retractions, and runtime execution attestation. v0.2, frozen on 2026-05-22 after a 14-day public comment window, addresses these gaps additively. We introduce four optional fields (`prml_mode`, `value_method`, `runner_attestation`, `revoked_at` / `revocation_reason`) and one structural change (the patent non-assertion grant moves from the appendix into the preamble). Every v0.1 manifest remains a valid v0.2 manifest, and the canonicalisation rules preserve hash-equivalence for v0.1-shaped inputs across the four reference implementations. We report the 27 substantive comments received during the RFC window, the 11 changes incorporated and 16 deferred, and a calibration study against the 12 v0.1 conformance vectors plus 8 new v0.2 vectors. The spec is licensed CC BY 4.0; the reference implementations are MIT; the patent non-assertion grant is reproduced verbatim in §1.5.
+> PRML v0.1 (Öztürk, 2026) introduced a content-addressed YAML serialisation that binds a pre-registered ML evaluation claim to a SHA-256 hash. The format covered the canonical case — a single batch evaluation against a fixed threshold — and deliberately deferred three classes of claim: live streaming evaluations, post-publication retractions, and runtime execution attestation. v0.2, frozen on 2026-05-22 after a 14-day public comment window, addresses these gaps additively. We introduce four optional fields (`prml_mode`, `value_method`, `runner_attestation`, `revoked_at` / `revocation_reason`) and one structural change (the patent non-assertion grant moves from the appendix into the preamble). Every v0.1 manifest remains a valid v0.2 manifest, and the canonicalisation rules preserve hash-equivalence for v0.1-shaped inputs across the four reference implementations. We report the 27 substantive comments received during the RFC window, the 11 changes incorporated and 16 deferred, and a calibration study against the 13 v0.1 conformance vectors plus 8 new v0.2 vectors. The spec is licensed CC BY 4.0; the reference implementations are MIT; the patent non-assertion grant is reproduced verbatim in §1.5.
 
 ---
 
@@ -65,7 +65,7 @@ For each addition: motivation paragraph → schema diff → byte-level canonical
 ### §4 Backwards compatibility (≈1 page)
 
 - §4.1 The non-negotiable property: any v0.1 manifest produces the same hash under v0.2 canonicalisation rules
-- §4.2 Empirical check: all 12 v0.1 vectors run against the patched v0.2 reference implementations; results table
+- §4.2 Empirical check: all 13 v0.1 vectors run against the patched v0.2 reference implementations; results table
 - §4.3 What this rules out: any v0.2 change that requires re-canonicalising v0.1 inputs is rejected at design time
 
 ### §5 The RFC process itself (≈2 pages — methodological)
@@ -82,7 +82,7 @@ For each addition: motivation paragraph → schema diff → byte-level canonical
 
 - §6.1 Patches to falsify (Python), prml-js (Node), prml-go, prml-rust
 - §6.2 Lines of diff per implementation
-- §6.3 Conformance test results: 12 v0.1 vectors + 8 v0.2 vectors against each impl
+- §6.3 Conformance test results: 13 v0.1 vectors + 8 v0.2 vectors against each impl
 - §6.4 Inspect AI upstream RFC status
 - §6.5 falsify-inspect adapter — operating below the upstream change in case it doesn't land
 
@@ -134,7 +134,7 @@ Same shape as v0.1 conclusion: the cost of adoption is one hash function call; t
 - Fig 2 — streaming-mode timeline showing `pre_registered_from/to` window vs batch `pre_registered` (§3.1)
 - Fig 3 — revocation status overlay on a registry page (§3.3)
 - Tab 1 — full canonicalisation rule list for v0.2 (§3 intro)
-- Tab 2 — backwards-compatibility check: 12 v0.1 vectors × 4 implementations × 2 spec versions (§4.2)
+- Tab 2 — backwards-compatibility check: 13 v0.1 vectors × 4 implementations × 2 spec versions (§4.2)
 - Tab 3 — RFC comment disposition by proposal (§5.2)
 - Tab 4 — implementation diff summary (§6.2)
 

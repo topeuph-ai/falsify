@@ -520,7 +520,7 @@ Each vector defines:
 3. The **lowercase hex SHA-256** of those bytes.
 
 An implementation conforms to PRML v0.1 if and only if it reproduces all
-12 vectors exactly. The vectors cover:
+13 vectors exactly. The vectors cover:
 
 | ID | Property exercised |
 |---|---|
@@ -550,7 +550,7 @@ Conformance is enforceable via the falsify reference test suite
 ## Change Log
 
 - **v0.1 (2026-05-01)** — Initial public draft.
-- **v0.1 (2026-05-01)** — Test vector suite (12 vectors) published in
+- **v0.1 (2026-05-01)** — Test vector suite (13 vectors) published in
   `spec/test-vectors/v0.1/`; Appendix B finalized.
 
 ---

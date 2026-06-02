@@ -4,6 +4,12 @@ All notable changes to Falsification Engine are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com); version
 numbers follow [Semantic Versioning](https://semver.org).
 
+## [v0.3.3] — 2026-06-02
+
+### Fixed
+
+- **Documentation: conformance-vector count corrected to 21 (13 v0.1 + 8 v0.2) across all surfaces.** The v0.3.2 release added TV-013 but several docs still read "20 / 12 v0.1" — the README spec-artifacts list and status banner, the spec pages (`spec/index.html`, `PRML-v0.1.md`, `PRML-v0.2-RFC.md`, demo, editor, schema, iso-42001, eval-audit), the JOSS paper, ROADMAPs, and `CITATION.cff`. All now state 21 / 13. Also refreshed the README test badge (571 passing) and the `falsify --version` line (0.3.3). Frozen preprints (`*.tex`) and the historical canonicalization-portability analysis are intentionally left at their as-published counts. Docs only; no behaviour change.
+
 ## [v0.3.2] — 2026-06-02
 
 ### Added

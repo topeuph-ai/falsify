@@ -19,7 +19,7 @@
 | 5 | `tolerance` field | absent (bit-exact compare) | **optional, float**; verifier uses `\|observed - threshold\| ≤ tolerance` when present | Hardware non-determinism in floats |
 | 6 | `claims:` sequence | one (metric, comparator, threshold) per manifest | **optional sequence** of claim tuples sharing dataset + seed | Multi-metric reports without manifest explosion |
 | 7 | `producer.signature` | optional | **mandatory for high-risk Annex III** systems via `producer.tier: high-risk` | EU AI Act Article 15 cybersecurity requirements |
-| 8 | Canonicalization grammar | English prose + 12 vectors | **formal ABNF grammar in spec §3** | Spec implementable from text alone |
+| 8 | Canonicalization grammar | English prose + 13 vectors | **formal ABNF grammar in spec §3** | Spec implementable from text alone |
 | 9 | Test vectors | 12 | **24** (TV-013 → TV-024 cover Unicode normalisation, control chars, signature roundtrip, multi-claim, tolerance, prior_hash chains of length 5+) | Coverage for new fields and edge cases |
 | 10 | Sidecar format | `<name>.prml.sha256` | **`<name>.prml.sha256` unchanged** + new `<name>.prml.sig` for signatures | Backward-compatible signature attachment |
 

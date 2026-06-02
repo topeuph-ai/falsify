@@ -5,7 +5,7 @@ abstract: >-
   PRML is an open CC BY 4.0 specification for committing machine-learning
   evaluation claims to a SHA-256 hash before the experiment runs. falsify
   is the Python reference implementation that produces canonical bytes
-  per the spec's §4 rules and validates against 12 v0.1 conformance
+  per the spec's §4 rules and validates against 13 v0.1 conformance
   vectors plus 8 v0.2 vectors. The repository contains the specification
   text, four reference implementations (Python, JS, Go, Rust) producing
   byte-equivalent output, the conformance vector set, formal JSON

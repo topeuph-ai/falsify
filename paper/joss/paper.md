@@ -37,8 +37,8 @@ text and a SHA-256 implementation, without producer trust or vendor runtime.
 The reference implementation is a single-file Python 3.10+ CLI in
 approximately 1,300 lines of code with one runtime dependency (PyYAML).
 Three companion implementations in JavaScript [@falsify_js], Go and Rust
-reproduce byte-equivalent output across a suite of 20 conformance vectors
-(12 v0.1 normative plus 8 v0.2 candidate), so a reader of any claim can
+reproduce byte-equivalent output across a suite of 21 conformance vectors
+(13 v0.1 normative plus 8 v0.2 candidate), so a reader of any claim can
 re-derive the SHA-256 offline using the language of their choice. A
 content-addressed public registry, three regulatory crosswalks (EU AI Act
 Article 12, NIST AI Risk Management Framework 1.0, ISO/IEC 42001:2023), a
@@ -98,7 +98,7 @@ The repository hosts:
 - **Reference implementation** (`falsify.py`): the Python CLI, ~1,300 LOC
   including the canonicalizer, the verifier, the registry-anchor flow, and
   diagnostic subcommands.
-- **Test vectors** (`spec/test-vectors/v0.1/`): 12 conformance vectors with
+- **Test vectors** (`spec/test-vectors/v0.1/`): 13 conformance vectors with
   locked SHA-256 digests; the multi-language CI runs these against four
   reference implementations on every push.
 - **Companion projects** as separate repositories: `falsify-js` (JavaScript
