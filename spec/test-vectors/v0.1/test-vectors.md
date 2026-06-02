@@ -35,7 +35,7 @@ Implementations in languages other than Python (Rust, Go, TypeScript, etc.) MUST
 | `TV-010` | pass@k metric for code generation | `60f8eb35dd21` |
 | `TV-011` | AUROC with low threshold | `91104f15ee95` |
 | `TV-012` | MAE for regression | `ec1d18427451` |
-| `TV-013` | Integer-valued threshold | `08c3af639228` |
+| `TV-013` | Integer-valued threshold | `cb9683ce70f5` |
 
 ---
 
@@ -626,7 +626,7 @@ comparator: '>='
 threshold: 90
 dataset:
   id: eval-2k
-  hash: abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234a
+  hash: abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234
 seed: 42
 producer:
   id: falsify.dev
@@ -639,7 +639,7 @@ claim_id: 01900000-0000-7000-8000-00000000000a
 comparator: '>='
 created_at: '2026-06-01T12:00:00Z'
 dataset:
-  hash: abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234a
+  hash: abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234
   id: eval-2k
 metric: accuracy_pct
 producer:
@@ -652,7 +652,7 @@ version: prml/0.1
 **Expected hash (lowercase hex SHA-256 of canonical bytes):**
 
 ```
-08c3af639228e49d42fc49c47ccce7acdfef6a34398628c3ce5b2faff3f399a5
+cb9683ce70f5d45d407b827d0b9223d342ebd3600c560ec6a9e76dd336bf007d
 ```
 
 ---

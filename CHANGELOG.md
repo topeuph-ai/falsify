@@ -4,6 +4,12 @@ All notable changes to Falsification Engine are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com); version
 numbers follow [Semantic Versioning](https://semver.org).
 
+## [v0.3.4] — 2026-06-02
+
+### Fixed
+
+- **Conformance vector TV-013 had a malformed `dataset.hash` (65 chars, not 64).** PRML v0.1 §2.3.2 fixes `dataset.hash` as 64 lowercase hex; TV-013's value carried one extra character. The canonicalization/hash tests never validated it, so it slipped through, but `validate_manifest` (Python and JS reference impls) correctly rejects it. Corrected to a valid 64-hex value and regenerated the suite; TV-013's hash changes from `08c3af63…` to `cb9683ce…`. All four reference implementations reproduce the new hash byte-for-byte, and `validateManifest` now accepts every v0.1 vector input. The integer→float threshold coercion TV-013 was added to lock is unchanged (`threshold: 90` still canonicalizes as `90.0`).
+
 ## [v0.3.3] — 2026-06-02
 
 ### Fixed

@@ -300,14 +300,14 @@
       "threshold": 90,
       "dataset": {
         "id": "eval-2k",
-        "hash": "abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234a"
+        "hash": "abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234"
       },
       "seed": 42,
       "producer": {
         "id": "falsify.dev"
       }
     },
-    "canonical": "claim_id: 01900000-0000-7000-8000-00000000000a\ncomparator: '>='\ncreated_at: '2026-06-01T12:00:00Z'\ndataset:\n  hash: abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234a\n  id: eval-2k\nmetric: accuracy_pct\nproducer:\n  id: falsify.dev\nseed: 42\nthreshold: 90.0\nversion: prml/0.1\n",
-    "hash": "08c3af639228e49d42fc49c47ccce7acdfef6a34398628c3ce5b2faff3f399a5"
+    "canonical": "claim_id: 01900000-0000-7000-8000-00000000000a\ncomparator: '>='\ncreated_at: '2026-06-01T12:00:00Z'\ndataset:\n  hash: abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234\n  id: eval-2k\nmetric: accuracy_pct\nproducer:\n  id: falsify.dev\nseed: 42\nthreshold: 90.0\nversion: prml/0.1\n",
+    "hash": "cb9683ce70f5d45d407b827d0b9223d342ebd3600c560ec6a9e76dd336bf007d"
   }
 ]

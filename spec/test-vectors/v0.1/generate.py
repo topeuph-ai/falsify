@@ -307,7 +307,7 @@ VECTORS.append({
         "threshold": 90,
         "dataset": {
             "id": "eval-2k",
-            "hash": "abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234a",
+            "hash": "abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234",
         },
         "seed": 42,
         "producer": {"id": "falsify.dev"},
