@@ -4,7 +4,7 @@ A single-file Node.js implementation of PRML v0.1, demonstrating that the canoni
 
 **Status:** working draft, intended as portability evidence rather than a production tool. The Python reference implementation (`falsify`, in the repo root) remains the recommended runtime.
 
-**Result:** 12 / 12 v0.1 conformance vectors pass byte-for-byte.
+**Result:** 13 / 13 v0.1 conformance vectors pass byte-for-byte.
 
 ---
 

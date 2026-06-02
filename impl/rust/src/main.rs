@@ -1,6 +1,6 @@
 // falsify-rs — PRML v0.1 fourth reference implementation in Rust.
 //
-// Reproduces all twelve v0.1 conformance vectors and all six v0.2
+// Reproduces all thirteen v0.1 conformance vectors and all eight v0.2
 // candidate vectors byte-for-byte, including the small-magnitude float
 // rendering required by Finding 4 (TV-018).
 //

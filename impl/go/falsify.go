@@ -1,7 +1,7 @@
 // Package main — falsify-go: third reference implementation of PRML v0.1.
 //
 // Single-file Go implementation. Standard library only.
-// Reproduces all 12 PRML v0.1 conformance vectors byte-for-byte.
+// Reproduces all 13 PRML v0.1 conformance vectors byte-for-byte.
 //
 // Spec:    https://spec.falsify.dev/v0.1
 // Vectors: https://github.com/studio-11-co/falsify/tree/main/spec/test-vectors

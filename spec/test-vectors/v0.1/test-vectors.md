@@ -15,7 +15,7 @@ These test vectors define the canonical-bytes-and-hash mapping for PRML v0.1 man
 1. The exact canonical UTF-8 byte sequence shown under **Canonical bytes**, and
 2. The exact lowercase hex SHA-256 digest shown under **Expected hash**.
 
-Implementations in languages other than Python (Rust, Go, TypeScript, etc.) MUST reproduce all 12 vectors. Discrepancies indicate either an implementation bug or a specification ambiguity that v0.2 must resolve.
+Implementations in languages other than Python (Rust, Go, TypeScript, etc.) MUST reproduce all 13 vectors. Discrepancies indicate either an implementation bug or a specification ambiguity that v0.2 must resolve.
 
 ---
 
@@ -35,6 +35,7 @@ Implementations in languages other than Python (Rust, Go, TypeScript, etc.) MUST
 | `TV-010` | pass@k metric for code generation | `60f8eb35dd21` |
 | `TV-011` | AUROC with low threshold | `91104f15ee95` |
 | `TV-012` | MAE for regression | `ec1d18427451` |
+| `TV-013` | Integer-valued threshold | `08c3af639228` |
 
 ---
 
@@ -610,6 +611,52 @@ ec1d18427451f0bd7886c6ac4027f07a779f899035c27ea52cb2765212866424
 
 ---
 
+## TV-013 — Integer-valued threshold
+
+Threshold supplied as a bare integer (90, not 90.0). PRML v0.1 §2 fixes threshold as float64, so it MUST canonicalize as `90.0`. Tests integer-to-float coercion in JSON parsers that distinguish int from float (Python, Rust).
+
+**Input (logical YAML, key order is irrelevant):**
+
+```yaml
+version: prml/0.1
+claim_id: 01900000-0000-7000-8000-00000000000a
+created_at: '2026-06-01T12:00:00Z'
+metric: accuracy_pct
+comparator: '>='
+threshold: 90
+dataset:
+  id: eval-2k
+  hash: abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234a
+seed: 42
+producer:
+  id: falsify.dev
+```
+
+**Canonical bytes (UTF-8, exact):**
+
+```yaml
+claim_id: 01900000-0000-7000-8000-00000000000a
+comparator: '>='
+created_at: '2026-06-01T12:00:00Z'
+dataset:
+  hash: abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234a
+  id: eval-2k
+metric: accuracy_pct
+producer:
+  id: falsify.dev
+seed: 42
+threshold: 90.0
+version: prml/0.1
+```
+
+**Expected hash (lowercase hex SHA-256 of canonical bytes):**
+
+```
+08c3af639228e49d42fc49c47ccce7acdfef6a34398628c3ce5b2faff3f399a5
+```
+
+---
+
 ## Invariants verified
 
 - `TV-001.hash` == `TV-002.hash` (key-ordering invariance): `True`
@@ -620,7 +667,7 @@ ec1d18427451f0bd7886c6ac4027f07a779f899035c27ea52cb2765212866424
 
 ## Implementer checklist
 
-Run all 12 vectors through your canonicalizer + SHA-256. For each, assert:
+Run all 13 vectors through your canonicalizer + SHA-256. For each, assert:
 
 ```
 assert sha256(canonicalize(input_spec)) == expected_hash

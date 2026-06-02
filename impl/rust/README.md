@@ -4,7 +4,7 @@ A Rust implementation of PRML v0.1 demonstrating that the canonicalization is im
 
 **Status:** working draft, intended as portability evidence rather than a production tool. The Python reference implementation (`falsify`, in the repo root) remains the recommended runtime.
 
-**Result:** 12 / 12 v0.1 vectors pass byte-for-byte. 6 / 6 v0.2 candidate vectors pass byte-for-byte (including TV-018, the small-magnitude-float case that surfaced Finding 4).
+**Result:** 13 / 13 v0.1 vectors pass byte-for-byte. 8 / 8 v0.2 candidate vectors pass byte-for-byte (including TV-018, the small-magnitude-float case that surfaced Finding 4).
 
 ---
 

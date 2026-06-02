@@ -286,5 +286,28 @@
     },
     "canonical": "claim_id: 01900000-0000-7000-8000-000000000009\ncomparator: <=\ncreated_at: '2026-09-01T15:00:00Z'\ndataset:\n  hash: 9999888877776666555544443333222211110000aaaaffffeeeeddddccccbbbb\n  id: boston-housing\nmetric: mae\nproducer:\n  id: studio-11.co\nseed: 1\nthreshold: 2.5\nversion: prml/0.1\n",
     "hash": "ec1d18427451f0bd7886c6ac4027f07a779f899035c27ea52cb2765212866424"
+  },
+  {
+    "id": "TV-013",
+    "title": "Integer-valued threshold",
+    "description": "Threshold supplied as a bare integer (90, not 90.0). PRML v0.1 §2 fixes threshold as float64, so it MUST canonicalize as `90.0`. Tests integer-to-float coercion in JSON parsers that distinguish int from float (Python, Rust).",
+    "input": {
+      "version": "prml/0.1",
+      "claim_id": "01900000-0000-7000-8000-00000000000a",
+      "created_at": "2026-06-01T12:00:00Z",
+      "metric": "accuracy_pct",
+      "comparator": ">=",
+      "threshold": 90,
+      "dataset": {
+        "id": "eval-2k",
+        "hash": "abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234a"
+      },
+      "seed": 42,
+      "producer": {
+        "id": "falsify.dev"
+      }
+    },
+    "canonical": "claim_id: 01900000-0000-7000-8000-00000000000a\ncomparator: '>='\ncreated_at: '2026-06-01T12:00:00Z'\ndataset:\n  hash: abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234a\n  id: eval-2k\nmetric: accuracy_pct\nproducer:\n  id: falsify.dev\nseed: 42\nthreshold: 90.0\nversion: prml/0.1\n",
+    "hash": "08c3af639228e49d42fc49c47ccce7acdfef6a34398628c3ce5b2faff3f399a5"
   }
 ]

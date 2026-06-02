@@ -5,7 +5,17 @@ import json
 from textwrap import indent
 
 def canonicalize(spec):
-    """Match falsify._canonicalize exactly."""
+    """Match falsify._canonicalize exactly.
+
+    PRML v0.1 §2 fixes `threshold` as float64: an integer-valued threshold
+    (e.g. 90) MUST canonicalize as a float ("90.0"), matching the
+    Python/JS/Go/Rust reference impls. v0.2 relaxes threshold to int|float.
+    """
+    spec = dict(spec)
+    if spec.get("version") == "prml/0.1":
+        t = spec.get("threshold")
+        if isinstance(t, int) and not isinstance(t, bool):
+            spec["threshold"] = float(t)
     return yaml.safe_dump(
         spec,
         sort_keys=True,
@@ -283,6 +293,27 @@ VECTORS.append({
     },
 })
 
+# TV-013: Integer-valued threshold must canonicalize as float64
+VECTORS.append({
+    "id": "TV-013",
+    "title": "Integer-valued threshold",
+    "description": "Threshold supplied as a bare integer (90, not 90.0). PRML v0.1 §2 fixes threshold as float64, so it MUST canonicalize as `90.0`. Tests integer-to-float coercion in JSON parsers that distinguish int from float (Python, Rust).",
+    "spec": {
+        "version": "prml/0.1",
+        "claim_id": "01900000-0000-7000-8000-00000000000a",
+        "created_at": "2026-06-01T12:00:00Z",
+        "metric": "accuracy_pct",
+        "comparator": ">=",
+        "threshold": 90,
+        "dataset": {
+            "id": "eval-2k",
+            "hash": "abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234a",
+        },
+        "seed": 42,
+        "producer": {"id": "falsify.dev"},
+    },
+})
+
 
 def to_repr(spec):
     """Pretty-print the input dict as readable YAML for the doc (NOT canonical)."""
@@ -325,7 +356,7 @@ out.append("")
 out.append("1. The exact canonical UTF-8 byte sequence shown under **Canonical bytes**, and")
 out.append("2. The exact lowercase hex SHA-256 digest shown under **Expected hash**.")
 out.append("")
-out.append("Implementations in languages other than Python (Rust, Go, TypeScript, etc.) MUST reproduce all 12 vectors. Discrepancies indicate either an implementation bug or a specification ambiguity that v0.2 must resolve.")
+out.append(f"Implementations in languages other than Python (Rust, Go, TypeScript, etc.) MUST reproduce all {len(VECTORS)} vectors. Discrepancies indicate either an implementation bug or a specification ambiguity that v0.2 must resolve.")
 out.append("")
 out.append("---")
 out.append("")
@@ -376,7 +407,7 @@ out.append("---")
 out.append("")
 out.append("## Implementer checklist")
 out.append("")
-out.append("Run all 12 vectors through your canonicalizer + SHA-256. For each, assert:")
+out.append(f"Run all {len(VECTORS)} vectors through your canonicalizer + SHA-256. For each, assert:")
 out.append("")
 out.append("```")
 out.append("assert sha256(canonicalize(input_spec)) == expected_hash")

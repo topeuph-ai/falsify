@@ -20,14 +20,14 @@ TAMPERED  (exit 3)
 
 No install? Verify any manifest in-browser at [registry.falsify.dev](https://registry.falsify.dev). Byte-equivalent reference CLIs also ship for JS (`npm i -g falsify-js`), Go, and Rust.
 
-4 reference implementations (Python, JavaScript, Go, Rust) byte-equivalent on all 20 conformance vectors (12 v0.1 stable + 8 v0.2). PRML v0.2 frozen 2026-05-22. The same day, Lock #2 (a public hypothesis on the spec's own distribution, target ≥3 external contributors in 14 days) resolved at 0/3. The mechanism worked, the post-mortem is at [falsify.dev/notes/lock-2-postmortem](https://falsify.dev/notes/lock-2-postmortem/). Designed for ML eval rigor. Maps to EU AI Act Article 12 evidence as a side effect.
+4 reference implementations (Python, JavaScript, Go, Rust) byte-equivalent on all 21 conformance vectors (13 v0.1 stable + 8 v0.2). PRML v0.2 frozen 2026-05-22. The same day, Lock #2 (a public hypothesis on the spec's own distribution, target ≥3 external contributors in 14 days) resolved at 0/3. The mechanism worked, the post-mortem is at [falsify.dev/notes/lock-2-postmortem](https://falsify.dev/notes/lock-2-postmortem/). Designed for ML eval rigor. Maps to EU AI Act Article 12 evidence as a side effect.
 
 > **Pre-registration + CI for AI-agent claims.** Lock the claim and threshold with SHA-256 *before* running the experiment — or the result doesn't count.
 
 ![CI](https://github.com/studio-11-co/falsify/actions/workflows/falsify.yml/badge.svg)
 ![Multi-lang Conformance](https://github.com/studio-11-co/falsify/actions/workflows/multi-lang-conformance.yml/badge.svg)
 ![PyPI](https://img.shields.io/pypi/v/falsify?color=brightgreen&label=pypi)
-![coverage](https://img.shields.io/badge/tests-564%20passing-brightgreen)
+![coverage](https://img.shields.io/badge/tests-561%20passing-brightgreen)
 ![impls](https://img.shields.io/badge/reference%20impls-4%20(py%20%C2%B7%20js%20%C2%B7%20go%20%C2%B7%20rs)-brightgreen)
 ![honesty](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/studio-11-co/falsify/main/.falsify/badge.json)
 ![python](https://img.shields.io/badge/python-3.11%2B-blue)
@@ -116,12 +116,12 @@ This repository is the home of **PRML v0.1** — Pre-Registered ML Manifest Spec
 
 **Audit & compliance crosswalks** (subcategory-by-subcategory maps from major AI governance frameworks to PRML fields, FULL/PARTIAL/NONE tagged):
 
-- **[EU AI Act Article 12](https://spec.falsify.dev/eu-ai-act/article-12/)** — code-level pattern for the 2 August 2026 high-risk applicability deadline
+- **[EU AI Act Article 12](https://spec.falsify.dev/eu-ai-act/article-12/)** — code-level pattern for the 2 December 2027 high-risk applicability deadline
 - **[Article 12 readiness diagnostic](https://spec.falsify.dev/article-12-readiness/)** — 10-question browser-only self-assessment
 - **[NIST AI RMF 1.0 crosswalk](https://spec.falsify.dev/nist-ai-rmf/)** — GOVERN / MAP / MEASURE / MANAGE subcategory map (incl. AI 600-1 GenAI Profile)
 - **[ISO/IEC 42001:2023 crosswalk](https://spec.falsify.dev/iso-42001/)** — AIMS clause-by-clause evidence map (Clauses 7-9 + Annex A controls)
 
-**Long-form working notes** (2026-05-23, written for compliance leads, AI governance officers, and notified body assessors preparing for the 2 August 2026 deadline; CC BY 4.0):
+**Long-form working notes** (2026-05-23, written for compliance leads, AI governance officers, and notified body assessors preparing for the 2 December 2027 deadline; CC BY 4.0):
 
 - **[EU AI Act readiness assessment](https://falsify.dev/eu-ai-act-readiness/)** — six binding articles, ten-question gap check, evidence shape per obligation
 - **[2 August 2026 deadline](https://falsify.dev/ai-act-deadline-august-2026/)** — three application dates, Article 99 penalty structure, ten-week plan
@@ -130,7 +130,7 @@ This repository is the home of **PRML v0.1** — Pre-Registered ML Manifest Spec
 - **[ISO/IEC 42001 readiness](https://falsify.dev/iso-42001-readiness/)** — seven clauses, EU AI Act Article 17 overlap, twelve-month certification path
 - **[Lock #2 post-mortem](https://falsify.dev/notes/lock-2-postmortem/)** — field report on running a falsifiable spec in public
 
-**Reference implementations** (four languages, 12 v0.1 + 8 v0.2 candidate vectors = 20 total; multi-lang CI runs all 20 byte-for-byte per push and daily at 04:00 UTC):
+**Reference implementations** (four languages, 13 v0.1 + 8 v0.2 candidate vectors = 21 total; multi-lang CI runs all 21 byte-for-byte per push and daily at 04:00 UTC):
 
 - **Python:** [`falsify.py`](falsify.py) — original reference, uses PyYAML
 - **Node.js:** [`impl/js/`](impl/js/) — second reference, ~400 LOC, hand-rolled, zero deps
@@ -141,7 +141,7 @@ Hosted spec at [spec.falsify.dev/v0.1](https://spec.falsify.dev/v0.1). Public re
 
 **Companion projects** (separate repos under `studio-11-co`, each MIT or CC0 licensed):
 
-- **[`falsify-cookbook`](https://github.com/studio-11-co/falsify-cookbook)** — field manual for the spec: 11 patterns + 4 anti-patterns, every one a single page with a runnable example, including [Pattern 11: PRML + Sigstore for execution integrity](https://github.com/studio-11-co/falsify-cookbook/blob/main/patterns/11-sigstore-execution.md) closing the §8.1 gap. CC0.
+- **[`falsify-cookbook`](https://github.com/studio-11-co/falsify-cookbook)** — field manual for the spec: 13 patterns + 4 anti-patterns, every one a single page with a runnable example, including [Pattern 11: PRML + Sigstore for execution integrity](https://github.com/studio-11-co/falsify-cookbook/blob/main/patterns/11-sigstore-execution.md) closing the §8.1 gap. CC0.
 - **[`falsify-integrity-index`](https://github.com/studio-11-co/falsify-integrity-index)** — public scorecard of how 25+ well-known ML eval claims meet the 9 PRML falsifiability criteria. Live at [falsify.dev/integrity](https://falsify.dev/integrity). CC0 data, MIT tooling.
 - **[`falsify-inspect`](https://github.com/studio-11-co/falsify-inspect)** — Inspect AI adapter: anchor an Inspect AI eval claim's threshold to a SHA-256 hash before the run, verify the post-run log against it. MIT.
 - **[`prml-verify-action`](https://github.com/studio-11-co/prml-verify-action)** — composite GitHub Action ([listed on Marketplace](https://github.com/marketplace/actions/prml-verify)) for CI integration. MIT.
@@ -472,9 +472,9 @@ ln -sf "$(pwd)/hooks/commit-msg" .git/hooks/commit-msg
 ## Repository layout
 
 - `falsify.py` — single-file Python CLI, stdlib + pyyaml only.
-- `impl/js/falsify.js` — Node.js second reference implementation (12/12 v0.1 + 8/8 v0.2 = 20/20 vectors). Also published to npm as [`falsify-js`](https://www.npmjs.com/package/falsify-js).
-- `impl/go/falsify.go` — Go third reference implementation (20/20 vectors).
-- `impl/rust/` — Rust fourth reference implementation (20/20 vectors).
+- `impl/js/falsify.js` — Node.js second reference implementation (13/13 v0.1 + 8/8 v0.2 = 21/21 vectors). Also published to npm as [`falsify-js`](https://www.npmjs.com/package/falsify-js).
+- `impl/go/falsify.go` — Go third reference implementation (21/21 vectors).
+- `impl/rust/` — Rust fourth reference implementation (21/21 vectors).
 - `spec/PRML-v0.1.md` + `spec/test-vectors/v0.1/` (12) + `spec/test-vectors/v0.2/` (8) — spec + conformance suite.
 - `spec/analysis/` — positioning + canonicalization portability findings.
 - `spec/compliance/` — EU AI Act mapping + compliance landing copy.

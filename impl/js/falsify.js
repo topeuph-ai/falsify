@@ -2,7 +2,7 @@
 // falsify-js — second reference implementation of PRML v0.1
 //
 // Single file, ~400 LOC, zero runtime dependencies beyond Node.js stdlib.
-// Reproduces all 12 PRML v0.1 conformance vectors byte-for-byte.
+// Reproduces all 13 PRML v0.1 conformance vectors byte-for-byte.
 //
 // Spec:    https://spec.falsify.dev/v0.1
 // Vectors: https://github.com/studio-11-co/falsify/tree/main/spec/test-vectors

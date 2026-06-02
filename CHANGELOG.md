@@ -4,6 +4,17 @@ All notable changes to Falsification Engine are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com); version
 numbers follow [Semantic Versioning](https://semver.org).
 
+## [Unreleased]
+
+### Added
+
+- **PRML v0.1 conformance vector TV-013 ("Integer-valued threshold").** Locks the v0.1 integer→float threshold coercion: a bare `threshold: 90` MUST canonicalize as `90.0`. This is the behaviour the v0.3.1 CLI fix introduced, but no conformance vector previously pinned it. All four reference implementations (Python, JavaScript, Go, Rust), the conformance runner's reference target, and the public registry reproduce it byte-for-byte. **Non-breaking:** every prior vector's hash is unchanged. The v0.1 suite is now 13 vectors (21 total, including v0.2's 8).
+
+### Fixed
+
+- **Conformance test wiring (`tests/test_prml_vectors.py`).** The PRML vector tests verified the falsify-*engine* canonicalizer (`falsify._canonicalize`, a different schema that does not apply the PRML v0.1 threshold coercion) instead of the PRML reference (`falsify_prml.canonicalize`). The mismatch was invisible while every vector used a float threshold; TV-013 exposed it. The suite now exercises the PRML CLI canonicalizer.
+- **`spec/test-vectors/v0.1/reference-target.py` and `generate.py`** now apply the same v0.1 threshold coercion, so the conformance runner's reference target and the vector generator agree with the four implementations.
+
 ## [v0.3.1] — 2026-05-31
 
 ### Fixed

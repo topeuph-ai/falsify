@@ -29,9 +29,19 @@ def canonicalise(manifest: dict) -> str:
         - trailing whitespace stripped
         - one trailing newline
         - UTF-8 encoded
+
+    PRML v0.1 §2 fixes `threshold` as float64: an integer-valued threshold
+    (e.g. `90`) MUST canonicalize as a float (`90.0`), matching the falsify
+    Python/JS/Go/Rust reference impls. v0.2 relaxes threshold to int|float,
+    so this coercion is v0.1-only.
     """
+    m = dict(manifest)
+    if m.get("version") == "prml/0.1":
+        v = m.get("threshold")
+        if isinstance(v, int) and not isinstance(v, bool):
+            m["threshold"] = float(v)
     canonical = yaml.safe_dump(
-        manifest,
+        m,
         default_flow_style=False,
         sort_keys=True,
         width=float("inf"),
