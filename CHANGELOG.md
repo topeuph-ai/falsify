@@ -4,7 +4,7 @@ All notable changes to Falsification Engine are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com); version
 numbers follow [Semantic Versioning](https://semver.org).
 
-## [Unreleased]
+## [v0.3.2] — 2026-06-02
 
 ### Added
 
@@ -14,6 +14,7 @@ numbers follow [Semantic Versioning](https://semver.org).
 
 - **Conformance test wiring (`tests/test_prml_vectors.py`).** The PRML vector tests verified the falsify-*engine* canonicalizer (`falsify._canonicalize`, a different schema that does not apply the PRML v0.1 threshold coercion) instead of the PRML reference (`falsify_prml.canonicalize`). The mismatch was invisible while every vector used a float threshold; TV-013 exposed it. The suite now exercises the PRML CLI canonicalizer.
 - **`spec/test-vectors/v0.1/reference-target.py` and `generate.py`** now apply the same v0.1 threshold coercion, so the conformance runner's reference target and the vector generator agree with the four implementations.
+- **Multi-language conformance workflow** Python reference switched from `falsify._canonicalize` (engine) to `falsify_prml.canonicalize` (PRML CLI) for both suites, so CI reproduces TV-013 byte-for-byte across all four languages (21 vectors, 84 agreements per run).
 
 ## [v0.3.1] — 2026-05-31
 
