@@ -4,6 +4,12 @@ All notable changes to Falsification Engine are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com); version
 numbers follow [Semantic Versioning](https://semver.org).
 
+## [v0.3.5] — 2026-06-04
+
+### Fixed
+
+- **Docs/spec consistency sweep + refreshed published metadata.** Updated `prml-verify-action` references from `@v1` to `@v2` (current major), corrected the v0.1 conformance-suite doc to 13 vectors and the required-field count to 9, and updated the EU AI Act high-risk obligation date to 2 December 2027 (Digital Omnibus deferral; Article 50 transparency unchanged at 2 August 2026) across the spec site. This release re-publishes the package so the PyPI project page reflects the corrected README. Docs only; no behaviour or API change.
+
 ## [v0.3.4] — 2026-06-02
 
 ### Fixed
