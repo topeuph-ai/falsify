@@ -26,9 +26,9 @@ bibliography: paper.bib
 `falsify` is the Python reference implementation of **PRML** (Pre-Registered ML
 Manifest), an open specification for committing a machine learning evaluation
 claim to a SHA-256 hash *before* the experiment runs. A claim is a small
-UTF-8 YAML manifest with eight required fields — metric, comparator,
-threshold, dataset content hash, seed, producer identity, claim identifier
-and timestamp — and the hash is computed over canonical bytes per
+UTF-8 YAML manifest with nine required fields — schema version, metric,
+comparator, threshold, dataset content hash, seed, producer identity, claim
+identifier and timestamp — and the hash is computed over canonical bytes per
 deterministic rules in §3 of the v0.1 specification [@prml_spec_v0_1]. Any
 retroactive edit of the manifest breaks the hash, so post-hoc tampering with
 a threshold or dataset is detectable by any third party with the manifest
@@ -80,7 +80,7 @@ selective non-publication as out of scope, and the cookbook documents
 how to pair PRML with Sigstore for execution integrity.
 
 `falsify` has been used in three independent contexts: as the
-reference verifier for the 20 published conformance vectors, as the
+reference verifier for the 21 published conformance vectors, as the
 content-addressing layer behind a public registry that has accepted
 manifests from external producers, and as the underlying primitive cited
 in subcategory-level crosswalks to the EU AI Act, the NIST AI RMF and

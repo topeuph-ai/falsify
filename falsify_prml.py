@@ -8,7 +8,7 @@ anyone; edit the manifest after locking and the hash no longer matches.
 Canonicalisation (PRML v0.1 §4): keys recursively sorted, block style, LF,
 trailing whitespace stripped, exactly one trailing newline, UTF-8. This is the
 same rule the Go / JS / Rust reference implementations use; all four produce
-byte-identical canonical bytes on the 20 published conformance vectors.
+byte-identical canonical bytes on the 21 published conformance vectors.
 
 Commands:
     falsify lock <spec.yaml|spec.json>            canonicalize, hash, write sidecar

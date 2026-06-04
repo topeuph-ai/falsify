@@ -45,7 +45,7 @@ These are opt-in. Manifests that omit them are valid v0.2.
 
 ### Conformance vector additions
 
-Eight new vectors TV-013 through TV-020 at `spec/test-vectors/v0.2/test-vectors.json`. TV-013 demonstrates v0.1 hash-equivalence under v0.2 rules. The full 20-vector suite (13 v0.1 + 8 v0.2) passes byte-equivalent across all four reference implementations as of 2026-05-15.
+Eight new vectors TV-013 through TV-020 at `spec/test-vectors/v0.2/test-vectors.json`. TV-013 demonstrates v0.1 hash-equivalence under v0.2 rules. The full 21-vector suite (13 v0.1 + 8 v0.2) passes byte-equivalent across all four reference implementations as of 2026-05-15.
 
 ### Canonicalisation rules
 

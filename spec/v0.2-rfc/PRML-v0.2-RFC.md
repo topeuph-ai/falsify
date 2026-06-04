@@ -34,7 +34,7 @@ v0.1 was scoped narrowly: eight fields, one hash, no I/O. v0.2 keeps that core u
 
 This is non-negotiable. If any proposed v0.2 change breaks v0.1 hash-equivalence for v0.1-shaped manifests, that proposal is rejected before consideration.
 
-The conformance vector set that exercises this property is shipped at `spec/test-vectors/v0.2/test-vectors.json` (TV-013 through TV-020, eight vectors). TV-013 specifically demonstrates a v0.1-shaped manifest hashing identically under v0.2 rules. All four reference implementations (Python, JS, Go, Rust) pass 20/21 vectors byte-for-byte as of 2026-05-15.
+The conformance vector set that exercises this property is shipped at `spec/test-vectors/v0.2/test-vectors.json` (TV-013 through TV-020, eight vectors). TV-013 specifically demonstrates a v0.1-shaped manifest hashing identically under v0.2 rules. All four reference implementations (Python, JS, Go, Rust) pass 21/21 vectors byte-for-byte as of 2026-05-15.
 
 ## Proposals open for comment
 
