@@ -43,7 +43,7 @@ No install? Verify any manifest in-browser at [registry.falsify.dev](https://reg
 
 **Try it without installing:** [`registry.falsify.dev`](https://registry.falsify.dev) — paste a PRML manifest, get a SHA-256 permalink and a README badge. No account, no server-side state beyond the hash.
 
-**Add it to your CI in five lines:** [`studio-11-co/prml-verify-action@v1`](https://github.com/studio-11-co/prml-verify-action) — composite GitHub Action wrapping the falsify CLI ([listed on the GitHub Marketplace](https://github.com/marketplace/actions/prml-verify)). Block merges on tampered or regressed eval claims. Optional public registry anchor.
+**Add it to your CI in five lines:** [`studio-11-co/prml-verify-action@v2`](https://github.com/studio-11-co/prml-verify-action) — composite GitHub Action wrapping the falsify CLI ([listed on the GitHub Marketplace](https://github.com/marketplace/actions/prml-verify)). Block merges on tampered or regressed eval claims. Optional public registry anchor.
 
 **Already on MLflow?** [`pip install mlflow-falsify`](https://pypi.org/project/mlflow-falsify/) — discoverable plugin that tags every MLflow run with the PRML manifest hash, version, metric, comparator, threshold, and dataset id. Zero code changes to your existing MLflow workflow. Source: [`studio-11-co/mlflow-falsify`](https://github.com/studio-11-co/mlflow-falsify).
 

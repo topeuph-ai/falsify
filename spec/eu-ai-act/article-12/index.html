@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>EU AI Act Article 12 logging compliance — a working pattern for high-risk providers</title>
-<meta name="description" content="Article 12 of Regulation (EU) 2024/1689 obliges high-risk AI providers to log evaluation events with tamper-evidence. A worked pattern using PRML manifests, with code, before the 2 August 2026 deadline.">
+<meta name="description" content="Article 12 of Regulation (EU) 2024/1689 obliges high-risk AI providers to log evaluation events with tamper-evidence. A worked pattern using PRML manifests, with code, before the 2 December 2027 high-risk deadline.">
 <meta name="author" content="Cüneyt Öztürk">
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="https://spec.falsify.dev/eu-ai-act/article-12/">
 
 <meta property="og:title" content="EU AI Act Article 12 logging compliance — a working pattern">
-<meta property="og:description" content="A concrete, code-level pattern for satisfying Article 12 automated-logging obligations before 2 August 2026, using SHA-256 pre-registered evaluation manifests.">
+<meta property="og:description" content="A concrete, code-level pattern for satisfying Article 12 automated-logging obligations before 2 December 2027, using SHA-256 pre-registered evaluation manifests.">
 <meta property="og:url" content="https://spec.falsify.dev/eu-ai-act/article-12/">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://spec.falsify.dev/og.png">
@@ -100,7 +100,7 @@ footer.colophon a { color:var(--ink-3); text-decoration:none; border-bottom:1px 
 <article>
 
 <h1>EU AI Act Article 12 logging compliance: a working pattern for high-risk providers</h1>
-<p class="lede">The high-risk obligations in Regulation (EU) 2024/1689 become applicable on <strong>2 August 2026</strong>. Article 12 is the one that most procurement teams underestimate, because "automated logging" reads like a checkbox and turns out to be a system design decision. This page is the technical pattern we use.</p>
+<p class="lede">The high-risk obligations in Regulation (EU) 2024/1689 become applicable on <strong>2 December 2027</strong> (deferred from 2 August 2026 by the EU Digital Omnibus). Article 12 is the one that most procurement teams underestimate, because "automated logging" reads like a checkbox and turns out to be a system design decision. This page is the technical pattern we use.</p>
 <aside class="disclaimer"><strong>Interpretive mapping, not legal advice.</strong> This crosswalk is published by Cüneyt Öztürk as an engineering pattern. It is not a legal opinion, a regulatory certification, or a conformity assessment. Article 12 obligations apply to the high-risk AI system as a whole; PRML is an evidence artefact that may support specific logging controls. Verify scope, applicability, and sufficiency with qualified counsel and your notified body before relying on it for compliance decisions.</aside>
 
 <h2>What Article 12 actually requires</h2>
@@ -181,8 +181,8 @@ reason: |
 
 <p>Pair PRML with whatever inference-logging stack you already trust. The two layers don't overlap.</p>
 
-<h2>What to do this quarter</h2>
-<p>Twelve weeks remain until the 2 August 2026 applicability date. Concretely:</p>
+<h2>What to do now</h2>
+<p>The high-risk applicability date is <strong>2 December 2027</strong> (deferred from 2 August 2026 by the EU Digital Omnibus). The work does not get smaller by waiting. Concretely:</p>
 <ol>
   <li>Identify every high-risk system you place on the EU market under Annex III. CV screening, credit scoring, biometric ID, critical infrastructure, education access — the list is enumerated.</li>
   <li>For each, list the named evaluation claims (accuracy, F1, calibration, latency SLA, fairness metric) that you would defend in writing today.</li>

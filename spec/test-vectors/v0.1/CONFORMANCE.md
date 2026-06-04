@@ -1,6 +1,6 @@
 # PRML v0.1 conformance suite
 
-Run any PRML implementation against the 12 canonical test vectors and report whether it produces byte-equivalent canonical bytes and matching SHA-256 hashes.
+Run any PRML implementation against the 13 canonical test vectors and report whether it produces byte-equivalent canonical bytes and matching SHA-256 hashes.
 
 ## Quick start
 
@@ -18,7 +18,7 @@ python3 conform.py "cargo run --bin falsify-conform --release --quiet"
 Expected output for a conforming implementation:
 
 ```
-PRML v0.1 conformance — 12 vectors
+PRML v0.1 conformance — 13 vectors
 target: python3 reference-target.py
 file:   test-vectors.json
 
@@ -26,13 +26,14 @@ file:   test-vectors.json
   PASS  TV-002  Key ordering — random insertion order
   ...
   PASS  TV-012  MAE for regression
+  PASS  TV-013  Integer-valued threshold
 
-PASS — 12/12 passed
+PASS — 13/13 passed
 ```
 
 Exit codes:
 
-- `0` — all 12 vectors pass
+- `0` — all 13 vectors pass
 - `1` — one or more failures (details printed)
 - `2` — runner / IO error
 
@@ -102,7 +103,7 @@ We accept proposed new vectors via PR to this repo. Each vector must:
 2. Include `title`, `description`, `input`, `canonical`, `hash`
 3. Be reproducible: someone running the reference target on `input` must produce `canonical` and `hash` exactly
 
-Do not modify existing vectors. The 12 v0.1 vectors are immutable; we use them to verify the spec hasn't drifted.
+Do not modify existing vectors. The 13 v0.1 vectors are immutable; we use them to verify the spec hasn't drifted.
 
 ## Versioning
 

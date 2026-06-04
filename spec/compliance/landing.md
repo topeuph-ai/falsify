@@ -8,7 +8,7 @@
 
 ## The deadline that started this
 
-The EU AI Act (Regulation 2024/1689) entered force on 1 August 2024. The high-risk obligations apply on **2 August 2026**.
+The EU AI Act (Regulation 2024/1689) entered force on 1 August 2024. The high-risk obligations apply on **2 December 2027** (deferred from 2 August 2026 by the EU Digital Omnibus).
 
 By that date, providers of high-risk AI systems (Annex III) must demonstrate, with documented evidence:
 
