@@ -198,7 +198,7 @@ fn needs_quoting(s: &str) -> bool {
     }
     // Control characters
     if s.bytes()
-        .any(|b| (b < 0x09 || (b > 0x0a && b < 0x20) || b == 0x7f))
+        .any(|b| b < 0x09 || (b > 0x0a && b < 0x20) || b == 0x7f)
     {
         return true;
     }
