@@ -50,6 +50,32 @@ REQUIRED_PRODUCER = ["id"]
 VALID_COMPARATORS = {">=", "<=", ">", "<", "=="}
 _HEX64 = re.compile(r"^[0-9a-f]{64}$")
 
+# Characters that break canonical-byte portability across the reference impls:
+# C0/C1 control chars (incl. U+0085 NEL, which PyYAML does not round-trip),
+# U+007F DEL, the Unicode line/paragraph separators U+2028/U+2029, and U+FEFF
+# (BOM / zero-width no-break space). These have no legitimate place in a PRML
+# string field (metric, ids, etc.); a manifest containing them would canonicalize
+# to different bytes — or fail to round-trip — across Python/JS/Go/Rust, so it is
+# rejected at validation rather than silently producing a non-portable hash.
+# Rejecting them is additive: no conformance vector contains these, so no valid
+# manifest's hash changes. Printable Unicode (emoji, CJK, accents) is unaffected.
+_FORBIDDEN_CHARS = re.compile(r"[\x00-\x1f\x7f-\x9f  ﻿]")
+
+
+def _bad_char_fields(obj, path="") -> list[str]:
+    """Return field paths whose string value contains a portability-breaking char."""
+    out = []
+    if isinstance(obj, str):
+        if _FORBIDDEN_CHARS.search(obj):
+            out.append(path or "(value)")
+    elif isinstance(obj, dict):
+        for k, v in obj.items():
+            out.extend(_bad_char_fields(v, f"{path}.{k}" if path else str(k)))
+    elif isinstance(obj, (list, tuple)):
+        for i, v in enumerate(obj):
+            out.extend(_bad_char_fields(v, f"{path}[{i}]"))
+    return out
+
 
 def _require_yaml():
     try:
@@ -133,6 +159,9 @@ def validate_manifest(m: dict) -> list[str]:
         for f in REQUIRED_PRODUCER:
             if f not in prod:
                 errors.append(f"missing required field: producer.{f}")
+    for fld in _bad_char_fields(m):
+        errors.append(f"{fld}: contains a control / non-portable character "
+                      f"(C0/C1, U+007F, U+2028/U+2029, or U+FEFF) — not allowed in a PRML string field")
     return errors
 
 

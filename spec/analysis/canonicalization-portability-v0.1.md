@@ -188,3 +188,32 @@ The right response to all three is the same: replace dependence on a reference *
 ---
 
 *Working draft v0.1, CC BY 4.0. Comments via [GitHub Discussions](https://github.com/studio-11-co/falsify/discussions/6) or `hello@falsify.dev`.*
+
+---
+
+## Control / format characters in string fields (measured 2026-06-17)
+
+**Finding (reproduced in the Python reference).** A string field containing **U+0085 (NEL)**
+does not round-trip through `yaml.safe_dump` → `yaml.safe_load`: `producer.id = "ab"`
+canonicalizes and re-parses back to `"a b"`. The canonical bytes therefore do not represent
+the input, so a lock/verify pair can disagree *within a single implementation*. Adjacent
+characters behave inconsistently across the four impls: Python round-trips U+007F, U+FEFF and
+U+2028 but the JS/Go/Rust control regex stops at U+007F and emits them raw or bare, yielding
+different canonical bytes — and the JS U+2028 case produces non-round-trippable YAML. The
+existing one-line "control characters untested" hedge (§ above) understated this: the documented
+"always single-quote strings" recommendation would *not* fix the U+FEFF or U+2028 cases, because
+the problem is round-trip fidelity / line-break interpretation, not quoting.
+
+**Fix adopted (reference impl, additive — v0.1-safe).** `validate_manifest` now **rejects** any
+manifest whose string fields contain a C0/C1 control character (incl. U+0085), U+007F, U+2028,
+U+2029, or U+FEFF. These have no legitimate place in a PRML string field (metric, ids, etc.).
+The rule is additive: no conformance vector contains such a character, so **no valid manifest's
+hash changes and all 21 vectors still pass byte-identically**. Printable Unicode (emoji, CJK,
+accents) is unaffected.
+
+**v0.2 normative recommendation.** Promote this reject-on-input rule to the v0.2 grammar
+(a closed character class for string scalars) rather than attempting to canonicalize the
+un-canonicalizable. **Cross-impl follow-up:** the JS/Go/Rust reference implementations should
+adopt the same reject rule on their next release; until then the Python reference is the one that
+refuses to *mint* a non-portable manifest. Suggested conformance addition: a vector set asserting
+each of U+0085 / U+007F / U+2028 / U+2029 / U+FEFF is rejected (a validation vector, not a hash vector).
