@@ -2,13 +2,17 @@ name: Multi-language conformance
 
 # Asserts that every reference implementation (Python, Node.js, Go, Rust)
 # reproduces the v0.1 normative suite (13 vectors) AND the v0.2 candidate
-# suite (8 vectors) byte-for-byte. Total verification surface per run:
-# 4 implementations × 21 vectors = 84 byte-for-byte agreements.
+# suite (8 vectors) byte-for-byte, AND rejects the negative suite (7
+# reject-vectors carrying control / non-portable characters). Verification
+# surface per run: 4 impls × 21 positive vectors = 84 byte-for-byte
+# agreements, plus 4 impls × 7 reject-vectors = 28 rejection checks.
 #
-# A failure in any language is a portability regression. Treat it as a
-# specification-level event: either the canonicalizer in that language
-# has drifted, or the spec itself has surfaced a new portability finding
-# that needs documenting in spec/analysis/canonicalization-portability-v0.1.md.
+# A positive-suite failure is a portability regression; a reject-suite failure
+# means an impl silently hashed a non-portable manifest (the control-char rule
+# from v0.3.6 drifted). Treat either as a specification-level event: either the
+# canonicalizer in that language has drifted, or the spec has surfaced a new
+# portability finding that needs documenting in
+# spec/analysis/canonicalization-portability-v0.1.md.
 
 on:
   push:
@@ -88,6 +92,9 @@ jobs:
           sys.exit(10 if fails else 0)
           PY
 
+      - name: Negative conformance — reject suite (7 vectors MUST be rejected)
+        run: python3 spec/test-vectors/reject/check_reject.py -- python3 falsify.py lock
+
   js-conformance:
     name: Node.js (impl/js)
     runs-on: ubuntu-latest
@@ -103,6 +110,9 @@ jobs:
 
       - name: Conformance — v0.2 candidate suite (8 vectors)
         run: node impl/js/falsify.js test-vectors spec/test-vectors/v0.2/test-vectors.json
+
+      - name: Negative conformance — reject suite (7 vectors MUST be rejected)
+        run: python3 spec/test-vectors/reject/check_reject.py -- node impl/js/falsify.js lock
 
   go-conformance:
     name: Go (impl/go)
@@ -124,6 +134,9 @@ jobs:
 
       - name: Conformance — v0.2 candidate suite (8 vectors)
         run: ./impl/go/falsify-go test-vectors spec/test-vectors/v0.2/test-vectors.json
+
+      - name: Negative conformance — reject suite (7 vectors MUST be rejected)
+        run: python3 spec/test-vectors/reject/check_reject.py -- ./impl/go/falsify-go hash
 
   rust-conformance:
     name: Rust (impl/rust)
@@ -156,6 +169,9 @@ jobs:
       - name: Conformance — v0.2 candidate suite (8 vectors)
         run: ./impl/rust/target/release/falsify-rs test-vectors spec/test-vectors/v0.2/test-vectors.json
 
+      - name: Negative conformance — reject suite (7 vectors MUST be rejected)
+        run: python3 spec/test-vectors/reject/check_reject.py -- ./impl/rust/target/release/falsify-rs hash
+
   conformance-summary:
     name: All four implementations agree
     runs-on: ubuntu-latest
@@ -180,4 +196,4 @@ jobs:
             echo "    in spec/analysis/canonicalization-portability-v0.1.md."
             exit 1
           fi
-          echo "::notice::All four reference implementations passed all 21 vectors byte-for-byte."
+          echo "::notice::All four reference implementations passed all 21 positive vectors byte-for-byte and rejected all 7 reject-vectors."

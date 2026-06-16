@@ -1,0 +1,156 @@
+[
+  {
+    "id": "RJ-001",
+    "title": "NEL (U+0085) in metric",
+    "reason": "U+0085 is a C1 control that PyYAML does not round-trip; a reference implementation MUST reject it rather than lock a non-portable hash.",
+    "field": "metric",
+    "input": {
+      "version": "prml/0.1",
+      "claim_id": "01900000-0000-7000-8000-000000000000",
+      "created_at": "2026-05-01T12:00:00Z",
+      "metric": "accu\u0085racy",
+      "comparator": ">=",
+      "threshold": 0.85,
+      "dataset": {
+        "id": "imagenet-val-2012",
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "seed": 42,
+      "producer": {
+        "id": "studio-11.co"
+      }
+    }
+  },
+  {
+    "id": "RJ-002",
+    "title": "Line Separator (U+2028) in claim_id",
+    "reason": "U+2028 canonicalizes inconsistently across YAML engines and JS string contexts; MUST be rejected.",
+    "field": "claim_id",
+    "input": {
+      "version": "prml/0.1",
+      "claim_id": "demo\u2028claim",
+      "created_at": "2026-05-01T12:00:00Z",
+      "metric": "accuracy",
+      "comparator": ">=",
+      "threshold": 0.85,
+      "dataset": {
+        "id": "imagenet-val-2012",
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "seed": 42,
+      "producer": {
+        "id": "studio-11.co"
+      }
+    }
+  },
+  {
+    "id": "RJ-003",
+    "title": "Paragraph Separator (U+2029) in producer.id",
+    "reason": "U+2029 is a non-portable line/paragraph separator; MUST be rejected.",
+    "field": "producer.id",
+    "input": {
+      "version": "prml/0.1",
+      "claim_id": "01900000-0000-7000-8000-000000000000",
+      "created_at": "2026-05-01T12:00:00Z",
+      "metric": "accuracy",
+      "comparator": ">=",
+      "threshold": 0.85,
+      "dataset": {
+        "id": "imagenet-val-2012",
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "seed": 42,
+      "producer": {
+        "id": "studio-11\u2029co"
+      }
+    }
+  },
+  {
+    "id": "RJ-004",
+    "title": "BOM (U+FEFF) in dataset.id",
+    "reason": "A zero-width BOM is invisible and shifts canonical bytes; MUST be rejected.",
+    "field": "dataset.id",
+    "input": {
+      "version": "prml/0.1",
+      "claim_id": "01900000-0000-7000-8000-000000000000",
+      "created_at": "2026-05-01T12:00:00Z",
+      "metric": "accuracy",
+      "comparator": ">=",
+      "threshold": 0.85,
+      "dataset": {
+        "id": "imagenet\ufeffval",
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "seed": 42,
+      "producer": {
+        "id": "studio-11.co"
+      }
+    }
+  },
+  {
+    "id": "RJ-005",
+    "title": "DEL (U+007F) in metric",
+    "reason": "U+007F is a C0-adjacent control character; MUST be rejected.",
+    "field": "metric",
+    "input": {
+      "version": "prml/0.1",
+      "claim_id": "01900000-0000-7000-8000-000000000000",
+      "created_at": "2026-05-01T12:00:00Z",
+      "metric": "accu\u007fracy",
+      "comparator": ">=",
+      "threshold": 0.85,
+      "dataset": {
+        "id": "imagenet-val-2012",
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "seed": 42,
+      "producer": {
+        "id": "studio-11.co"
+      }
+    }
+  },
+  {
+    "id": "RJ-006",
+    "title": "NUL (U+0000) in claim_id",
+    "reason": "An embedded null byte is a C0 control; MUST be rejected.",
+    "field": "claim_id",
+    "input": {
+      "version": "prml/0.1",
+      "claim_id": "demo\u0000claim",
+      "created_at": "2026-05-01T12:00:00Z",
+      "metric": "accuracy",
+      "comparator": ">=",
+      "threshold": 0.85,
+      "dataset": {
+        "id": "imagenet-val-2012",
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "seed": 42,
+      "producer": {
+        "id": "studio-11.co"
+      }
+    }
+  },
+  {
+    "id": "RJ-007",
+    "title": "C1 control (U+009F) in producer.id",
+    "reason": "U+009F is a C1 control in the U+0080-U+009F band; MUST be rejected.",
+    "field": "producer.id",
+    "input": {
+      "version": "prml/0.1",
+      "claim_id": "01900000-0000-7000-8000-000000000000",
+      "created_at": "2026-05-01T12:00:00Z",
+      "metric": "accuracy",
+      "comparator": ">=",
+      "threshold": 0.85,
+      "dataset": {
+        "id": "imagenet-val-2012",
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "seed": 42,
+      "producer": {
+        "id": "studio\u009f11"
+      }
+    }
+  }
+]
