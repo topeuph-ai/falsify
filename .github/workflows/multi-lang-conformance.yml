@@ -93,7 +93,10 @@ jobs:
           PY
 
       - name: Negative conformance — reject suite (7 vectors MUST be rejected)
-        run: python3 spec/test-vectors/reject/check_reject.py -- python3 falsify.py lock
+        # falsify_prml.py is THE PRML reference (validate_manifest); falsify.py is
+        # the falsify-engine CLI (different schema) and would reject every input for
+        # an unrelated reason, making this check vacuous.
+        run: python3 spec/test-vectors/reject/check_reject.py -- python3 falsify_prml.py lock
 
   js-conformance:
     name: Node.js (impl/js)

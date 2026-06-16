@@ -422,9 +422,10 @@ func minN(a, b int) int {
 
 const (
 	exitPass     = 0
+	exitBad      = 2 // bad input / spec: unreadable, unparseable, invalid manifest, bad --observed
 	exitTampered = 3
 	exitFail     = 10
-	exitGuard    = 11
+	exitGuard    = 11 // environmental guard: missing sidecar
 )
 
 func evaluatePredicate(observed, threshold float64, comparator string) (bool, error) {
@@ -483,24 +484,24 @@ func cmdHash(specPath string) int {
 	data, err := os.ReadFile(specPath)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "hash: %v\n", err)
-		return exitGuard
+		return exitBad
 	}
 	dec := json.NewDecoder(strings.NewReader(string(data)))
 	dec.UseNumber()
 	var m map[string]interface{}
 	if err := dec.Decode(&m); err != nil {
 		fmt.Fprintf(os.Stderr, "hash: parse: %v\n", err)
-		return exitGuard
+		return exitBad
 	}
 	for _, fld := range forbiddenCharFields(m, "") {
 		fmt.Fprintf(os.Stderr, "hash: %s: contains a control / non-portable character "+
 			"(C0/C1, U+007F, U+2028/U+2029, or U+FEFF) — not allowed in a PRML string field\n", fld)
-		return exitGuard
+		return exitBad
 	}
 	h, err := ManifestHash(m)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "hash: %v\n", err)
-		return exitGuard
+		return exitBad
 	}
 	fmt.Println(h)
 	return exitPass
@@ -510,24 +511,24 @@ func cmdVerify(specPath, observedStr string) int {
 	data, err := os.ReadFile(specPath)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "verify: %v\n", err)
-		return exitGuard
+		return exitBad
 	}
 	dec := json.NewDecoder(strings.NewReader(string(data)))
 	dec.UseNumber()
 	var m map[string]interface{}
 	if err := dec.Decode(&m); err != nil {
 		fmt.Fprintf(os.Stderr, "verify: parse: %v\n", err)
-		return exitGuard
+		return exitBad
 	}
 	for _, fld := range forbiddenCharFields(m, "") {
 		fmt.Fprintf(os.Stderr, "verify: %s: contains a control / non-portable character "+
 			"(C0/C1, U+007F, U+2028/U+2029, or U+FEFF) — not allowed in a PRML string field\n", fld)
-		return exitGuard
+		return exitBad
 	}
 	canonical, err := Canonicalize(m)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "verify: %v\n", err)
-		return exitGuard
+		return exitBad
 	}
 	computed := computeSHA256(canonical)
 	sidecar := strings.TrimSuffix(specPath, getExt(specPath)) + ".prml.sha256"
@@ -551,20 +552,20 @@ func cmdVerify(specPath, observedStr string) int {
 	observed, err := strconv.ParseFloat(observedStr, 64)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "verify: --observed must be a finite number: %v\n", err)
-		return exitGuard
+		return exitBad
 	}
 	comparator, _ := m["comparator"].(string)
 	thresholdRaw, _ := m["threshold"].(json.Number)
 	threshold, err := thresholdRaw.Float64()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "verify: threshold not numeric: %v\n", err)
-		return exitGuard
+		return exitBad
 	}
 	metric, _ := m["metric"].(string)
 	ok, err := evaluatePredicate(observed, threshold, comparator)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "verify: %v\n", err)
-		return exitGuard
+		return exitBad
 	}
 	if ok {
 		fmt.Printf("PASS  metric=%s  observed=%g  %s  threshold=%g\n",
@@ -600,7 +601,7 @@ Commands:
   hash <spec.json>                       print canonical SHA-256
   verify <spec.json> [--observed <v>]    verify hash; if --observed, evaluate
 
-Exit codes: 0=PASS, 3=TAMPERED, 10=FAIL, 11=GUARD
+Exit codes: 0=PASS, 2=BAD (bad input/spec), 3=TAMPERED, 10=FAIL, 11=GUARD (missing sidecar)
 Spec:    https://spec.falsify.dev/v0.1`)
 	return exitGuard
 }

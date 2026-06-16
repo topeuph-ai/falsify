@@ -384,21 +384,21 @@ fn run_vectors(path: &str) -> i32 {
         Ok(s) => s,
         Err(e) => {
             eprintln!("read {}: {}", path, e);
-            return 11;
+            return 2;
         }
     };
     let parsed: Value = match serde_json::from_str(&data) {
         Ok(v) => v,
         Err(e) => {
             eprintln!("decode: {}", e);
-            return 11;
+            return 2;
         }
     };
     let vectors = match parsed.as_array() {
         Some(arr) => arr,
         None => {
             eprintln!("vectors file root is not an array");
-            return 11;
+            return 2;
         }
     };
     let mut pass = 0;
@@ -532,21 +532,21 @@ fn cmd_hash(spec_path: &str) -> i32 {
         Ok(s) => s,
         Err(e) => {
             eprintln!("hash: {}", e);
-            return 11;
+            return 2;
         }
     };
     let parsed: Value = match serde_json::from_str(&data) {
         Ok(v) => v,
         Err(e) => {
             eprintln!("hash: parse: {}", e);
-            return 11;
+            return 2;
         }
     };
     let map = match parsed.as_object() {
         Some(m) => m,
         None => {
             eprintln!("hash: spec must be a JSON object");
-            return 11;
+            return 2;
         }
     };
     for fld in forbidden_char_fields(&parsed, "") {
@@ -555,7 +555,7 @@ fn cmd_hash(spec_path: &str) -> i32 {
              (C0/C1, U+007F, U+2028/U+2029, or U+FEFF) — not allowed in a PRML string field",
             fld
         );
-        return 11;
+        return 2;
     }
     println!("{}", manifest_hash(map));
     0
@@ -566,21 +566,21 @@ fn cmd_verify(spec_path: &str, observed: Option<&str>) -> i32 {
         Ok(s) => s,
         Err(e) => {
             eprintln!("verify: {}", e);
-            return 11;
+            return 2;
         }
     };
     let parsed: Value = match serde_json::from_str(&data) {
         Ok(v) => v,
         Err(e) => {
             eprintln!("verify: parse: {}", e);
-            return 11;
+            return 2;
         }
     };
     let map = match parsed.as_object() {
         Some(m) => m,
         None => {
             eprintln!("verify: spec must be a JSON object");
-            return 11;
+            return 2;
         }
     };
     for fld in forbidden_char_fields(&parsed, "") {
@@ -589,7 +589,7 @@ fn cmd_verify(spec_path: &str, observed: Option<&str>) -> i32 {
              (C0/C1, U+007F, U+2028/U+2029, or U+FEFF) — not allowed in a PRML string field",
             fld
         );
-        return 11;
+        return 2;
     }
     let computed = manifest_hash(map);
     // Sidecar: replace extension with .prml.sha256
@@ -624,7 +624,7 @@ fn cmd_verify(spec_path: &str, observed: Option<&str>) -> i32 {
         Ok(v) if v.is_finite() => v,
         _ => {
             eprintln!("verify: --observed must be a finite number");
-            return 11;
+            return 2;
         }
     };
     let comparator = map.get("comparator").and_then(|v| v.as_str()).unwrap_or("");
@@ -635,7 +635,7 @@ fn cmd_verify(spec_path: &str, observed: Option<&str>) -> i32 {
         Some(t) => t,
         None => {
             eprintln!("verify: threshold not numeric");
-            return 11;
+            return 2;
         }
     };
     let metric = map.get("metric").and_then(|v| v.as_str()).unwrap_or("");
@@ -647,7 +647,7 @@ fn cmd_verify(spec_path: &str, observed: Option<&str>) -> i32 {
         "==" => observed == threshold,
         _ => {
             eprintln!("verify: invalid comparator: {}", comparator);
-            return 11;
+            return 2;
         }
     };
     if ok {
@@ -672,7 +672,7 @@ fn usage() -> i32 {
     eprintln!("  hash <spec.json>                       print canonical SHA-256");
     eprintln!("  verify <spec.json> [--observed <v>]    verify hash; if --observed, evaluate");
     eprintln!();
-    eprintln!("Exit codes: 0=PASS, 3=TAMPERED, 10=FAIL, 11=GUARD");
+    eprintln!("Exit codes: 0=PASS, 2=BAD (bad input/spec), 3=TAMPERED, 10=FAIL, 11=GUARD (missing sidecar)");
     eprintln!("Spec:    https://spec.falsify.dev/v0.1");
     11
 }

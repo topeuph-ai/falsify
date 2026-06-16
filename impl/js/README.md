@@ -26,7 +26,7 @@ node falsify.js lock my-manifest.json
 node falsify.js verify my-manifest.json --observed 0.876
 ```
 
-Exit codes match the spec: `0` PASS, `3` TAMPERED, `10` FAIL, `11` GUARD.
+Exit codes match the spec: `0` PASS, `2` BAD (bad input/spec), `3` TAMPERED, `10` FAIL, `11` GUARD (missing sidecar).
 
 ---
 

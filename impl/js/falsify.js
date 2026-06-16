@@ -254,9 +254,10 @@ function validateManifest(m) {
 // ─────────────────────────────────────────────────────────────────────────
 
 const EXIT_PASS = 0;
+const EXIT_BAD = 2;       // bad input / spec: unreadable, unparseable, invalid manifest, bad --observed
 const EXIT_TAMPERED = 3;
 const EXIT_FAIL = 10;
-const EXIT_GUARD = 11;
+const EXIT_GUARD = 11;    // environmental guard: missing sidecar / missing lib
 
 function evaluatePredicate(observed, comparator, threshold) {
   switch (comparator) {
@@ -319,7 +320,7 @@ function cmdLock(filePath) {
   if (errors.length) {
     console.error('lock: invalid manifest:');
     errors.forEach(e => console.error('  - ' + e));
-    return EXIT_GUARD;
+    return EXIT_BAD;
   }
   const canonical = canonicalize(m);
   const hash = crypto.createHash('sha256').update(canonical, 'utf-8').digest('hex');
@@ -338,7 +339,7 @@ function cmdVerify(filePath, observedStr) {
   if (errors.length) {
     console.error('verify: invalid manifest:');
     errors.forEach(e => console.error('  - ' + e));
-    return EXIT_GUARD;
+    return EXIT_BAD;
   }
   const canonical = canonicalize(m);
   const computed = crypto.createHash('sha256').update(canonical, 'utf-8').digest('hex');
@@ -362,7 +363,7 @@ function cmdVerify(filePath, observedStr) {
   const observed = parseFloat(observedStr);
   if (!Number.isFinite(observed)) {
     console.error('verify: --observed must be a finite number');
-    return EXIT_GUARD;
+    return EXIT_BAD;
   }
   const ok = evaluatePredicate(observed, m.comparator, m.threshold);
   if (ok) {
@@ -425,7 +426,7 @@ Commands:
   test-vectors <vectors.json>            run conformance suite
   hash <spec.json>                       print canonical SHA-256 only
 
-Exit codes: 0=PASS, 3=TAMPERED, 10=FAIL, 11=GUARD
+Exit codes: 0=PASS, 2=BAD (bad input/spec), 3=TAMPERED, 10=FAIL, 11=GUARD (missing sidecar/lib)
 Spec:    https://spec.falsify.dev/v0.1
 `);
   return EXIT_GUARD;
@@ -441,19 +442,26 @@ function main(argv) {
   const args = argv.slice(2);
   if (args.length === 0) return usage();
   const cmd = args[0];
-  switch (cmd) {
-    case 'init':         return cmdInit(args[1] || 'default');
-    case 'lock':         return cmdLock(args[1]);
-    case 'verify': {
-      const idx = args.indexOf('--observed');
-      const observed = idx >= 0 ? args[idx + 1] : undefined;
-      return cmdVerify(args[1], observed);
+  try {
+    switch (cmd) {
+      case 'init':         return cmdInit(args[1] || 'default');
+      case 'lock':         return cmdLock(args[1]);
+      case 'verify': {
+        const idx = args.indexOf('--observed');
+        const observed = idx >= 0 ? args[idx + 1] : undefined;
+        return cmdVerify(args[1], observed);
+      }
+      case 'test-vectors': return cmdTestVectors(args[1]);
+      case 'hash':         return cmdHash(args[1]);
+      case '-h':
+      case '--help':       return usage() === EXIT_GUARD ? EXIT_PASS : EXIT_PASS;
+      default:             return usage();
     }
-    case 'test-vectors': return cmdTestVectors(args[1]);
-    case 'hash':         return cmdHash(args[1]);
-    case '-h':
-    case '--help':       return usage() === EXIT_GUARD ? EXIT_PASS : EXIT_PASS;
-    default:             return usage();
+  } catch (e) {
+    // Unreadable file, malformed JSON/YAML — bad input, matching the Python
+    // reference (EXIT_BAD=2), not an environmental guard.
+    console.error(`${cmd}: ${e.message}`);
+    return EXIT_BAD;
   }
 }
 
