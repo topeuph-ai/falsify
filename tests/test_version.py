@@ -15,6 +15,18 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 FALSIFY = REPO_ROOT / "falsify.py"
 
 
+def _version() -> str:
+    """The version under test, read from falsify.py — never hardcode it here."""
+    spec = importlib.util.spec_from_file_location("_falsify_ver", FALSIFY)
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.__version__
+
+
+VERSION = _version()
+
+
 def _run(args: list[str], cwd: Path) -> subprocess.CompletedProcess:
     return subprocess.run(
         [sys.executable, str(FALSIFY), *args],
@@ -35,14 +47,14 @@ class VersionTests(unittest.TestCase):
     def test_version_subcommand_prints_version(self) -> None:
         result = _run(["version"], cwd=self.cwd)
         self.assertEqual(result.returncode, 0, msg=result.stderr)
-        self.assertIn("0.3.5", result.stdout)
+        self.assertIn(VERSION, result.stdout)
         self.assertIn("falsify", result.stdout)
 
     def test_version_flag_prints_version(self) -> None:
         result = _run(["--version"], cwd=self.cwd)
         self.assertEqual(result.returncode, 0, msg=result.stderr)
         # argparse's `action='version'` writes to stdout on Python 3.11+.
-        self.assertIn("0.3.5", result.stdout)
+        self.assertIn(VERSION, result.stdout)
 
     def test_version_subcommand_json_mode(self) -> None:
         result = _run(["version", "--json"], cwd=self.cwd)
