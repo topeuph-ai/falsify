@@ -195,6 +195,28 @@ const REQUIRED_DATASET = ['id', 'hash'];
 const REQUIRED_PRODUCER = ['id'];
 const VALID_COMPARATORS = new Set(['>=', '<=', '>', '<', '==']);
 
+// Control / non-portable chars forbidden in any PRML string field: C0 (U+0000–
+// U+001F), DEL + C1 (U+007F–U+009F), line/paragraph separators (U+2028/U+2029),
+// and BOM (U+FEFF). These survive canonicalisation inconsistently across YAML
+// engines and editors, so a manifest carrying them is non-portable. Rejecting is
+// additive — no conformance vector contains them, so no valid hash changes.
+// Mirrors the Python reference (_FORBIDDEN_CHARS in falsify_prml.py).
+const FORBIDDEN_CHARS = /[\u0000-\u001f\u007f-\u009f\u2028\u2029\ufeff]/;
+
+function badCharFields(obj, path = '') {
+  const out = [];
+  if (typeof obj === 'string') {
+    if (FORBIDDEN_CHARS.test(obj)) out.push(path || '(value)');
+  } else if (Array.isArray(obj)) {
+    obj.forEach((v, i) => out.push(...badCharFields(v, `${path}[${i}]`)));
+  } else if (obj && typeof obj === 'object') {
+    for (const [k, v] of Object.entries(obj)) {
+      out.push(...badCharFields(v, path ? `${path}.${k}` : k));
+    }
+  }
+  return out;
+}
+
 function validateManifest(m) {
   const errors = [];
   for (const f of REQUIRED_FIELDS) {
@@ -219,6 +241,10 @@ function validateManifest(m) {
     for (const f of REQUIRED_PRODUCER) {
       if (!(f in m.producer)) errors.push(`missing required field: producer.${f}`);
     }
+  }
+  for (const fld of badCharFields(m)) {
+    errors.push(`${fld}: contains a control / non-portable character `
+      + `(C0/C1, U+007F, U+2028/U+2029, or U+FEFF) — not allowed in a PRML string field`);
   }
   return errors;
 }

@@ -444,6 +444,41 @@ func evaluatePredicate(observed, threshold float64, comparator string) (bool, er
 	}
 }
 
+// forbiddenChars: control / non-portable chars disallowed in any PRML string
+// field — C0 (U+0000–U+001F), DEL + C1 (U+007F–U+009F), line/paragraph
+// separators (U+2028/U+2029), and BOM (U+FEFF). They canonicalise inconsistently
+// across YAML engines, so a manifest carrying them is non-portable. Rejecting is
+// additive — no conformance vector contains them. Mirrors the Python reference.
+var forbiddenChars = regexp.MustCompile("[\\x00-\\x1f\\x7f-\\x9f\\x{2028}\\x{2029}\\x{feff}]")
+
+// forbiddenCharFields walks a decoded manifest and returns the dotted paths of
+// any string field (key or value) containing a forbidden char.
+func forbiddenCharFields(v interface{}, path string) []string {
+	var out []string
+	switch t := v.(type) {
+	case string:
+		if forbiddenChars.MatchString(t) {
+			if path == "" {
+				path = "(value)"
+			}
+			out = append(out, path)
+		}
+	case map[string]interface{}:
+		for k, vv := range t {
+			child := k
+			if path != "" {
+				child = path + "." + k
+			}
+			out = append(out, forbiddenCharFields(vv, child)...)
+		}
+	case []interface{}:
+		for i, vv := range t {
+			out = append(out, forbiddenCharFields(vv, fmt.Sprintf("%s[%d]", path, i))...)
+		}
+	}
+	return out
+}
+
 func cmdHash(specPath string) int {
 	data, err := os.ReadFile(specPath)
 	if err != nil {
@@ -455,6 +490,11 @@ func cmdHash(specPath string) int {
 	var m map[string]interface{}
 	if err := dec.Decode(&m); err != nil {
 		fmt.Fprintf(os.Stderr, "hash: parse: %v\n", err)
+		return exitGuard
+	}
+	for _, fld := range forbiddenCharFields(m, "") {
+		fmt.Fprintf(os.Stderr, "hash: %s: contains a control / non-portable character "+
+			"(C0/C1, U+007F, U+2028/U+2029, or U+FEFF) — not allowed in a PRML string field\n", fld)
 		return exitGuard
 	}
 	h, err := ManifestHash(m)
@@ -477,6 +517,11 @@ func cmdVerify(specPath, observedStr string) int {
 	var m map[string]interface{}
 	if err := dec.Decode(&m); err != nil {
 		fmt.Fprintf(os.Stderr, "verify: parse: %v\n", err)
+		return exitGuard
+	}
+	for _, fld := range forbiddenCharFields(m, "") {
+		fmt.Fprintf(os.Stderr, "verify: %s: contains a control / non-portable character "+
+			"(C0/C1, U+007F, U+2028/U+2029, or U+FEFF) — not allowed in a PRML string field\n", fld)
 		return exitGuard
 	}
 	canonical, err := Canonicalize(m)

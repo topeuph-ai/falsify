@@ -492,6 +492,41 @@ fn first_diff(a: &str, b: &str) -> i64 {
 // Verifier
 // ─────────────────────────────────────────────────────────────────────────
 
+// Control / non-portable chars disallowed in any PRML string field: C0
+// (U+0000–U+001F), DEL + C1 (U+007F–U+009F), line/paragraph separators
+// (U+2028/U+2029), and BOM (U+FEFF). They canonicalize inconsistently across
+// YAML engines, so a manifest carrying them is non-portable. Rejecting is
+// additive — no conformance vector contains them. Mirrors the Python reference.
+fn is_forbidden_char(c: char) -> bool {
+    matches!(c, '\u{0}'..='\u{1f}' | '\u{7f}'..='\u{9f}' | '\u{2028}' | '\u{2029}' | '\u{feff}')
+}
+
+// forbidden_char_fields walks a parsed manifest and returns the dotted paths of
+// any string field (key or value) containing a forbidden char.
+fn forbidden_char_fields(v: &Value, path: &str) -> Vec<String> {
+    let mut out = Vec::new();
+    match v {
+        Value::String(s) => {
+            if s.chars().any(is_forbidden_char) {
+                out.push(if path.is_empty() { "(value)".to_string() } else { path.to_string() });
+            }
+        }
+        Value::Object(map) => {
+            for (k, vv) in map {
+                let child = if path.is_empty() { k.clone() } else { format!("{}.{}", path, k) };
+                out.extend(forbidden_char_fields(vv, &child));
+            }
+        }
+        Value::Array(arr) => {
+            for (i, vv) in arr.iter().enumerate() {
+                out.extend(forbidden_char_fields(vv, &format!("{}[{}]", path, i)));
+            }
+        }
+        _ => {}
+    }
+    out
+}
+
 fn cmd_hash(spec_path: &str) -> i32 {
     let data = match fs::read_to_string(spec_path) {
         Ok(s) => s,
@@ -514,6 +549,14 @@ fn cmd_hash(spec_path: &str) -> i32 {
             return 11;
         }
     };
+    for fld in forbidden_char_fields(&parsed, "") {
+        eprintln!(
+            "hash: {}: contains a control / non-portable character \
+             (C0/C1, U+007F, U+2028/U+2029, or U+FEFF) — not allowed in a PRML string field",
+            fld
+        );
+        return 11;
+    }
     println!("{}", manifest_hash(map));
     0
 }
@@ -540,6 +583,14 @@ fn cmd_verify(spec_path: &str, observed: Option<&str>) -> i32 {
             return 11;
         }
     };
+    for fld in forbidden_char_fields(&parsed, "") {
+        eprintln!(
+            "verify: {}: contains a control / non-portable character \
+             (C0/C1, U+007F, U+2028/U+2029, or U+FEFF) — not allowed in a PRML string field",
+            fld
+        );
+        return 11;
+    }
     let computed = manifest_hash(map);
     // Sidecar: replace extension with .prml.sha256
     let sidecar = if let Some(idx) = spec_path.rfind('.') {
