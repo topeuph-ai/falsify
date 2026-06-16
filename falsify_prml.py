@@ -33,7 +33,7 @@ import os
 import re
 import sys
 
-__version__ = "0.3.5"
+__version__ = "0.3.6"
 
 EXIT_PASS = 0
 EXIT_BAD = 2

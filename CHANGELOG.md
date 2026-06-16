@@ -4,6 +4,12 @@ All notable changes to Falsification Engine are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com); version
 numbers follow [Semantic Versioning](https://semver.org).
 
+## [v0.3.6] — 2026-06-17
+
+### Fixed
+
+- **Reject control / non-portable characters in string fields.** `validate_manifest` now rejects any manifest whose string fields contain a C0/C1 control character (including U+0085 NEL, which PyYAML does not round-trip), U+007F, U+2028/U+2029, or U+FEFF. Such characters canonicalize to non-portable or non-round-trippable bytes across the Python/JS/Go/Rust reference implementations, so a manifest containing them could lock to a hash that does not faithfully represent the input. The rule is additive: no conformance vector contains these characters, so every valid manifest's hash is unchanged and all 21 vectors still pass byte-identically (571 unit tests pass). Printable Unicode (emoji, CJK, accents) is unaffected. See `spec/analysis/canonicalization-portability-v0.1.md`. JS/Go/Rust ports adopt the same rule on their next release.
+
 ## [v0.3.5] — 2026-06-04
 
 ### Fixed
