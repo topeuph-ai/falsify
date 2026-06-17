@@ -27,7 +27,7 @@ No install? Verify any manifest in-browser at [registry.falsify.dev](https://reg
 ![CI](https://github.com/studio-11-co/falsify/actions/workflows/falsify.yml/badge.svg)
 ![Multi-lang Conformance](https://github.com/studio-11-co/falsify/actions/workflows/multi-lang-conformance.yml/badge.svg)
 ![PyPI](https://img.shields.io/pypi/v/falsify?color=brightgreen&label=pypi)
-![coverage](https://img.shields.io/badge/tests-581%20passing-brightgreen)
+![coverage](https://img.shields.io/badge/tests-586%20passing-brightgreen)
 ![impls](https://img.shields.io/badge/reference%20impls-4%20(py%20%C2%B7%20js%20%C2%B7%20go%20%C2%B7%20rs)-brightgreen)
 ![honesty](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/studio-11-co/falsify/main/.falsify/badge.json)
 ![python](https://img.shields.io/badge/python-3.11%2B-blue)
@@ -96,7 +96,7 @@ See [docs/CASE_STUDIES.md](docs/CASE_STUDIES.md) for three concrete adoption sto
 
 ---
 
-**Current version:** falsify 0.3.5 (PRML CLI) · falsify-engine 0.3.5 — `falsify --version`.
+**Current version:** falsify 0.3.6 (PRML CLI) · falsify-engine 0.3.6 — `falsify --version`.
 **Working with Claude Code?** See [CLAUDE.md](CLAUDE.md).
 
 ---

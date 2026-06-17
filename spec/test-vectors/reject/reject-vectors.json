@@ -2,8 +2,10 @@
   {
     "id": "RJ-001",
     "title": "NEL (U+0085) in metric",
+    "category": "control-char",
     "reason": "U+0085 is a C1 control that PyYAML does not round-trip; a reference implementation MUST reject it rather than lock a non-portable hash.",
     "field": "metric",
+    "expect": "control / non-portable character",
     "input": {
       "version": "prml/0.1",
       "claim_id": "01900000-0000-7000-8000-000000000000",
@@ -24,8 +26,10 @@
   {
     "id": "RJ-002",
     "title": "Line Separator (U+2028) in claim_id",
+    "category": "control-char",
     "reason": "U+2028 canonicalizes inconsistently across YAML engines and JS string contexts; MUST be rejected.",
     "field": "claim_id",
+    "expect": "control / non-portable character",
     "input": {
       "version": "prml/0.1",
       "claim_id": "demo\u2028claim",
@@ -46,8 +50,10 @@
   {
     "id": "RJ-003",
     "title": "Paragraph Separator (U+2029) in producer.id",
+    "category": "control-char",
     "reason": "U+2029 is a non-portable line/paragraph separator; MUST be rejected.",
     "field": "producer.id",
+    "expect": "control / non-portable character",
     "input": {
       "version": "prml/0.1",
       "claim_id": "01900000-0000-7000-8000-000000000000",
@@ -68,8 +74,10 @@
   {
     "id": "RJ-004",
     "title": "BOM (U+FEFF) in dataset.id",
+    "category": "control-char",
     "reason": "A zero-width BOM is invisible and shifts canonical bytes; MUST be rejected.",
     "field": "dataset.id",
+    "expect": "control / non-portable character",
     "input": {
       "version": "prml/0.1",
       "claim_id": "01900000-0000-7000-8000-000000000000",
@@ -90,8 +98,10 @@
   {
     "id": "RJ-005",
     "title": "DEL (U+007F) in metric",
+    "category": "control-char",
     "reason": "U+007F is a C0-adjacent control character; MUST be rejected.",
     "field": "metric",
+    "expect": "control / non-portable character",
     "input": {
       "version": "prml/0.1",
       "claim_id": "01900000-0000-7000-8000-000000000000",
@@ -112,8 +122,10 @@
   {
     "id": "RJ-006",
     "title": "NUL (U+0000) in claim_id",
+    "category": "control-char",
     "reason": "An embedded null byte is a C0 control; MUST be rejected.",
     "field": "claim_id",
+    "expect": "control / non-portable character",
     "input": {
       "version": "prml/0.1",
       "claim_id": "demo\u0000claim",
@@ -134,8 +146,10 @@
   {
     "id": "RJ-007",
     "title": "C1 control (U+009F) in producer.id",
+    "category": "control-char",
     "reason": "U+009F is a C1 control in the U+0080-U+009F band; MUST be rejected.",
     "field": "producer.id",
+    "expect": "control / non-portable character",
     "input": {
       "version": "prml/0.1",
       "claim_id": "01900000-0000-7000-8000-000000000000",
@@ -150,6 +164,125 @@
       "seed": 42,
       "producer": {
         "id": "studio\u009f11"
+      }
+    }
+  },
+  {
+    "id": "RJ-008",
+    "title": "missing required field (seed)",
+    "category": "structural",
+    "reason": "All 9 required fields must be present; a missing field MUST be rejected, not silently hashed.",
+    "field": "seed",
+    "expect": "missing required field: seed",
+    "input": {
+      "version": "prml/0.1",
+      "claim_id": "01900000-0000-7000-8000-000000000000",
+      "created_at": "2026-05-01T12:00:00Z",
+      "metric": "accuracy",
+      "comparator": ">=",
+      "threshold": 0.85,
+      "dataset": {
+        "id": "imagenet-val-2012",
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "producer": {
+        "id": "studio-11.co"
+      }
+    }
+  },
+  {
+    "id": "RJ-009",
+    "title": "dataset.hash not 64 lowercase hex",
+    "category": "structural",
+    "reason": "dataset.hash is fixed at 64 lowercase hex chars; a malformed hash MUST be rejected.",
+    "field": "dataset.hash",
+    "expect": "dataset.hash must be 64 lowercase hex chars",
+    "input": {
+      "version": "prml/0.1",
+      "claim_id": "01900000-0000-7000-8000-000000000000",
+      "created_at": "2026-05-01T12:00:00Z",
+      "metric": "accuracy",
+      "comparator": ">=",
+      "threshold": 0.85,
+      "dataset": {
+        "id": "imagenet-val-2012",
+        "hash": "NOTAHASH"
+      },
+      "seed": 42,
+      "producer": {
+        "id": "studio-11.co"
+      }
+    }
+  },
+  {
+    "id": "RJ-010",
+    "title": "invalid comparator",
+    "category": "structural",
+    "reason": "comparator must be one of >=,<=,>,<,==; anything else MUST be rejected.",
+    "field": "comparator",
+    "expect": "comparator must be one of",
+    "input": {
+      "version": "prml/0.1",
+      "claim_id": "01900000-0000-7000-8000-000000000000",
+      "created_at": "2026-05-01T12:00:00Z",
+      "metric": "accuracy",
+      "comparator": "=>",
+      "threshold": 0.85,
+      "dataset": {
+        "id": "imagenet-val-2012",
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "seed": 42,
+      "producer": {
+        "id": "studio-11.co"
+      }
+    }
+  },
+  {
+    "id": "RJ-011",
+    "title": "unknown version string",
+    "category": "structural",
+    "reason": "version must be prml/0.1 or prml/0.2; an unknown version MUST be rejected.",
+    "field": "version",
+    "expect": "version must be",
+    "input": {
+      "version": "prml/9.9",
+      "claim_id": "01900000-0000-7000-8000-000000000000",
+      "created_at": "2026-05-01T12:00:00Z",
+      "metric": "accuracy",
+      "comparator": ">=",
+      "threshold": 0.85,
+      "dataset": {
+        "id": "imagenet-val-2012",
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "seed": 42,
+      "producer": {
+        "id": "studio-11.co"
+      }
+    }
+  },
+  {
+    "id": "RJ-012",
+    "title": "threshold is not a number",
+    "category": "structural",
+    "reason": "threshold must be a finite number; a string threshold MUST be rejected.",
+    "field": "threshold",
+    "expect": "threshold must be a finite number",
+    "input": {
+      "version": "prml/0.1",
+      "claim_id": "01900000-0000-7000-8000-000000000000",
+      "created_at": "2026-05-01T12:00:00Z",
+      "metric": "accuracy",
+      "comparator": ">=",
+      "threshold": "high",
+      "dataset": {
+        "id": "imagenet-val-2012",
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "seed": 42,
+      "producer": {
+        "id": "studio-11.co"
       }
     }
   }

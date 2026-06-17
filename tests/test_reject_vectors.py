@@ -59,10 +59,13 @@ class RejectVectorTests(unittest.TestCase):
             raise unittest.SkipTest(f"reject vectors not present: {VECTORS_PATH}")
 
     def test_vector_count(self):
-        """The reject suite ships 7 vectors (RJ-001..RJ-007), one per forbidden
-        character category. Adding more is fine; dropping below 7 means a guard
-        was removed."""
-        self.assertGreaterEqual(len(VECTORS), 7, f"Expected >=7 reject vectors, got {len(VECTORS)}")
+        """The reject suite ships 12 vectors: 7 control-char (RJ-001..007) + 5
+        structural (RJ-008..012). Adding more is fine; dropping below means a
+        guard was removed."""
+        self.assertGreaterEqual(len(VECTORS), 12, f"Expected >=12 reject vectors, got {len(VECTORS)}")
+        cats = {v["category"] for v in VECTORS}
+        self.assertIn("control-char", cats)
+        self.assertIn("structural", cats)
 
     def test_positive_control_clean_manifest_validates(self):
         """The clean control manifest MUST pass validation — otherwise the reject
@@ -70,10 +73,13 @@ class RejectVectorTests(unittest.TestCase):
         self.assertEqual(falsify_prml.validate_manifest(CLEAN), [],
                          "clean control manifest unexpectedly rejected — reject suite would be vacuous")
 
-    def test_each_vector_has_a_forbidden_char(self):
-        """Sanity: every vector actually carries a forbidden codepoint in its
-        declared field, so the data file can't silently rot into clean inputs."""
+    def test_control_char_vectors_carry_a_forbidden_char(self):
+        """Sanity: every control-char vector actually carries a forbidden codepoint
+        in its declared field, so the data file can't silently rot into clean
+        inputs. (Structural vectors are malformed in other ways and are exempt.)"""
         for v in VECTORS:
+            if v["category"] != "control-char":
+                continue
             cur = v["input"]
             for part in v["field"].split("."):
                 cur = cur[part]
@@ -90,13 +96,15 @@ def _make_reject_test(vector):
             f"{vector['id']} ({vector['title']}) was ACCEPTED — it must be rejected.\n"
             f"  reason: {vector['reason']}",
         )
-        # The rejection must cite the control-character rule, not some unrelated error.
+        # The rejection must cite the SPECIFIC rule, not some unrelated error.
+        expect = vector["expect"]
         self.assertTrue(
-            any("control / non-portable character" in e for e in errors),
-            f"{vector['id']} was rejected, but not for the control-char rule; errors={errors}",
+            any(expect in e for e in errors),
+            f"{vector['id']} was rejected, but not for the expected reason "
+            f"{expect!r}; errors={errors}",
         )
 
-    test.__doc__ = f"{vector['id']}: {vector['title']} is rejected for the control-char rule"
+    test.__doc__ = f"{vector['id']}: {vector['title']} is rejected ({vector['category']})"
     return test
 
 

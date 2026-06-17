@@ -527,6 +527,63 @@ fn forbidden_char_fields(v: &Value, path: &str) -> Vec<String> {
     out
 }
 
+fn is_hex64(s: &str) -> bool {
+    s.len() == 64 && s.bytes().all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b))
+}
+
+// validate_manifest mirrors the Python reference's validate_manifest: it returns
+// the reasons a manifest is not a valid PRML v0.1/v0.2 manifest (empty = valid).
+// Required fields, version, threshold type, comparator, dataset id/hash (64
+// lowercase hex), producer id, and the control / non-portable character rule.
+fn validate_manifest(parsed: &Value) -> Vec<String> {
+    let mut errs = Vec::new();
+    let map = match parsed.as_object() {
+        Some(m) => m,
+        None => return vec!["manifest must be a mapping".to_string()],
+    };
+    for f in ["version", "claim_id", "created_at", "metric",
+              "comparator", "threshold", "dataset", "seed", "producer"] {
+        if !map.contains_key(f) {
+            errs.push(format!("missing required field: {}", f));
+        }
+    }
+    match map.get("version").and_then(|v| v.as_str()) {
+        Some("prml/0.1") | Some("prml/0.2") => {}
+        other => errs.push(format!(
+            "version must be \"prml/0.1\" or \"prml/0.2\", got {:?}", other)),
+    }
+    if !map.get("threshold").map(|v| v.is_number()).unwrap_or(false) {
+        errs.push("threshold must be a finite number".to_string());
+    }
+    if let Some(c) = map.get("comparator").and_then(|v| v.as_str()) {
+        if !c.is_empty() && !matches!(c, ">=" | "<=" | ">" | "<" | "==") {
+            errs.push("comparator must be one of <, <=, ==, >, >=".to_string());
+        }
+    }
+    if let Some(ds) = map.get("dataset").and_then(|v| v.as_object()) {
+        for f in ["id", "hash"] {
+            if !ds.contains_key(f) {
+                errs.push(format!("missing required field: dataset.{}", f));
+            }
+        }
+        if let Some(h) = ds.get("hash").and_then(|v| v.as_str()) {
+            if !h.is_empty() && !is_hex64(h) {
+                errs.push("dataset.hash must be 64 lowercase hex chars".to_string());
+            }
+        }
+    }
+    if let Some(prod) = map.get("producer").and_then(|v| v.as_object()) {
+        if !prod.contains_key("id") {
+            errs.push("missing required field: producer.id".to_string());
+        }
+    }
+    for fld in forbidden_char_fields(parsed, "") {
+        errs.push(format!("{}: contains a control / non-portable character \
+            (C0/C1, U+007F, U+2028/U+2029, or U+FEFF) — not allowed in a PRML string field", fld));
+    }
+    errs
+}
+
 fn cmd_hash(spec_path: &str) -> i32 {
     let data = match fs::read_to_string(spec_path) {
         Ok(s) => s,
@@ -549,12 +606,12 @@ fn cmd_hash(spec_path: &str) -> i32 {
             return 2;
         }
     };
-    for fld in forbidden_char_fields(&parsed, "") {
-        eprintln!(
-            "hash: {}: contains a control / non-portable character \
-             (C0/C1, U+007F, U+2028/U+2029, or U+FEFF) — not allowed in a PRML string field",
-            fld
-        );
+    let errs = validate_manifest(&parsed);
+    if !errs.is_empty() {
+        eprintln!("hash: invalid manifest:");
+        for e in &errs {
+            eprintln!("  - {}", e);
+        }
         return 2;
     }
     println!("{}", manifest_hash(map));
@@ -583,12 +640,12 @@ fn cmd_verify(spec_path: &str, observed: Option<&str>) -> i32 {
             return 2;
         }
     };
-    for fld in forbidden_char_fields(&parsed, "") {
-        eprintln!(
-            "verify: {}: contains a control / non-portable character \
-             (C0/C1, U+007F, U+2028/U+2029, or U+FEFF) — not allowed in a PRML string field",
-            fld
-        );
+    let errs = validate_manifest(&parsed);
+    if !errs.is_empty() {
+        eprintln!("verify: invalid manifest:");
+        for e in &errs {
+            eprintln!("  - {}", e);
+        }
         return 2;
     }
     let computed = manifest_hash(map);

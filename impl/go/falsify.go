@@ -480,6 +480,53 @@ func forbiddenCharFields(v interface{}, path string) []string {
 	return out
 }
 
+var hex64 = regexp.MustCompile("^[0-9a-f]{64}$")
+
+var validComparators = map[string]bool{">=": true, "<=": true, ">": true, "<": true, "==": true}
+
+// validateManifest mirrors the Python reference's validate_manifest: it returns
+// the list of reasons a manifest is not a valid PRML v0.1/v0.2 manifest (empty =
+// valid). Required fields, version, threshold type, comparator, dataset id/hash
+// (64 lowercase hex), producer id, and the control / non-portable character rule.
+func validateManifest(m map[string]interface{}) []string {
+	var errs []string
+	for _, f := range []string{"version", "claim_id", "created_at", "metric",
+		"comparator", "threshold", "dataset", "seed", "producer"} {
+		if _, ok := m[f]; !ok {
+			errs = append(errs, "missing required field: "+f)
+		}
+	}
+	if v, _ := m["version"].(string); v != "prml/0.1" && v != "prml/0.2" {
+		errs = append(errs, fmt.Sprintf("version must be \"prml/0.1\" or \"prml/0.2\", got \"%v\"", m["version"]))
+	}
+	if _, ok := m["threshold"].(json.Number); !ok {
+		errs = append(errs, "threshold must be a finite number")
+	}
+	if c, ok := m["comparator"].(string); ok && c != "" && !validComparators[c] {
+		errs = append(errs, "comparator must be one of <, <=, ==, >, >=")
+	}
+	if ds, ok := m["dataset"].(map[string]interface{}); ok {
+		for _, f := range []string{"id", "hash"} {
+			if _, ok := ds[f]; !ok {
+				errs = append(errs, "missing required field: dataset."+f)
+			}
+		}
+		if h, ok := ds["hash"].(string); ok && h != "" && !hex64.MatchString(h) {
+			errs = append(errs, "dataset.hash must be 64 lowercase hex chars")
+		}
+	}
+	if prod, ok := m["producer"].(map[string]interface{}); ok {
+		if _, ok := prod["id"]; !ok {
+			errs = append(errs, "missing required field: producer.id")
+		}
+	}
+	for _, fld := range forbiddenCharFields(m, "") {
+		errs = append(errs, fld+": contains a control / non-portable character "+
+			"(C0/C1, U+007F, U+2028/U+2029, or U+FEFF) — not allowed in a PRML string field")
+	}
+	return errs
+}
+
 func cmdHash(specPath string) int {
 	data, err := os.ReadFile(specPath)
 	if err != nil {
@@ -493,9 +540,11 @@ func cmdHash(specPath string) int {
 		fmt.Fprintf(os.Stderr, "hash: parse: %v\n", err)
 		return exitBad
 	}
-	for _, fld := range forbiddenCharFields(m, "") {
-		fmt.Fprintf(os.Stderr, "hash: %s: contains a control / non-portable character "+
-			"(C0/C1, U+007F, U+2028/U+2029, or U+FEFF) — not allowed in a PRML string field\n", fld)
+	if errs := validateManifest(m); len(errs) > 0 {
+		fmt.Fprintln(os.Stderr, "hash: invalid manifest:")
+		for _, e := range errs {
+			fmt.Fprintf(os.Stderr, "  - %s\n", e)
+		}
 		return exitBad
 	}
 	h, err := ManifestHash(m)
@@ -520,9 +569,11 @@ func cmdVerify(specPath, observedStr string) int {
 		fmt.Fprintf(os.Stderr, "verify: parse: %v\n", err)
 		return exitBad
 	}
-	for _, fld := range forbiddenCharFields(m, "") {
-		fmt.Fprintf(os.Stderr, "verify: %s: contains a control / non-portable character "+
-			"(C0/C1, U+007F, U+2028/U+2029, or U+FEFF) — not allowed in a PRML string field\n", fld)
+	if errs := validateManifest(m); len(errs) > 0 {
+		fmt.Fprintln(os.Stderr, "verify: invalid manifest:")
+		for _, e := range errs {
+			fmt.Fprintf(os.Stderr, "  - %s\n", e)
+		}
 		return exitBad
 	}
 	canonical, err := Canonicalize(m)

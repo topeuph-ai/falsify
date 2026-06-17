@@ -222,7 +222,7 @@ function validateManifest(m) {
   for (const f of REQUIRED_FIELDS) {
     if (!(f in m)) errors.push(`missing required field: ${f}`);
   }
-  if (m.version !== 'prml/0.1') errors.push(`version must be "prml/0.1", got "${m.version}"`);
+  if (m.version !== 'prml/0.1' && m.version !== 'prml/0.2') errors.push(`version must be "prml/0.1" or "prml/0.2", got "${m.version}"`);
   if (typeof m.threshold !== 'number' || !Number.isFinite(m.threshold)) {
     errors.push(`threshold must be a finite number`);
   }

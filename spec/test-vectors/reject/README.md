@@ -27,7 +27,7 @@ faithfully represent the input. Printable Unicode (emoji, CJK, accents) is
 `reject-vectors.json` is a JSON array; each entry has `id`, `title`, `reason`,
 `field` (the dotted path carrying the bad char), and `input` (the manifest).
 Every `input` is otherwise valid — the **only** reason it must be rejected is the
-forbidden character. Seven vectors (`RJ-001`..`RJ-007`) cover one category each.
+forbidden character. Twelve vectors: 7 control-char (`RJ-001`..`RJ-007`, one per forbidden category) and 5 structural (`RJ-008`..`RJ-012`: missing required field, malformed `dataset.hash`, invalid comparator, unknown version, non-numeric threshold). Each entry carries an `expect` substring its rejection message must contain, and a `category`.
 
 ## Running it
 
@@ -35,7 +35,7 @@ forbidden character. Seven vectors (`RJ-001`..`RJ-007`) cover one category each.
 takes a manifest path as its last argument) and asserts a **non-zero exit**:
 
 ```sh
-python3 check_reject.py -- python3 falsify.py lock
+python3 check_reject.py -- python3 falsify_prml.py lock
 python3 check_reject.py -- node impl/js/falsify.js lock
 python3 check_reject.py -- impl/go/falsify-go hash
 python3 check_reject.py -- impl/rust/target/release/falsify-rs hash
