@@ -514,6 +514,10 @@ fn forbidden_char_fields(v: &Value, path: &str) -> Vec<String> {
         Value::Object(map) => {
             for (k, vv) in map {
                 let child = if path.is_empty() { k.clone() } else { format!("{}.{}", path, k) };
+                // A forbidden char in a KEY canonicalizes non-portably just as in a value.
+                if k.chars().any(is_forbidden_char) {
+                    out.push(format!("{} (key)", child));
+                }
                 out.extend(forbidden_char_fields(vv, &child));
             }
         }

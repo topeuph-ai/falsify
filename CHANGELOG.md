@@ -4,6 +4,12 @@ All notable changes to Falsification Engine are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com); version
 numbers follow [Semantic Versioning](https://semver.org).
 
+## [v0.3.7] — 2026-06-18
+
+### Fixed
+
+- **Control-char reject rule now scans dictionary KEYS, not just values.** v0.3.6's `_bad_char_fields` (and the JS/Go/Rust mirrors) recursed into string values and dict values but never tested the key strings themselves, so a manifest carrying a forbidden character in a *key* name (e.g. an extra key `metric note`, or a nested `dataset.<bad>key`) passed `validate_manifest` and locked to a non-portable hash — exactly the cross-impl byte-divergence v0.3.6 exists to prevent. Validation (and the `hash`/`verify`/`lock` guard in all four reference impls) now scans keys at every depth. The fix is additive: no conformance vector has a control-char key, so all 21 positive vectors still pass byte-identically and every valid manifest's hash is unchanged. Two negative-conformance vectors added — `RJ-013` (forbidden char in a top-level key) and `RJ-014` (in a nested `dataset` key) — so the suite (now 14: 9 control-char + 5 structural) guards the hole; verified rejected by all four impls. Found by an adversarial self-audit of the v0.3.6 work.
+
 ## [v0.3.6] — 2026-06-17
 
 ### Fixed

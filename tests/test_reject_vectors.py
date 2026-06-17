@@ -59,10 +59,10 @@ class RejectVectorTests(unittest.TestCase):
             raise unittest.SkipTest(f"reject vectors not present: {VECTORS_PATH}")
 
     def test_vector_count(self):
-        """The reject suite ships 12 vectors: 7 control-char (RJ-001..007) + 5
-        structural (RJ-008..012). Adding more is fine; dropping below means a
-        guard was removed."""
-        self.assertGreaterEqual(len(VECTORS), 12, f"Expected >=12 reject vectors, got {len(VECTORS)}")
+        """The reject suite ships 14 vectors: 9 control-char (RJ-001..007 values +
+        RJ-013/014 keys) + 5 structural (RJ-008..012). Adding more is fine;
+        dropping below means a guard was removed."""
+        self.assertGreaterEqual(len(VECTORS), 14, f"Expected >=14 reject vectors, got {len(VECTORS)}")
         cats = {v["category"] for v in VECTORS}
         self.assertIn("control-char", cats)
         self.assertIn("structural", cats)
@@ -75,17 +75,24 @@ class RejectVectorTests(unittest.TestCase):
 
     def test_control_char_vectors_carry_a_forbidden_char(self):
         """Sanity: every control-char vector actually carries a forbidden codepoint
-        in its declared field, so the data file can't silently rot into clean
-        inputs. (Structural vectors are malformed in other ways and are exempt.)"""
+        somewhere in its input — in a value OR a key — so the data file can't
+        silently rot into clean inputs. (Structural vectors are malformed in other
+        ways and are exempt.)"""
+        def has_forbidden(obj):
+            bad = lambda s: any(ord(c) < 0x20 or 0x7f <= ord(c) <= 0x9f
+                                or ord(c) in (0x2028, 0x2029, 0xfeff) for c in s)
+            if isinstance(obj, str):
+                return bad(obj)
+            if isinstance(obj, dict):
+                return any(bad(k) or has_forbidden(v) for k, v in obj.items())
+            if isinstance(obj, (list, tuple)):
+                return any(has_forbidden(x) for x in obj)
+            return False
         for v in VECTORS:
             if v["category"] != "control-char":
                 continue
-            cur = v["input"]
-            for part in v["field"].split("."):
-                cur = cur[part]
-            bad = [c for c in cur
-                   if ord(c) < 0x20 or 0x7f <= ord(c) <= 0x9f or ord(c) in (0x2028, 0x2029, 0xfeff)]
-            self.assertTrue(bad, f"{v['id']} declares field {v['field']} but it has no forbidden char")
+            self.assertTrue(has_forbidden(v["input"]),
+                            f"{v['id']} is control-char but its input has no forbidden char")
 
 
 def _make_reject_test(vector):

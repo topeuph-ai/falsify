@@ -27,7 +27,7 @@ faithfully represent the input. Printable Unicode (emoji, CJK, accents) is
 `reject-vectors.json` is a JSON array; each entry has `id`, `title`, `reason`,
 `field` (the dotted path carrying the bad char), and `input` (the manifest).
 Every `input` is otherwise valid — the **only** reason it must be rejected is the
-forbidden character. Twelve vectors: 7 control-char (`RJ-001`..`RJ-007`, one per forbidden category) and 5 structural (`RJ-008`..`RJ-012`: missing required field, malformed `dataset.hash`, invalid comparator, unknown version, non-numeric threshold). Each entry carries an `expect` substring its rejection message must contain, and a `category`.
+forbidden character. Fourteen vectors: 9 control-char (`RJ-001`..`RJ-007` carry the bad char in a *value*, `RJ-013`/`RJ-014` in a *key* — top-level and nested) and 5 structural (`RJ-008`..`RJ-012`: missing required field, malformed `dataset.hash`, invalid comparator, unknown version, non-numeric threshold). Each entry carries an `expect` substring its rejection message must contain, and a `category`.
 
 ## Running it
 

@@ -470,6 +470,10 @@ func forbiddenCharFields(v interface{}, path string) []string {
 			if path != "" {
 				child = path + "." + k
 			}
+			// A forbidden char in a KEY canonicalizes non-portably just as in a value.
+			if forbiddenChars.MatchString(k) {
+				out = append(out, child+" (key)")
+			}
 			out = append(out, forbiddenCharFields(vv, child)...)
 		}
 	case []interface{}:

@@ -33,7 +33,7 @@ import os
 import re
 import sys
 
-__version__ = "0.3.6"
+__version__ = "0.3.7"
 
 EXIT_PASS = 0
 EXIT_BAD = 2
@@ -63,14 +63,19 @@ _FORBIDDEN_CHARS = re.compile(r"[\x00-\x1f\x7f-\x9f  ﻿]")
 
 
 def _bad_char_fields(obj, path="") -> list[str]:
-    """Return field paths whose string value contains a portability-breaking char."""
+    """Return field paths whose string key or value contains a portability-breaking char."""
     out = []
     if isinstance(obj, str):
         if _FORBIDDEN_CHARS.search(obj):
             out.append(path or "(value)")
     elif isinstance(obj, dict):
         for k, v in obj.items():
-            out.extend(_bad_char_fields(v, f"{path}.{k}" if path else str(k)))
+            child = f"{path}.{k}" if path else str(k)
+            # A forbidden char in a KEY canonicalizes non-portably just as in a
+            # value, so keys are scanned too.
+            if isinstance(k, str) and _FORBIDDEN_CHARS.search(k):
+                out.append(f"{child} (key)")
+            out.extend(_bad_char_fields(v, child))
     elif isinstance(obj, (list, tuple)):
         for i, v in enumerate(obj):
             out.extend(_bad_char_fields(v, f"{path}[{i}]"))

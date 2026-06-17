@@ -211,7 +211,10 @@ function badCharFields(obj, path = '') {
     obj.forEach((v, i) => out.push(...badCharFields(v, `${path}[${i}]`)));
   } else if (obj && typeof obj === 'object') {
     for (const [k, v] of Object.entries(obj)) {
-      out.push(...badCharFields(v, path ? `${path}.${k}` : k));
+      const child = path ? `${path}.${k}` : k;
+      // A forbidden char in a KEY canonicalizes non-portably just as in a value.
+      if (FORBIDDEN_CHARS.test(k)) out.push(`${child} (key)`);
+      out.push(...badCharFields(v, child));
     }
   }
   return out;
