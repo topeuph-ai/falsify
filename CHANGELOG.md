@@ -4,6 +4,12 @@ All notable changes to Falsification Engine are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com); version
 numbers follow [Semantic Versioning](https://semver.org).
 
+## [v0.3.8] — 2026-06-18
+
+### Added
+
+- **Embed path: in-toto (ITE-6) attestation + a documented library quickstart.** PRML's strategy is to be embedded inside a host that already speaks provenance/governance, but until now there was no clean "what do I drop in?" answer — no in-toto predicate emitter (it existed only in spec prose) and no library quickstart (the README sold 18 CLI subcommands, never `import falsify_prml`). This adds: (1) `to_intoto_statement(manifest)` — renders a PRML lock as an in-toto Attestation **Statement v1** (`_type: https://in-toto.io/Statement/v1`, subject = the locked claim digest + the dataset, `predicateType: https://falsify.dev/prml/v0.1`, predicate = the pre-registered bar). It validates first, so you can never attest a malformed/non-portable claim. (2) A `falsify attest <spec>` CLI subcommand that prints the Statement JSON. (3) **[`docs/EMBED.md`](docs/EMBED.md)** — the 3-function library path (`validate_manifest` / `manifest_hash` / `evaluate_predicate`), a <5-line lock-before-run emit hook, and the in-toto bridge, so a host engineer integrates PRML without learning the CLI. A host that already ingests SLSA/in-toto attestations can now treat PRML as one more predicate type.
+
 ## [v0.3.7] — 2026-06-18
 
 ### Fixed

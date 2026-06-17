@@ -14,6 +14,7 @@ Commands:
     falsify lock <spec.yaml|spec.json>            canonicalize, hash, write sidecar
     falsify verify <spec> [--observed <v>]        verify hash; if --observed, evaluate
     falsify hash <spec>                           print the canonical SHA-256 only
+    falsify attest <spec>                         emit an in-toto (ITE-6) Statement
     falsify init <name>                           write a skeleton manifest
     falsify test-vectors <vectors.json>           run the conformance suite
     falsify --version
@@ -33,7 +34,7 @@ import os
 import re
 import sys
 
-__version__ = "0.3.7"
+__version__ = "0.3.8"
 
 EXIT_PASS = 0
 EXIT_BAD = 2
@@ -184,6 +185,46 @@ def evaluate_predicate(observed: float, comparator: str, threshold: float) -> bo
     raise ValueError(f"invalid comparator: {comparator}")
 
 
+def to_intoto_statement(manifest: dict) -> dict:
+    """Render a PRML manifest as an in-toto Attestation (ITE-6) Statement v1.
+
+    This is the embed path for hosts that already speak in-toto / SLSA: a PRML
+    lock becomes one more predicate type, no PRML CLI required. The Statement's
+    `subject` is the locked claim (digest = the PRML manifest SHA-256) plus the
+    dataset it is about; the `predicate` carries the pre-registered bar. Raises
+    ValueError if the manifest is invalid (so you never attest a non-portable or
+    malformed claim).
+
+        from falsify_prml import to_intoto_statement
+        stmt = to_intoto_statement(manifest)   # dict; json.dump it into your bundle
+    """
+    errors = validate_manifest(manifest)
+    if errors:
+        raise ValueError("invalid manifest: " + "; ".join(errors))
+    h = manifest_hash(manifest)
+    version = str(manifest["version"]).split("/", 1)[-1]  # "prml/0.1" -> "0.1"
+    ds = manifest["dataset"]
+    return {
+        "_type": "https://in-toto.io/Statement/v1",
+        "subject": [
+            {"name": str(manifest["claim_id"]), "digest": {"sha256": h}},
+            {"name": str(ds["id"]), "digest": {"sha256": str(ds["hash"])}},
+        ],
+        "predicateType": f"https://falsify.dev/prml/v{version}",
+        "predicate": {
+            "claim_id": manifest["claim_id"],
+            "created_at": manifest["created_at"],
+            "metric": manifest["metric"],
+            "comparator": manifest["comparator"],
+            "threshold": manifest["threshold"],
+            "seed": manifest["seed"],
+            "producer": manifest["producer"],
+            "prml_version": manifest["version"],
+            "manifest_sha256": h,
+        },
+    }
+
+
 def _sidecar_path(spec_path: str) -> str:
     return re.sub(r"\.[^.]+$", "", spec_path) + ".prml.sha256"
 
@@ -329,6 +370,21 @@ def cmd_test_vectors(args) -> int:
     return EXIT_PASS if failed == 0 else EXIT_FAIL
 
 
+def cmd_attest(args) -> int:
+    try:
+        m = load_manifest(args.spec)
+    except (OSError, ValueError) as e:
+        sys.stderr.write(f"attest: cannot read {args.spec}: {e}\n")
+        return EXIT_BAD
+    try:
+        stmt = to_intoto_statement(m)
+    except ValueError as e:
+        sys.stderr.write(f"attest: {e}\n")
+        return EXIT_BAD
+    print(json.dumps(stmt, indent=2, ensure_ascii=False, sort_keys=True))
+    return EXIT_PASS
+
+
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(prog="falsify", description="PRML reference CLI — pre-register ML eval claims.")
     p.add_argument("--version", action="version", version=f"falsify {__version__} (PRML v0.1/v0.2)")
@@ -347,6 +403,10 @@ def main(argv=None) -> int:
     sp = sub.add_parser("hash", help="print the canonical SHA-256 only")
     sp.add_argument("spec")
     sp.set_defaults(func=cmd_hash)
+
+    sp = sub.add_parser("attest", help="emit an in-toto (ITE-6) Statement for the manifest")
+    sp.add_argument("spec")
+    sp.set_defaults(func=cmd_attest)
 
     sp = sub.add_parser("init", help="write a skeleton manifest")
     sp.add_argument("name")
