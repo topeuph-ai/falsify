@@ -148,6 +148,15 @@ Hosted spec at [spec.falsify.dev/v0.1](https://spec.falsify.dev/v0.1). Public re
 - **[`mlflow-falsify`](https://github.com/studio-11-co/mlflow-falsify)** — MLflow plugin (`pip install mlflow-falsify`) auto-tags every run with the PRML manifest hash. MIT.
 - **[`falsify-js`](https://github.com/studio-11-co/falsify-js)** — JS reference implementation, [`npm install falsify-js`](https://www.npmjs.com/package/falsify-js). MIT.
 
+**Listed in / referenced by** (independent curation — discoverability and third-party review, not adoption claims):
+
+- **[SchemaStore](https://github.com/SchemaStore/schemastore/pull/5673)** — the PRML JSON Schema is in the catalog; `.prml.yaml` autocompletes and validates in VS Code, JetBrains, Cursor, Zed, and anything using `yaml-language-server`. *(real tooling integration)*
+- **[theopenlane/awesome-compliance](https://github.com/theopenlane/awesome-compliance)** — Compliance Specs (PR reviewed + merged by an Openlane co-founder)
+- **[AthenaCore/AwesomeResponsibleAI](https://github.com/AthenaCore/AwesomeResponsibleAI)** — Responsible-AI Audit section
+- **[GenAI-Gurus/awesome-eu-ai-act](https://github.com/GenAI-Gurus/awesome-eu-ai-act)** — EU AI Act Reference Implementations
+- **[leipzig/awesome-reproducible-research](https://github.com/leipzig/awesome-reproducible-research)** — Scientific Data Management
+- **[ASSERT-KTH/awesome-open-science-software](https://github.com/ASSERT-KTH/awesome-open-science-software)** — Tools (KTH research group)
+
 ---
 
 ## Why
