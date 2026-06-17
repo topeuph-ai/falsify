@@ -123,6 +123,17 @@ CLI equivalent (for shelling out from any language):
 falsify attest claim.prml.yaml          # prints the Statement JSON to stdout
 ```
 
+## Runnable example
+
+[`examples/embed_host.py`](../examples/embed_host.py) is this whole page as a
+working script: a stand-in host (`AcmeEval`) that locks before the run, verifies
+after, emits the in-toto Statement, and shows a post-hoc threshold change being
+caught as `TAMPERED`. Run it with nothing but `pip install falsify`:
+
+```bash
+python3 examples/embed_host.py
+```
+
 ## Exit codes (for CI / shell embedding)
 
 The CLI's exit codes are the API; all four reference impls agree:
